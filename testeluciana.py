@@ -1,1 +1,0 @@
-print("Eu sou Luciana!")
