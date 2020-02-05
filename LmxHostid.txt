@@ -1,0 +1,21 @@
+ETHERNET: Intel(R) PRO/1000 MT Network Connection
+HostID: 000C29BBFB74
+
+BIOS: Phoenix Technologies LTD - _ASUS_ - 6040000
+HostID: VMware-564da0fd3cdb8748-03f0cd3b72bbfb74
+
+IPADDRESS: 10.100.15.231
+HostID: 10.100.15.231
+IPADDRESS: 10.100.15.*
+HostID: 10.100.15.*
+IPADDRESS: 10.100.*.*
+HostID: 10.100.*.*
+
+HOSTNAME: srv-visure
+HostID: srv-visure
+
+USERNAME: ifce
+HostID: ifce
+
+WIN_PRODUCT_ID: Windows Product ID
+HostID: 00371-OEM-8992671-00004
