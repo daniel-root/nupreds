@@ -1,0 +1,26 @@
+<h1>Equipments</h1>
+
+<table border="1">
+<thead>
+    <tr>
+    <th>Etiqueta</th>
+    <th>Descrição</th>
+    <th>View</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    </tr>
+</thead>
+<tbody>
+    {% for equipments in object_list %}
+    <tr>
+    <td>{{ equipment.tag }}</td>
+    <td>{{ equipment.description }}</td>
+    <td><a href="{% url "equipment_view" equipment.id %}">view</a></td>
+    <td><a href="{% url "equipment_edit" equipment.id %}">edit</a></td>
+    <td><a href="{% url "equipment_delete" equipment.id %}">delete</a></td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+<a href="{% url "equipment_new" %}">New</a>
