@@ -1,0 +1,80 @@
+/* GLOBAL */
+* {
+    line-height: 1.75em;
+    max-width: 600px;
+    margin: auto; 
+}
+
+h1 {
+    font-size: 55px;
+    font-family: 'Permanent Marker', Cursive;
+}
+
+h2 {
+    font-size: 24px;
+    font-family: amatic sc, verdana;
+}
+
+main, p {
+    font-size: 17px;
+    font-family: 'Overpass', Sans-Serif;
+}
+
+.body-text {
+    font-family: 'Overpass', Sans-Serif;
+}
+
+.heading {
+    font-family: 'Permanent Marker', Cursive;
+    color: black;
+}
+
+/* LINKS */
+a {
+   color: #829AFF;
+}
+
+a:visited {
+    color: #829AFF;
+}
+
+/* NAV MENU */
+nav {
+    font-size: 17px;
+    font-family: amatic sc, verdana;
+}
+
+nav a:hover {
+	background-color: #BECBFF;
+}
+
+.primary-menu ul {
+	list-style-type:none;
+	padding: 3px;
+	margin: 0px;
+	background-color: #829AFF;
+}
+
+.primary-menu li {
+    display: inline;
+}
+
+.primary-menu a {
+    display: block;
+    padding: 10px 30px;
+	text-decoration:none;
+	color: white;
+	font-weight: bold;
+	background-color: #829AFF ;
+	display: inline-block;
+	text-align: center;
+}
+
+/* FORM */
+.upload-form {
+    border: 1px solid black;
+    padding: 3px;
+    background-color: lightyellow;
+    width: 500px;
+    float: left;
+}

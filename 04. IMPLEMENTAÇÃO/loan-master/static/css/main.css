@@ -1,0 +1,26 @@
+ .navbar{
+	width: 100%;
+	border-radius: 0px;
+	background-color: #05BEFF;
+    box-shadow: 0px 0px 5px;
+}
+
+.navbar-right {
+    margin-right: 0;
+}
+
+.navbar ul li {
+	float: left;
+	padding: 15px;
+	font-size: 14px;
+	list-style: none;
+	color: #fff;
+} 
+
+.navbar ul a {
+	color: #fff;
+	font-size: 15px;
+} 
+.page-title{
+	text-align: center;
+}

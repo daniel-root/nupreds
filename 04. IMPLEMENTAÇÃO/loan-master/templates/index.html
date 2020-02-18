@@ -1,0 +1,64 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Home | Best Loan Manager</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+</head>
+<body>
+<div id="wrapper">
+		<nav class="navbar">
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="{% url 'loan' %}">Loans</a></li>
+				<li><a href="{% url 'loantype' %}">LoanTypes</a></li>
+				<li><a href="{% url 'payment' %}">Payments</a></li>
+				<li><a href="{% url 'employee' %}">Employees</a></li>
+				<li><a href="{% url 'company' %}">Company</a></li>
+			</ul>
+			<ul class="navbar-right">
+				<li><a href="/admin">Login</a></li>
+				<li><a href="admin">Register</a></li>
+			</ul>
+		</nav>
+   <div class="container-fluid">
+	<div class="col-md-12">
+		<div class="row">
+			<div class="panel">
+				<div class="panel-header">
+					<h3>{{title}} Page</h3>
+				</div>
+				<div class="panel-subtitle">Add, Update, Read & Delete Loans</div>
+				<div class="panel-body">
+
+					{% for obj in Loan_list %}
+
+					<a href="{% url 'details' id=obj.id %}">{{ obj.title }}</a><br>
+					{{ obj.content }}<br>
+					{{ obj.timestamp }}<br>
+					{{ obj.updated }}<br>
+					{{ obj.id }}<br>
+
+					{% endfor %}
+
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+</body>
+</html>

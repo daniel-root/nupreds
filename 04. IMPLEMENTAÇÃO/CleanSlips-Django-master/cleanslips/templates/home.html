@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<form method="POST" action="/find" >
+    <h2 class="heading">
+        Choose your campus:
+    </h2>
+    <div>
+        <select name="campus">
+            <option value="CBA">Bakersfield</option>
+            <option value="U$C">Channel Islands</option>
+            <option value="CCH">Chico</option>
+            <option value="CDH">Dominguez Hills</option>
+            <option value="CSH">East Bay</option>
+            <option value="CFS">Fresno</option>
+            <option value="CFI">Fullerton</option>
+            <option value="CHU">Humboldt</option>
+            <option value="CLO">Long Beach</option>
+            <option value="CLA">Los Angeles</option>
+            <option value="CVM">Maritime Academy</option>
+            <option value="MB@">Monterey Bay</option>
+            <option value="MFL">Moss Landing</option>
+            <option value="CNO">Northridge</option>
+            <option value="CPO">Pomona</option>
+            <option value="CSA">Sacramento</option>
+            <option value="CSB">San Bernardino</option>
+            <option value="CDS">San Diego</option>
+            <option value="CSF">San Francisco</option>
+            <option value="CSJ">San Jose</option>
+            <option value="CPS">San Luis Obispo</option>
+            <option value="CS1">San Marcos</option>
+            <option value="CSO">Sonoma</option>
+            <option value="CTU">Stanislaus</option>
+        </select>
+    </div>
+
+    <h2 class="heading">
+        Choose your slip type:
+    </h2>
+    <div>
+        <select name="template">
+            <option value="flags">Flags</option>
+            <option value="stickers">Stickers</option>
+        </select>
+    </div>
+    
+    {% csrf_token %}
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
