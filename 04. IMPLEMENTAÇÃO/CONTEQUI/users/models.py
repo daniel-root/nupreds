@@ -55,19 +55,11 @@ def validate_CPF(value):
     return orig_value
 class User(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
+    #name = models.CharField(max_length=100,null=False, blank=False)
+    #email = models.EmailField(max_length=254,null=False, blank=False)
     phone = models.CharField(max_length=11,null=False, blank=False, unique=True)
     whatsapp = models.CharField(max_length=11,null=False, blank=False, unique=True)
     cpf = models.CharField(unique=True, max_length=14, validators=[validate_CPF])
     
     def __str__(self):
         return self.user.username
-
-    @receiver(post_save, sender=User)
-    def create_user(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
-
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
-
