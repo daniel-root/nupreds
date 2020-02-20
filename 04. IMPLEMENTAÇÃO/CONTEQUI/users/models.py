@@ -63,7 +63,7 @@ class User(models.Model):
         return self.user.username
 
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_user(sender, instance, created, **kwargs):
         if created:
             Profile.objects.create(user=instance)
 

@@ -43,3 +43,4 @@ def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
         user.delete()
         return redirect('use_list')
     return render(request, template_name, {'object':user})
+

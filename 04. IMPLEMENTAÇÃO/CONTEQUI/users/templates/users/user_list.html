@@ -5,7 +5,6 @@
     <tr>
     <th>Nome</th>
     <th>CPF</th>
-    <th>Tipo</th>
     <th>View</th>
     <th>Edit</th>
     <th>Delete</th>
@@ -16,7 +15,6 @@
     <tr>
     <td>{{ user.user }}</td>
     <td>{{ user.cpf }}</td>
-    <td>{{ user.group }}</td>
     <td><a href="{% url "user_view" user.id %}">view</a></td>
     <td><a href="{% url "user_edit" user.id %}">edit</a></td>
     <td><a href="{% url "user_delete" user.id %}">delete</a></td>
