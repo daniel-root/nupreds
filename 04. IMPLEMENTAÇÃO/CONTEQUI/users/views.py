@@ -6,16 +6,16 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 # Create your views here.
 from users.models import User
-
+'''
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['user','cpf','phone','whatsapp']
+        fields = ['nome','cpf','phone','whatsapp']
 
 def user_list(request, templete_name='users/user_list.html'):
     user = User.objects.all()
     data = {}
-    data['object_list'] = user
+    data['object_list'] = nome
     return render(request, templete_name, data)
 
 def user_view(request, pk, template_name='users/user_detail.html'):
@@ -44,3 +44,4 @@ def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
         return redirect('use_list')
     return render(request, template_name, {'object':user})
 
+'''
