@@ -4,13 +4,21 @@ from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 # Create your views here.
 from equipments.models import Equipment
+from equipments.models import Client
 
+class HomePageView(TemplateView):
+    template_name = 'home.html'
 class EquipmentForm(ModelForm):
     class Meta:
         model = Equipment
         fields = ['tag','description','typ','maximum_time']
+class ClientForm(ModelForm):
+    class Meta:
+        model = Client
+        fields = ['usuario','nome','email','telefone','cpf','data_de_nascimento','sexo']
 
 def equipment_list(request, templete_name='equipments/equipment_list.html'):
     equipment = Equipment.objects.all()
@@ -43,25 +51,36 @@ def equipment_delete(request, pk, template_name='equipments/equipment_confirm_de
         equipment.delete()
         return redirect('equipment_list')
     return render(request, template_name, {'object':equipment})
-'''
-class EquipmentList(ListView):
-    model = Equipment
 
-class EquipmentView(DetailView):
-    model = Equipment
 
-class EquipmentCreate(CreateView):
-    model = Equipment
-    fields = ['tag','description','typ','maximum_time']
-    success_url = reverse_lazy('equipment_list')
+def client_list(request, templete_name='clients/client_list.html'):
+    client = Client.objects.all()
+    data = {}
+    data['object_list'] = client
+    return render(request, templete_name, data)
 
-class EquipmentUpdate(UpdateView):
-    model = Equipment
-    fields = ['tag','description','type','maximum_time']
-    success_url = reverse_lazy('equipment_list')
+def client_view(request, pk, template_name='clients/client_detail.html'):
+    client = get_object_or_404(Client, pk=pk)    
+    return render(request, template_name, {'object':client})
 
-class EquipmentDelete(DeleteView):
-    model = Equipment
-    success_url = reverse_lazy('equipment_list')
+def client_create(request, template_name='clients/client_form.html'):
+    form = CLientForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('client_list')
+    return render(request, template_name, {'form':form})
 
-'''
+def client_update(request, pk, template_name='clients/client_form.html'):
+    client = get_object_or_404(Client, pk=pk)
+    form = ClientForm(request.POST or None, instance=client)
+    if form.is_valid():
+        form.save()
+        return redirect('client_list')
+    return render(request, template_name, {'form':form})
+
+def client_delete(request, pk, template_name='clients/client_confirm_delete.html'):
+    client= get_object_or_404(Client, pk=pk)    
+    if request.method=='POST':
+        client.delete()
+        return redirect('client_list')
+    return render(request, template_name, {'object':client})

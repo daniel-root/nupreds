@@ -36,8 +36,11 @@ class Client(models.Model):
     senha = models.CharField(max_length=50, null=False)
     
 
-    def __unicode__(self):
-        return self.nome
+    def __str__(self):
+       return self.usuario
+
+    def get_absolute_url(self):
+        return reverse('equipment_edit', kwargs={'pk': self.pk})
 
 class Equipment_user(models.Model):
     loan = models.DateTimeField(blank=True)
