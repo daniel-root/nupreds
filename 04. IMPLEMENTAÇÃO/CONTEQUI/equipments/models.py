@@ -20,8 +20,27 @@ class Equipment(models.Model):
     def get_absolute_url(self):
         return reverse('equipment_edit', kwargs={'pk': self.pk})
 
+
+class Client(models.Model):
+    SEXO_CHOICES = (
+        (u'Masculino', u'Masculino'),
+        (u'Feminino', u'Feminino'),
+    )
+    usuario = models.CharField(max_length=255, null=False)
+    nome = models.CharField(max_length=255, null=False)
+    email = models.EmailField()
+    telefone = models.CharField(max_length=20, null=True)
+    cpf = models.CharField(max_length=255, null=False)
+    data_de_nascimento = models.DateField(null=False)
+    sexo = models.CharField(max_length=9, null=False, choices=SEXO_CHOICES)
+    senha = models.CharField(max_length=50, null=False)
+    
+
+    def __unicode__(self):
+        return self.nome
+
 class Equipment_user(models.Model):
     loan = models.DateTimeField(blank=True)
     devolution = models.DateTimeField(blank=True,null=True)
     equiment = models.ForeignKey('Equipment',on_delete=models.SET_NULL, null=True)
-    user = models.ForeignKey(User,on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey('Client',on_delete=models.SET_NULL, null=True)
