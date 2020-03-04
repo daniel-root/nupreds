@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 # Create your views here.
 from equipments.models import Equipment
 from equipments.models import Client
+from equipments.models import Equipment_type
 
 class HomePageView(TemplateView):
     template_name = 'home.html'
@@ -18,7 +19,12 @@ class EquipmentForm(ModelForm):
 class ClientForm(ModelForm):
     class Meta:
         model = Client
-        fields = ['usuario','nome','email','telefone','cpf','data_de_nascimento','sexo']
+        fields = ['usuario','nome','email','telefone','cpf','data_de_nascimento','sexo','senha']
+
+class TypeForm(ModelForm):
+    class Meta:
+        model = Equipment_type
+        fields = ['name']
 
 def equipment_list(request, templete_name='equipments/equipment_list.html'):
     equipment = Equipment.objects.all()
@@ -64,7 +70,7 @@ def client_view(request, pk, template_name='clients/client_detail.html'):
     return render(request, template_name, {'object':client})
 
 def client_create(request, template_name='clients/client_form.html'):
-    form = CLientForm(request.POST or None)
+    form = ClientForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect('client_list')
@@ -84,3 +90,35 @@ def client_delete(request, pk, template_name='clients/client_confirm_delete.html
         client.delete()
         return redirect('client_list')
     return render(request, template_name, {'object':client})
+
+def equipment_type_list(request, templete_name='equipments/equipment_type_list.html'):
+    equipment_type = Equipment_type.objects.all()
+    data = {}
+    data['object_list'] = equipment_type
+    return render(request, templete_name, data)
+
+def equipment_type_view(request, pk, template_name='equipments/equipment_type_detail.html'):
+    equipment_type= get_object_or_404(Equipment_type, pk=pk)    
+    return render(request, template_name, {'object':equipment_type})
+
+def equipment_type_create(request, template_name='equipments/equipment_type_form.html'):
+    form = TypeForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('equipment_list')
+    return render(request, template_name, {'form':form})
+
+def equipment_type_update(request, pk, template_name='equipments/equipment_type_form.html'):
+    equipment_type= get_object_or_404(Equipment_type, pk=pk)
+    form = TypeForm(request.POST or None, instance=equipment_type)
+    if form.is_valid():
+        form.save()
+        return redirect('equipment_list')
+    return render(request, template_name, {'form':form})
+
+def equipment_type_delete(request, pk, template_name='equipments/equipment_type_confirm_delete.html'):
+    equipment_type= get_object_or_404(Equipment_type, pk=pk)    
+    if request.method=='POST':
+        equipment_type.delete()
+        return redirect('equipment_list')
+    return render(request, template_name, {'object':equipment_type})
