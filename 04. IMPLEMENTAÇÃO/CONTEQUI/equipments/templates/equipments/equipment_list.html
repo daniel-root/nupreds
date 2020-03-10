@@ -5,7 +5,7 @@
     <tr>
     <th>Etiqueta</th>
     <th>Descrição</th>
-    <th>View</th>
+    <th>Emprestimo</th>
     <th>Edit</th>
     <th>Delete</th>
     </tr>
@@ -15,7 +15,7 @@
     <tr>
     <td>{{ equipment.tag }}</td>
     <td>{{ equipment.description }}</td>
-    <td><a href="{% url "equipment_view" equipment.id %}">view</a></td>
+    <td><a href="{% url "equipment_user_new" %}">emprestimo</a></td>
     <td><a href="{% url "equipment_edit" equipment.id %}">edit</a></td>
     <td><a href="{% url "equipment_delete" equipment.id %}">delete</a></td>
     </tr>

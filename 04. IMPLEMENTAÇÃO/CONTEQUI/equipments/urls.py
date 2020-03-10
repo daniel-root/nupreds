@@ -4,7 +4,7 @@ from .views import HomePageView
 from equipments import views
 
 urlpatterns = [
-    path('', HomePageView.as_view(), name='home'),
+    path('home', HomePageView.as_view(), name='home'),
     path('alist', views.equipment_list, name='equipment_list'),
     path('aview/<int:pk>', views.equipment_view, name='equipment_view'),
     path('anew', views.equipment_create, name='equipment_new'),
@@ -20,4 +20,7 @@ urlpatterns = [
     path('tnew', views.equipment_type_create, name='equipment_type_new'),
     path('tedit/<int:pk>', views.equipment_type_update, name='equipment_type_edit'),
     path('tdelete/<int:pk>', views.equipment_type_delete, name='equipment_type_delete'),
+    path('uedit/<int:pk>', views.equipment_user_update, name='equipment_user_edit'),
+    path('uview/<int:pk>', views.equipment_user_view, name='equipment_user_view'),
+    path('unew', views.equipment_user_create, name='equipment_user_new'),
 ]

@@ -5,10 +5,10 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
-# Create your views here.
 from equipments.models import Equipment
 from equipments.models import Client
 from equipments.models import Equipment_type
+from equipments.models import Equipment_user
 
 class HomePageView(TemplateView):
     template_name = 'home.html'
@@ -25,6 +25,11 @@ class TypeForm(ModelForm):
     class Meta:
         model = Equipment_type
         fields = ['name']
+
+class UserEquipmentForm(ModelForm):
+    class Meta:
+        model = Equipment_user
+        fields = ['loan','devolution','equiment','client_loan','client_devolution']
 
 def equipment_list(request, templete_name='equipments/equipment_list.html'):
     equipment = Equipment.objects.all()
@@ -122,3 +127,22 @@ def equipment_type_delete(request, pk, template_name='equipments/equipment_type_
         equipment_type.delete()
         return redirect('equipment_list')
     return render(request, template_name, {'object':equipment_type})
+
+def equipment_user_create(request, template_name='equipments/equipment_user_form.html'):
+    form = UserEquipmentForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('equipment_list')
+    return render(request, template_name, {'form':form})
+
+def equipment_user_update(request, pk, template_name='equipments/equipment_user_form.html'):
+    equipment_user = get_object_or_404(Equipment_user, pk=pk)
+    form = UserEquipmentForm(request.POST or None, instance=equipment_user)
+    if form.is_valid():
+        form.save()
+        return redirect('equipment_list')
+    return render(request, template_name, {'form':form})
+
+def equipment_user_view(request, pk, template_name='equipments/equipment_user_detail.html'):
+    equipment_user= get_object_or_404(Equipment_user, pk=pk)    
+    return render(request, template_name, {'object':equipment_user})
