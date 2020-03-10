@@ -50,8 +50,5 @@ class Equipment_user(models.Model):
     client_loan = models.ForeignKey('Client',on_delete=models.SET_NULL, null=True,related_name='client_load')
     client_devolution = models.ForeignKey('Client',on_delete=models.SET_NULL, null=True,related_name='client_devolution',blank=True)
 
-    def __str__(self):
-        return self.load + self.devolution
-
     def get_absolute_url(self):
         return reverse('equipment_edit', kwargs={'pk': self.pk})
