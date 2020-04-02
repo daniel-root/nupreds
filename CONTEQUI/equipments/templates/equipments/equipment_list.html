@@ -1,0 +1,39 @@
+<h1>Equipments</h1>
+<table border="1">
+{% for QuerySet in tipo %}
+<a href="{% url "filter_type" QuerySet %}">{{ QuerySet }}</a>
+
+{% endfor %}
+<form method="POST" action="{% url 'search' %}">{% csrf_token %}
+    <input type="text" placeholder="Search.." name="search" required="required">
+    <div class="submit">
+        <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
+    </div>
+</form>
+<thead>
+    <tr>
+    <th><a href="{% url "filter_list" 1 %}">Etiqueta</a></th>
+    <th><a href="{% url "filter_list" 2 %}">Descrição</a></th>
+    <th><a href="{% url "filter_list" 3 %}">Em posse</a></th>
+    <th>View</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    </tr>
+</thead>
+<tbody>
+    {% for equipment in object_list %}
+    <tr>
+    <td>{{ equipment.tag }}</td>
+    <td>{{ equipment.description }}</td>
+    {% load my_tag %}
+    <td>{% my_tag equipment.id %}</td>
+    <td><a href="{% url "equipment_view" equipment.id %}">emprestimo</a></td>
+    <td><a href="{% url "equipment_edit" equipment.id %}">edit</a></td>
+    <td><a href="{% url "equipment_delete" equipment.id %}">delete</a></td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+<a href="{% url "equipment_new" %}">New</a>
+<a href="{% url "home" %}">voltar</a>

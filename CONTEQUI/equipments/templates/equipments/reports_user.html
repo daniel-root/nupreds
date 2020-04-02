@@ -1,0 +1,47 @@
+<h1>Relatorios</h1>
+<a href="{% url "reports_list" %}">Listagem</a>
+<a href="">Rastreio</a>
+<a href="reports_list3">Não devolvidas</a>
+<a href="{% url "reports_list2" %}">Uso</a>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ list2 }}
+    <input type="submit" value="Submit">
+</form>
+<!--<form method="POST" action="">{% csrf_token %}
+    <input type="text" placeholder="Search.." name="search" required="required">
+    <div class="submit">
+        <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
+    </div>
+</form>
+-->
+<table border="1">
+<thead>
+    <tr>
+    <th>Tipo</th>
+    <th>Etiqueta</th>
+    <th>Descrição</th>
+    <th>Solicitação</th>
+    <th>Responsavel</th>
+    <th>Solicitação</th>
+    <th>Responsavel</th>
+    <th>Qtd. Emprestimos</th>
+    </tr>
+</thead>
+<tbody>
+    {% load my_tag %}
+    {% for list in list0 %}
+    <tr>
+    <td>{% my_tag5 list.id %}</td>
+    <td>{% my_tag3 list.id %}</td>
+    <td>{% my_tag4 list.id %}</td>
+    <td>{{ list.loan }}</td>
+    <td>{{ list.usuario }}</td>
+    <td>{{ list.devolution }}</td>
+    <td>{{ list.usuario2 }}</td>
+    <td>{{ list.amount_of_loans }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<a href="{% url "home" %}">voltar</a>

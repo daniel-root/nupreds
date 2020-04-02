@@ -1,0 +1,8 @@
+<h1>Equipments Details</h1>
+<h2>{{object.typ}} {{object.tag}} {{object.description}}</h2>
+{% load my_tag %}
+{% my_tag object.pk %}
+{% my_tag2 object.pk %}
+
+<h2><a href="{% url "emprestar" object.pk %}">emprestar</a> <a href="{% url "devolver" object.pk %}">devolver</a></h2>
+<a href="{% url "equipment_list" %}">voltar</a>
