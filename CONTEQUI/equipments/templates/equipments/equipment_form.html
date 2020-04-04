@@ -1,5 +1,7 @@
-<h1>Equipments Edit</h1>
+<h1>Equipments Create</h1>
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />
-</form><a href="{% url "equipment_list" %}">voltar</a>
+</form>
+<a href="{% url "equipment_type_list" %}">new type</a>
+<a href="{% url "equipment_list" %}">voltar</a>

@@ -61,9 +61,10 @@ def loginpage(request):
         if post:
             username = request.POST['username']
             request.session['username'] = username
-            return redirect('/')
+            return render(request, 'home.html')
+            #return redirect('/')
             #tag = 'tag'
-            #return render(request, 'home.html',{'tag':tag})
+            #,{'tag':tag})
         else:
             return render(request, 'login.html')
     return render(request, 'login.html')

@@ -2,12 +2,12 @@ from django.db import models
 from django.urls import reverse
 from users.models import Client
 
-# Create your models here.
 class Equipment_type(models.Model):
     name = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
+
 class Equipment(models.Model):
     STATUS_CHOICES = (
         (u'Livre', u'Livre'),
@@ -28,7 +28,8 @@ class Equipment(models.Model):
 class Equipment_user(models.Model):
     loan = models.DateTimeField(blank=True)
     devolution = models.DateTimeField(blank=True,null=True)
-    equiment = models.ForeignKey('Equipment',on_delete=models.SET_NULL, null=True)
-    usuario = models.ForeignKey(Client,on_delete=models.SET_NULL, null=True,related_name='emprestimo')
-    usuario2 = models.ForeignKey(Client,on_delete=models.SET_NULL, null=True,related_name='devolução')
+    equipment = models.ForeignKey('Equipment',on_delete=models.SET_NULL, null=True)
+    user_loan = models.ForeignKey(Client,on_delete=models.SET_NULL, null=True,related_name='emprestimo')
+    user_devolution = models.ForeignKey(Client,on_delete=models.SET_NULL, null=True,related_name='devolução')
     amount_of_loans = models.IntegerField(default=0)
+    limit_time = models.DateTimeField(blank=True,null=True)

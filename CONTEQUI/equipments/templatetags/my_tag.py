@@ -10,7 +10,7 @@ from django.utils import timezone
 @register.simple_tag
 def my_tag(pk):
     chave = int(pk)
-    teste = Equipment_user.objects.filter(devolution=None,equiment=Equipment.objects.get(id = chave)).values_list('usuario',flat=True)
+    teste = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = chave)).values_list('user_loan',flat=True)
     #teste = Equipment_user.objects.get(devolution=None,equiment=Equipment.objects.get(id = chave))
     #data = {}
     #data['object_list'] = teste
@@ -24,7 +24,7 @@ def my_tag(pk):
 @register.simple_tag
 def my_tag2(pk):
     chave = int(pk)
-    teste = Equipment_user.objects.filter(devolution=None,equiment=Equipment.objects.get(id = chave)).values_list('loan',flat=True)
+    teste = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = chave)).values_list('loan',flat=True)
     #teste = Equipment_user.objects.get(devolution=None,equiment=Equipment.objects.get(id = chave))
     #data = {}
     #data['object_list'] = teste
@@ -151,3 +151,32 @@ def my_tag6(pk):
         return a
         
     return ''
+
+@register.simple_tag
+def LoanOrDevolution(pk):
+    chave = int(pk)
+    BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = chave)).values_list('user_loan',flat=True)
+    if BusyEquipment:
+        return 'Devolução'
+    return 'Emprestimo'
+
+@register.simple_tag
+def ActiveOrInactive(pk):
+    ActiveEquipment = Equipment.objects.filter(id = pk,inative=False)
+    if ActiveEquipment:
+        return 'Desativar'
+    return 'Ativar'
+
+@register.simple_tag
+def Atraso(pk):
+    Equipment_time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
+    Maximum_Time = ''.join(map(str, Equipment_time))
+    TimeEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).values_list('loan',flat=True)
+    BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).values_list('user_loan',flat=True)
+    #data = {}
+    #data['Time']=TimeEquipment
+    #print('Time' in data)
+    #timedelta(minutes=60)
+    #Time = ''.join(map(str, TimeEquipment))
+    if str(timezone.now()) >= '2020-04-04 17:55':
+        return 'Atrasado'
