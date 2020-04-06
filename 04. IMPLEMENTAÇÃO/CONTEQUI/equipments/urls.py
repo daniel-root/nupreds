@@ -1,26 +1,30 @@
 from django.urls import path
-from .views import HomePageView
-
+from django.conf.urls.static import static
+from django.conf import settings
 from equipments import views
 
 urlpatterns = [
-    path('home', HomePageView.as_view(), name='home'),
-    path('alist', views.equipment_list, name='equipment_list'),
-    path('aview/<int:pk>', views.equipment_view, name='equipment_view'),
-    path('anew', views.equipment_create, name='equipment_new'),
-    path('aedit/<int:pk>', views.equipment_update, name='equipment_edit'),
-    path('adelete/<int:pk>', views.equipment_delete, name='equipment_delete'),
-    path('list', views.client_list, name='client_list'),
-    path('view/<int:pk>', views.client_view, name='client_view'),
-    path('new', views.client_create, name='client_new'),
-    path('edit/<int:pk>', views.client_update, name='client_edit'),
-    path('delete/<int:pk>', views.client_delete, name='client_delete'),
-    path('tlist', views.equipment_type_list, name='equipment_type_list'),
-    path('tview/<int:pk>', views.equipment_type_view, name='equipment_type_view'),
-    path('tnew', views.equipment_type_create, name='equipment_type_new'),
-    path('tedit/<int:pk>', views.equipment_type_update, name='equipment_type_edit'),
-    path('tdelete/<int:pk>', views.equipment_type_delete, name='equipment_type_delete'),
-    path('uedit/<int:pk>', views.equipment_user_update, name='equipment_user_edit'),
-    path('uview/<int:pk>', views.equipment_user_view, name='equipment_user_view'),
-    path('unew', views.equipment_user_create, name='equipment_user_new'),
-]
+    path('', views.home, name='home'),
+    path('Equipamentos', views.equipment_list, name='equipment_list'),
+    path('Emprestimo/<int:pk>', views.equipment_view, name='equipment_view'),
+    path('Novo', views.equipment_create, name='equipment_new'),
+    path('Editar/<int:pk>', views.equipment_update, name='equipment_edit'),
+    path('InativarAtivar/<int:pk>', views.equipment_delete, name='equipment_delete'),
+    path('Emprestar/<int:pk>', views.emprestar, name='emprestar'),
+    path('Devolver/<int:pk>', views.devolver, name='devolver'),
+    path('ConfirmarEmprestimo/<int:pk>', views.emprestar_user, name='emprestar_user'),
+    path('ConfirmarDevolução/<int:pk>', views.devolver_user, name='devolver_user'),
+    path('Filtro/<int:pk>', views.filter_list, name='filter_list'),
+    path('Equipamentos/<str:value>', views.filter_type, name='filter_type'),
+    path('Pesquisar', views.search, name='search'),
+    path('reports_list', views.get_rastreio, name='reports_list'),
+    path('reports_list2', views.get_rastreio_list, name='reports_list2'),
+    path('reports_list3', views.get_rastreio_list2, name='reports_list3'),
+    path('type_list', views.equipment_type_list, name='equipment_type_list'),
+    path('type_view/<int:pk>', views.equipment_type_view, name='equipment_type_view'),
+    path('type_new', views.equipment_type_create, name='equipment_type_new'),
+    path('type_edit/<int:pk>', views.equipment_type_update, name='equipment_type_edit'),
+    path('type_delete/<int:pk>', views.equipment_type_delete, name='equipment_type_delete'),
+    path('Inativos', views.equipment_list_inactive, name='equipment_list_inactive'),
+   
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

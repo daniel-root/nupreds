@@ -1,6 +1,0 @@
-<h1>Equipment Delete</h1>
-<form method="post">{% csrf_token %}
-    {% load my_tag %}
-    Você tem certeza que deseja {% ActiveOrInactive object.id %} "{{object.tag}} {{object.description}}" ?
-    <input type="submit" value="Submit" />
-</form><a href="{% url "equipment_list" %}">voltar</a>
