@@ -171,12 +171,20 @@ def ActiveOrInactive(pk):
 def Atraso(pk):
     Equipment_time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
     Maximum_Time = ''.join(map(str, Equipment_time))
-    TimeEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).values_list('loan',flat=True)
+    TimeEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
     BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).values_list('user_loan',flat=True)
     #data = {}
     #data['Time']=TimeEquipment
     #print('Time' in data)
     #timedelta(minutes=60)
+    #print(TimeEquipment)
+    for time in TimeEquipment:
+        if timezone.now() >= time.limit_time:
+            Equipment.objects.filter(id = pk).update(status='Atrasado')
+            return 'Atrasado'
+        return ''
+    return ''
     #Time = ''.join(map(str, TimeEquipment))
-    if str(timezone.now()) >= '2020-04-04 17:55':
-        return 'Atrasado'
+    #if str(timezone.now()) >= '2020-04-04 17:55':
+    #    return 'Atrasado'
+    

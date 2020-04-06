@@ -17,7 +17,7 @@ class Equipment(models.Model):
     tag = models.CharField(max_length=10)
     description = models.TextField()
     type_equipment = models.ForeignKey('Equipment_type',on_delete=models.SET_NULL, null=True)
-    maximum_time = models.IntegerField()
+    maximum_time = models.IntegerField(default=4)
     inative = models.BooleanField(default=False)
     status =  models.CharField(max_length=9, null=False, choices=STATUS_CHOICES,default='Livre')
     amount_of_loans = models.IntegerField(default=0)

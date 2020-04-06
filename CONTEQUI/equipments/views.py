@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import ModelForm
 from equipments.models import *
-from datetime import datetime
+from datetime import datetime, timedelta
 from users.models import *
 from django.db.models import Q
 from django.utils import timezone
 from django import forms
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 
 def CheckLoggedUser(request):
@@ -23,6 +24,10 @@ class TypeForm(ModelForm):
     class Meta:
         model = Equipment_type
         fields = ['name']
+
+class InactiveForm(forms.Form):
+    #search_keyword = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Keyword Search','class':'keyword-search'}))
+    inactive = forms.BooleanField(widget=forms.CheckboxInput(attrs={'onclick':'this.form.submit();'}),required=False, label="Ver inativos")
 
 class EquipmentForm(ModelForm):
     class Meta:
@@ -61,19 +66,43 @@ def equipment_type_delete(request, pk, template_name='equipments/equipment_type_
         return redirect('equipment_list')
     return render(request, template_name, {'object':equipment_type})
 
+class tipos():
+    a = 1
+    b = 2
+    c = 3
+
+
 def equipment_list(request,templete_name='equipments/equipment_list.html'):
+    if request.session.has_key('username'):
+        equipment = Equipment.objects.filter(inative=False).order_by('status','tag')
+        type_equipment = Equipment_type.objects.all().values_list('name',flat=True)
+        #tipos={['a',1],['b',2],['c',3]}
+        # {'object':equipment}
+        #print(equipment)
+        data = {}
+        data['list_equipment'] = equipment
+        data['type_equipment']= type_equipment
+        data['form_inactive'] = InactiveForm()
+        data['type_filter'] = tipos()
+        return render(request, templete_name, data)
+    return render(request, 'login.html')
+
+def equipment_list_inactive(request,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
         equipment = Equipment.objects.all().order_by('status','tag')
         type_equipment = Equipment_type.objects.all().values_list('name',flat=True)
         data = {}
         data['list_equipment'] = equipment
         data['type_equipment']= type_equipment
+        data['form_inactive'] = InactiveForm()
+        data['type_filter'] = tipos()
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
 def equipment_view(request, pk, template_name='equipments/equipment_detail.html'):
     if request.session.has_key('username'):
-        equipment = get_object_or_404(Equipment, pk=pk)    
+        equipment = get_object_or_404(Equipment, pk=pk)   
+        #print(equipment) 
         return render(request, template_name, {'object':equipment})
     return render(request, 'login.html')
 
@@ -133,10 +162,13 @@ def emprestar_user(request,pk):
                 amout = Equipment.objects.filter(id=chave).values_list('amount_of_loans',flat=True)
                 amout_of_equipments = ''.join(map(str, amout))
                 if BusyEquipment:
+                    messages.error(request, 'Equipamento já emprestado!')
                     equipment= get_object_or_404(Equipment, pk=pk)
                     return render(request, 'equipments/equipment_detail.html', {'object':equipment})
+                time = Equipment.objects.filter(id = chave).values_list('maximum_time',flat=True)
+                time = ''.join(map(str,time))
                 Equipment.objects.filter(id = chave).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
-                Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = chave),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1)
+                Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = chave),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
                 return equipment_list(request)
         equipment= get_object_or_404(Equipment, pk=pk)
         return render(request, 'equipments/equipment_detail.html', {'object':equipment})
@@ -156,6 +188,7 @@ def devolver_user(request,pk):
                     Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = chave)).update(user_devolution=Client.objects.get(id = int(StringPost)),devolution=timezone.now())
                     Equipment.objects.filter(id = chave).update(status='Livre')
                     return equipment_list(request)
+            messages.error(request, 'Equipamento sem emprestimo!')
             equipment= get_object_or_404(Equipment, pk=pk)
             return render(request, 'equipments/equipment_detail.html', {'object':equipment})
         equipment= get_object_or_404(Equipment, pk=pk)
@@ -176,6 +209,7 @@ def filter_list(request,pk,templete_name='equipments/equipment_list.html'):
         data = {}
         data['list_equipment'] = equipment
         data['type_equipment']= tipo
+        data['type_filter'] = tipos()
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -188,6 +222,7 @@ def filter_type(request,value,templete_name='equipments/equipment_list.html'):
         data = {}
         data['list_equipment'] = equipment
         data['type_equipment']= tipo
+        data['type_filter'] = tipos()
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -200,6 +235,7 @@ def search(request):
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= tipo
+            data['type_filter'] = tipos()
             return render(request, 'equipments/equipment_list.html', data)
     return render(request, 'login.html')
 

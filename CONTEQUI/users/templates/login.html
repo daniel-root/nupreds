@@ -12,6 +12,11 @@
         
         <button type="submit">Entrar</button>
     </form>
+    {% for message in messages %}
+    <div class="alert alert-danger">
+      <strong>Error!</strong> {{ message }}
+    </div>
+    {% endfor %}
     <h2>&nbsp;</h2>
   </div>
 </div>
