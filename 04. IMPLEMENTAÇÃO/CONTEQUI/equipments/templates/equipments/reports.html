@@ -14,17 +14,23 @@
 </head>
 <body>
     <h1>Relatorios</h1>
-<a href="">Listagem</a>
-<a href="">Rastreio</a>
-<a href="">Não devolvidas</a>
-<a href="">Uso</a>
-<form action="" method="post">
+{{ type }}
+<a href="{% url "get_rastreio" 'Listagem' %}">Listagem</a>
+<a href="{% url "get_rastreio" 'Rastreio' %}">Rastreio</a>
+<a href="{% url "get_rastreio" 'NaoDevolvidos' %}">Não devolvidas</a>
+<!--<a href="">Uso</a> -->
+<form action="{% url "get_rastreio" type %}" method="post">
     {% csrf_token %}
     Tipo: {{ list_equipment_user_form.type_equipment }}
     Etiqueta: {{ list_equipment_user_form.tag }}
     Descrição: {{ list_equipment_user_form.description }}
+    {% ifequal type 'Rastreio' %}
     Inicio: {{ list_equipment_user_form.start }}
     Fim: {{ list_equipment_user_form.end }}
+    {% endifequal %}
+    {% ifequal type 'NaoDevolvidos' %}
+    Inicio: {{ list_equipment_user_form.start }}
+    {% endifequal %}
     <input type="submit" value="Submit">
 </form>
 <!--<form method="POST" action="">{% csrf_token %}
@@ -48,6 +54,7 @@
     </tr>
 </thead>
 <tbody>
+    {% ifequal type 'Rastreio' %}
     {% load my_tag %}
     {% for equipment_user in list_equipment_user %}
     <tr>
@@ -61,6 +68,36 @@
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
     {% endfor %}
+    {% endifequal %}
+    {% ifequal type 'NaoDevolvidos' %}
+    {% load my_tag %}
+    {% for equipment_user in list_equipment_user %}
+    <tr>
+    <td>{% my_tag5 equipment_user.equipment %}</td>
+    <td>{% my_tag3 equipment_user.equipment %}</td>
+    <td>{% my_tag4 equipment_user.equipment %}</td>
+    <td>{{ equipment_user.loan }}</td>
+    <td>{{ equipment_user.user_loan }}</td>
+    <td></td>
+    <td></td>
+    <td>{{ equipment_user.amount_of_loans }}</td>
+    </tr>
+    {% endfor %}
+    {% endifequal %}
+    {% ifequal type 'Listagem' %}
+    {% for equipment_user in list_equipment_user %}
+    <tr>
+    <td>{{ equipment_user.type_equipment }}</td>
+    <td>{{ equipment_user.tag }}</td>
+    <td>{{ equipment_user.description }}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>{{ equipment_user.amount_of_loans }}</td>
+    </tr>
+    {% endfor %}
+    {% endifequal %}
 </tbody>
 </table>
 <a href="{% url "home" %}">voltar</a>

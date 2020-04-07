@@ -9,14 +9,8 @@ from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 
-
-def CheckLoggedUser(request):
-    if request.session.has_key('username') == False:
-        return False
-    return True
-
 def home(request):
-    if CheckLoggedUser(request):
+    if request.session.has_key('username'):
         return render(request,'home.html')
     return render(request,'login.html')
 
@@ -26,7 +20,6 @@ class TypeForm(ModelForm):
         fields = ['name']
 
 class InactiveForm(forms.Form):
-    #search_keyword = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Keyword Search','class':'keyword-search'}))
     inactive = forms.BooleanField(widget=forms.CheckboxInput(attrs={'onclick':'this.form.submit();'}),required=False, label="Ver inativos")
 
 class EquipmentForm(ModelForm):
@@ -34,15 +27,21 @@ class EquipmentForm(ModelForm):
         model = Equipment
         fields = ['tag','description','type_equipment','maximum_time']
 
-def equipment_type_list(request, templete_name='equipments/equipment_type_list.html'):
+def EquipmentTypeAll():
     equipment_type = Equipment_type.objects.all()
+    return equipment_type
+
+def EquipmentTypeUnique(pk):
+    equipment_type = get_object_or_404(Equipment_type, pk=pk) 
+    return equipment_type   
+
+def equipment_type_list(request, templete_name='equipments/equipment_type_list.html'):
     data = {}
-    data['object_list'] = equipment_type
+    data['object_list'] = EquipmentTypeAll
     return render(request, templete_name, data)
 
-def equipment_type_view(request, pk, template_name='equipments/equipment_type_detail.html'):
-    equipment_type= get_object_or_404(Equipment_type, pk=pk)    
-    return render(request, template_name, {'object':equipment_type})
+def equipment_type_view(request, pk, template_name='equipments/equipment_type_detail.html'):   
+    return render(request, template_name, {'object':EquipmentTypeUnique(pk)})
 
 def equipment_type_create(request, template_name='equipments/equipment_type_form.html'):
     form = TypeForm(request.POST or None)
@@ -52,52 +51,53 @@ def equipment_type_create(request, template_name='equipments/equipment_type_form
     return render(request, template_name, {'form':form})
 
 def equipment_type_update(request, pk, template_name='equipments/equipment_type_form.html'):
-    equipment_type= get_object_or_404(Equipment_type, pk=pk)
-    form = TypeForm(request.POST or None, instance=equipment_type)
+    form = TypeForm(request.POST or None, instance=EquipmentTypeUnique(pk))
     if form.is_valid():
         form.save()
         return redirect('equipment_list')
     return render(request, template_name, {'form':form})
 
 def equipment_type_delete(request, pk, template_name='equipments/equipment_type_confirm_delete.html'):
-    equipment_type= get_object_or_404(Equipment_type, pk=pk)    
     if request.method=='POST':
         equipment_type.delete()
         return redirect('equipment_list')
-    return render(request, template_name, {'object':equipment_type})
+    return render(request, template_name, {'object':EquipmentTypeUnique(pk)})
+
+def EquipmentActiveAll():
+    equipment = Equipment.objects.filter(inative=False).order_by('status','tag')
+    return equipment
+
+def EquipmentAll():
+    equipment = Equipment.objects.all().order_by('status','tag')
+    return equipment
+
+def EquipmentUnique(pk):
+    equipment = get_object_or_404(Equipment, pk=pk)
+    return equipment
 
 def equipment_list(request,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
-        equipment = Equipment.objects.filter(inative=False).order_by('status','tag')
-        type_equipment = Equipment_type.objects.all().values_list('name',flat=True)
-        #tipos={['a',1],['b',2],['c',3]}
-        # {'object':equipment}
-        #print(equipment)
-        types = 'Todos'
         data = {}
-        data['list_equipment'] = equipment
-        data['type_equipment']= type_equipment
+        data['list_equipment'] = EquipmentActiveAll()
+        data['type_equipment']= EquipmentTypeAll()
         data['form_inactive'] = InactiveForm()
-        data['type'] = types
+        data['type'] = 'Todos'
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
-def equipment_list_inactive(request,templete_name='equipments/equipment_list.html'):
+def equipment_list_inactive(request,value,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
-        equipment = Equipment.objects.all().order_by('status','tag')
-        type_equipment = Equipment_type.objects.all().values_list('name',flat=True)
         data = {}
-        data['list_equipment'] = equipment
-        data['type_equipment']= type_equipment
+        data['list_equipment'] = EquipmentAll()
+        data['type_equipment']= EquipmentTypeAll()
         data['form_inactive'] = InactiveForm()
+        data['type'] = value
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
 def equipment_view(request, pk, template_name='equipments/equipment_detail.html'):
     if request.session.has_key('username'):
-        equipment = get_object_or_404(Equipment, pk=pk)   
-        #print(equipment) 
-        return render(request, template_name, {'object':equipment})
+        return render(request, template_name, {'object':EquipmentUnique(pk)})
     return render(request, 'login.html')
 
 def equipment_create(request, template_name='equipments/equipment_form.html'):
@@ -111,8 +111,7 @@ def equipment_create(request, template_name='equipments/equipment_form.html'):
 
 def equipment_update(request, pk, template_name='equipments/equipment_form.html'):
     if request.session.has_key('username'):
-        equipment= get_object_or_404(Equipment, pk=pk)
-        form = EquipmentForm(request.POST or None, instance=equipment)
+        form = EquipmentForm(request.POST or None, instance=EquipmentUnique(pk))
         if form.is_valid():
             form.save()
             return equipment_list(request)
@@ -121,26 +120,23 @@ def equipment_update(request, pk, template_name='equipments/equipment_form.html'
 
 def equipment_delete(request, pk, template_name='equipments/equipment_confirm_delete.html'):
     if request.session.has_key('username'):
-        equipment= get_object_or_404(Equipment, pk=pk)   
         if request.method=='POST':
             if Equipment.objects.filter(id = pk,inative='True'):
                 Equipment.objects.filter(id = pk).update(inative='False')
             else:
                 Equipment.objects.filter(id = pk).update(inative='True')
             return equipment_list(request)
-        return render(request, template_name, {'object':equipment})
+        return render(request, template_name, {'object':EquipmentUnique(pk)})
     return render(request, 'login.html')
 
 def emprestar(request,pk):
     if request.session.has_key('username'):
-        chave = pk
-        return render(request, 'equipments/emprestar.html', {'chave': chave })
+        return render(request, 'equipments/emprestar.html', {'chave': pk })
     return render(request, 'login.html')
 
 def devolver(request,pk):
     if request.session.has_key('username'):
-        chave = pk
-        return render(request, 'equipments/devolver.html', {'chave': chave })
+        return render(request, 'equipments/devolver.html', {'chave': pk })
     return render(request, 'login.html')
 
 def emprestar_user(request,pk):
@@ -204,6 +200,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= tipo
+            data['form_inactive'] = InactiveForm()
             data['type'] = value
             return render(request, templete_name, data)
         else:
@@ -218,6 +215,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= tipo
+            data['form_inactive'] = InactiveForm()
             data['type'] = value
             return render(request, templete_name, data)
     return render(request, 'login.html')
@@ -231,11 +229,12 @@ def filter_type(request,value,templete_name='equipments/equipment_list.html'):
         data = {}
         data['list_equipment'] = equipment
         data['type_equipment']= tipo
+        data['form_inactive'] = InactiveForm()
         data['type'] = filtro
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
-def search(request):
+def search(request,value):
     if request.session.has_key('username'):
         if request.method == 'POST':
             name = request.POST['search']
@@ -244,18 +243,10 @@ def search(request):
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= tipo
+            data['form_inactive'] = InactiveForm()
+            data['type'] = value
             return render(request, 'equipments/equipment_list.html', data)
     return render(request, 'login.html')
-
-def reports_list(request,templete_name='equipments/reports.html'):
-    if request.session.has_key('username'):
-        equipment = Equipment.objects.all()
-        equipment_user = Equipment_user.objects.all()
-        data = {}
-        data['list_equipment_user']= equipment_user
-        return render(request, templete_name, data)
-    return render(request, 'login.html')
-
 
 class RastreioForm(forms.Form):
     data = {}
@@ -278,57 +269,106 @@ class RastreioForm(forms.Form):
         widget=forms.widgets.DateTimeInput(attrs={'type':'date'}),
     )
 
-def get_rastreio(request):
-    if request.method == 'POST':
-        form = RastreioForm(request.POST)
-        type_equipment = request.POST['type_equipment']
-        tag = request.POST['tag']
-        description = request.POST['description']
-        inicio = request.POST['start']
-        fim = request.POST['end']
-        #equipment = Equipment.objects.all()
-        #teste = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
-        #a = ''.join(map(str, teste))
-        #print(a)
-        #a = int(a)
-        #teste1 = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = a)).values_list('id',flat=True)
-        #b = ' '.join(map(str, teste1))
-        #b = b.split()
-        #get_object_or_404(Equipment, pk=pk)
-        #print(b)    
-        #chave = int(b)
-        #equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
+def reports_list(request,templete_name='equipments/reports.html'):
+    if request.session.has_key('username'):
+        equipment = Equipment.objects.all()
         equipment_user = Equipment_user.objects.all()
-        #number = []
-        #for i in b:
-        #    number.append(int(i))
-        #print(number)
-        #equipment_user = Equipment_user.objects.filter(equiment=Equipment.objects.get(type_equipment = a))
-        #equipment_user = Equipment_user.objects.filter(equiment__in =  number)
-        #print(equipment_user)
-    #print(tipo)
+        form = RastreioForm()
         data = {}
-        data['list_equipment_user']= equipment_user
+        #data['list_equipment_user']= equipment_user
         data['list_equipment_user_form']= form
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            #return HttpResponseRedirect('/thanks/')
-            return render(request, 'equipments/reports.html', data)
+        data['type'] = 'Todos'
+        return render(request, templete_name, data)
+    return render(request, 'login.html')
 
-    # if a GET (or any other method) we'll create a blank form
+
+def get_rastreio(request,value):
+    if request.method == 'POST':
+        if value == 'Listagem':
+            type_equipment = request.POST['type_equipment']
+            tag = request.POST['tag']
+            description = request.POST['description']
+            if type_equipment == 'Todos':
+                equipment_user = Equipment.objects.all().order_by('type_equipment','tag')
+                form = RastreioForm(request.POST)
+                data = {}
+                data['list_equipment_user']= equipment_user
+                data['list_equipment_user_form']= form
+                data['type'] = value
+            else:
+                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+                EquipmentType = ''.join(map(str, EquipmentType))
+                EquipmentType = int(EquipmentType)
+                equipment_user = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType))
+                form = RastreioForm(request.POST)
+                data = {}
+                data['list_equipment_user']= equipment_user
+                data['list_equipment_user_form']= form
+                data['type'] = value
+        elif value == 'Rastreio':
+            form = RastreioForm(request.POST)
+            type_equipment = request.POST['type_equipment']
+            tag = request.POST['tag']
+            description = request.POST['description']
+            inicio = request.POST['start']
+            fim = request.POST['end']
+            if type_equipment == 'Todos':
+                equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
+                data = {}
+                data['list_equipment_user']= equipment_user
+                data['list_equipment_user_form']= form
+                data['type'] = value
+            else:
+                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+                EquipmentType = ''.join(map(str, EquipmentType))
+                EquipmentType = int(EquipmentType)
+                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                EquipmentFilter = EquipmentFilter.split()
+                number = []
+                for i in EquipmentFilter:
+                    number.append(int(i))
+                equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment__in =  number)
+                data = {}
+                data['list_equipment_user']= equipment_user
+                data['list_equipment_user_form']= form
+                data['type'] = value
+        elif value == 'NaoDevolvidos':
+            form = RastreioForm(request.POST)
+            type_equipment = request.POST['type_equipment']
+            tag = request.POST['tag']
+            description = request.POST['description']
+            inicio = request.POST['start']
+            if type_equipment == 'Todos':
+                equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None)
+                data = {}
+                data['list_equipment_user']= equipment_user
+                data['list_equipment_user_form']= form
+                data['type'] = value
+            else:
+                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+                EquipmentType = ''.join(map(str, EquipmentType))
+                EquipmentType = int(EquipmentType)
+                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                EquipmentFilter = EquipmentFilter.split()
+                number = []
+                for i in EquipmentFilter:
+                    number.append(int(i))
+                equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment__in =  number)
+                data = {}
+                data['list_equipment_user']= equipment_user
+                data['list_equipment_user_form']= form
+                data['type'] = value
+        if form.is_valid():
+            return render(request, 'equipments/reports.html', data)
     else:
         form = RastreioForm()
         equipment = Equipment.objects.all()
         equipment_user = Equipment_user.objects.all()
-    #print(tipo)
         data = {}
-        #data['list0'] = equipment
-        data['list_equipment_user']= equipment_user
         data['list_equipment_user_form']= form
-
+        data['type'] = value
     return render(request, 'equipments/reports.html', data)
 
 class RastreioListForm(forms.Form):
@@ -338,7 +378,7 @@ class RastreioListForm(forms.Form):
     #inicio = forms.DateTimeField(label='Intervalo Inicial')
     #fim = forms.DateTimeField(label='Intervalo Final')
 
-def get_rastreio_list(request):
+def get_rastreio_list(request,value):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
