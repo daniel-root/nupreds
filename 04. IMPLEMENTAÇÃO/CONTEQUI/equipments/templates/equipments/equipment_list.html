@@ -9,16 +9,15 @@
         <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
     </div>
 </form>
-
+{{ type }}
 <form action={% url 'equipment_list_inactive' %} method="post">{% csrf_token %}
     {{ form_inactive.as_p }}
 </form>
-
 <thead>
     <tr>
-    <th><a href="{% url "filter_list" type_filter.a %}">Etiqueta</a></th>
-    <th><a href="{% url "filter_list" 2 %}">Descrição</a></th>
-    <th><a href="{% url "filter_list" 3 %}">Em posse</a></th>
+    <th><a href="{% url "filter_list" 'Etiqueta' type %}">Etiqueta</a></th>
+    <th><a href="{% url "filter_list" 'Descricao' type %}">Descrição</a></th>
+    <th><a href="{% url "filter_list" 'EmPosse' type %}">Em posse</a></th>
     <th>Ações</th>
     </tr>
 </thead>

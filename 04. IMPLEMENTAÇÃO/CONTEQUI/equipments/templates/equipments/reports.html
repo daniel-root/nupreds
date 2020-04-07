@@ -20,11 +20,11 @@
 <a href="">Uso</a>
 <form action="" method="post">
     {% csrf_token %}
-    Tipo: {{ list2.type_equipment }}
-    Etiqueta: {{ list2.tag }}
-    Descrição: {{ list2.description }}
-    Inicio: {{ list2.start }}
-    Fim: {{ list2.end }}
+    Tipo: {{ list_equipment_user_form.type_equipment }}
+    Etiqueta: {{ list_equipment_user_form.tag }}
+    Descrição: {{ list_equipment_user_form.description }}
+    Inicio: {{ list_equipment_user_form.start }}
+    Fim: {{ list_equipment_user_form.end }}
     <input type="submit" value="Submit">
 </form>
 <!--<form method="POST" action="">{% csrf_token %}

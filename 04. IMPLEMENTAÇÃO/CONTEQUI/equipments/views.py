@@ -66,12 +66,6 @@ def equipment_type_delete(request, pk, template_name='equipments/equipment_type_
         return redirect('equipment_list')
     return render(request, template_name, {'object':equipment_type})
 
-class tipos():
-    a = 1
-    b = 2
-    c = 3
-
-
 def equipment_list(request,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
         equipment = Equipment.objects.filter(inative=False).order_by('status','tag')
@@ -79,11 +73,12 @@ def equipment_list(request,templete_name='equipments/equipment_list.html'):
         #tipos={['a',1],['b',2],['c',3]}
         # {'object':equipment}
         #print(equipment)
+        types = 'Todos'
         data = {}
         data['list_equipment'] = equipment
         data['type_equipment']= type_equipment
         data['form_inactive'] = InactiveForm()
-        data['type_filter'] = tipos()
+        data['type'] = types
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -95,7 +90,6 @@ def equipment_list_inactive(request,templete_name='equipments/equipment_list.htm
         data['list_equipment'] = equipment
         data['type_equipment']= type_equipment
         data['form_inactive'] = InactiveForm()
-        data['type_filter'] = tipos()
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -195,22 +189,37 @@ def devolver_user(request,pk):
         return render(request, 'equipments/equipment_detail.html', {'object':equipment})
     return render(request, 'login.html')
 
-def filter_list(request,pk,templete_name='equipments/equipment_list.html'):
+def filter_list(request,pk,value,templete_name='equipments/equipment_list.html'):
     pk = pk
     if request.session.has_key('username'):
-        if pk == 1:
-            filtro = 'tag'
-        elif pk == 2:
-            filtro = 'description'
-        elif pk == 3:
-            filtro = 'tag'
-        equipment = Equipment.objects.all().order_by('status',filtro)
-        tipo = Equipment_type.objects.all().values_list('name',flat=True)
-        data = {}
-        data['list_equipment'] = equipment
-        data['type_equipment']= tipo
-        data['type_filter'] = tipos()
-        return render(request, templete_name, data)
+        if value == 'Todos':
+            if pk == 'Etiqueta':
+                filtro = 'tag'
+            elif pk == 'Descricao':
+                filtro = 'description'
+            elif pk == 'EmPosse':
+                filtro = 'tag'
+            equipment = Equipment.objects.all().order_by('status',filtro)
+            tipo = Equipment_type.objects.all().values_list('name',flat=True)
+            data = {}
+            data['list_equipment'] = equipment
+            data['type_equipment']= tipo
+            data['type'] = value
+            return render(request, templete_name, data)
+        else:
+            if pk == 'Etiqueta':
+                filtro = 'tag'
+            elif pk == 'Descricao':
+                filtro = 'description'
+            elif pk == 'EmPosse':
+                filtro = 'tag'
+            equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value)).order_by('status',filtro)
+            tipo = Equipment_type.objects.all().values_list('name',flat=True)
+            data = {}
+            data['list_equipment'] = equipment
+            data['type_equipment']= tipo
+            data['type'] = value
+            return render(request, templete_name, data)
     return render(request, 'login.html')
 
 def filter_type(request,value,templete_name='equipments/equipment_list.html'):
@@ -222,7 +231,7 @@ def filter_type(request,value,templete_name='equipments/equipment_list.html'):
         data = {}
         data['list_equipment'] = equipment
         data['type_equipment']= tipo
-        data['type_filter'] = tipos()
+        data['type'] = filtro
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -235,7 +244,6 @@ def search(request):
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= tipo
-            data['type_filter'] = tipos()
             return render(request, 'equipments/equipment_list.html', data)
     return render(request, 'login.html')
 
@@ -276,10 +284,9 @@ def get_rastreio(request):
         type_equipment = request.POST['type_equipment']
         tag = request.POST['tag']
         description = request.POST['description']
-        inicio = request.POST['inicio']
-        fim = request.POST['fim']
-        equipment = Equipment.objects.all()
-        
+        inicio = request.POST['start']
+        fim = request.POST['end']
+        #equipment = Equipment.objects.all()
         #teste = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
         #a = ''.join(map(str, teste))
         #print(a)
@@ -290,7 +297,8 @@ def get_rastreio(request):
         #get_object_or_404(Equipment, pk=pk)
         #print(b)    
         #chave = int(b)
-        equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
+        #equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
+        equipment_user = Equipment_user.objects.all()
         #number = []
         #for i in b:
         #    number.append(int(i))
@@ -317,9 +325,9 @@ def get_rastreio(request):
         equipment_user = Equipment_user.objects.all()
     #print(tipo)
         data = {}
-        data['list0'] = equipment
-        data['list1']= equipment_user
-        data['list2']= form
+        #data['list0'] = equipment
+        data['list_equipment_user']= equipment_user
+        data['list_equipment_user_form']= form
 
     return render(request, 'equipments/reports.html', data)
 
