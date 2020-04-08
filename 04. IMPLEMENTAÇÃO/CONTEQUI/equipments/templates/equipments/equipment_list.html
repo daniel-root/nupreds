@@ -26,7 +26,7 @@
     <td>{{ equipment.tag }}</td>
     <td>{{ equipment.description }}</td>
     {% load my_tag %}
-    <td>{% my_tag equipment.id %}</td>
+    <td>{% NameUser equipment.id %}</td>
     <td><a href="{% url "equipment_view" equipment.id %}">{% LoanOrDevolution equipment.id %}</a>     
     <a href="{% url "equipment_edit" equipment.id %}">Editar</a>
     <a href="{% url "equipment_delete" equipment.id %}">{% ActiveOrInactive equipment.id %}</a>{% Atraso equipment.id %}</td>

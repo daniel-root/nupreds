@@ -7,149 +7,57 @@ from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from django.utils import timezone
 
+def UserEquipmentInUse(pk):
+    equipment_user = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).values_list('user_loan',flat=True)
+    return equipment_user
+
+def UserNameUnique(pk):
+    user = Client.objects.filter(id=pk).values_list('usuario',flat=True)
+    return user
+
 @register.simple_tag
-def my_tag(pk):
-    chave = int(pk)
-    teste = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = chave)).values_list('user_loan',flat=True)
-    #teste = Equipment_user.objects.get(devolution=None,equiment=Equipment.objects.get(id = chave))
-    #data = {}
-    #data['object_list'] = teste
-    if teste:
-        a = ''.join(map(str, teste))
-        p = Client.objects.filter(id=a).values_list('usuario',flat=True)
-        client = ''.join(map(str, p))
-        return client
+def NameUser(pk):
+    if UserEquipmentInUse(pk):
+        EquipmentUser = ''.join(map(str, UserEquipmentInUse(pk)))
+        return ''.join(map(str, UserNameUnique(int(EquipmentUser))))
     return ''
 
 @register.simple_tag
-def my_tag2(pk):
-    chave = int(pk)
-    teste = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = chave)).values_list('loan',flat=True)
-    #teste = Equipment_user.objects.get(devolution=None,equiment=Equipment.objects.get(id = chave))
-    #data = {}
-    #data['object_list'] = teste
-    if teste:
-        a = ''.join(map(str, teste))
-        DataHora = a.split()
-        Data = DataHora[0]
-        Data = Data.split('-')
-        Hora = DataHora[1]
-        Hora = Hora.split('.')
-        Hora = Hora[0]
-        #Hora = Hora.split(':')
-        print(timezone.now())
-        #print(timezone.now()+3)
-        a = Data[2]+'/'+Data[1]+'/'+Data[0]+' - '+Hora
-        #a2 =  a.strftime("%d/%m/%Y %H:%M:%S")
-        #p = Client.objects.filter(id=a).values_list('usuario',flat=True)
-        #client = ''.join(map(str, p))
-        return a
+def DateTimeLoan(pk):
+    DateTimeEquipmentUser = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).values_list('loan',flat=True)
+    if DateTimeEquipmentUser:
+        DateTime = ''.join(map(str, DateTimeEquipmentUser))
+        DateTime = DateTime.split()
+        Date = DateTime[0]
+        Date = Date.split('-')
+        Time = DateTime[1]
+        Time = Time.split('.')
+        Time = Time[0]
+        DateTime = Date[2]+'/'+Date[1]+'/'+Date[0]+' - '+ Time
+        return DateTime
+    return ''
+
+def NameEquipment(pk,value):
+    name_equipment = Equipment.objects.filter(id=pk).values_list(value,flat=True)
+    return name_equipment
+
+@register.simple_tag
+def TagName(pk):
+    if NameEquipment(pk,'tag'):
+        return ''.join(map(str, NameEquipment(pk,'tag')))
     return ''
 
 @register.simple_tag
-def my_tag3(pk):
-    chave = int(pk)
-    teste = Equipment.objects.filter(id=chave).values_list('tag',flat=True)
-    #teste = Equipment_user.objects.get(devolution=None,equiment=Equipment.objects.get(id = chave))
-    #data = {}
-    #data['object_list'] = teste
-    if teste:
-        a = ''.join(map(str, teste))
-        #DataHora = a.split()
-        #Data = DataHora[0]
-        #Data = Data.split('-')
-        #Hora = DataHora[1]
-        #Hora = Hora.split('.')
-        #Hora = Hora[0]
-        #Hora = Hora.split(':')
-        #print(timezone.now())
-        #print(timezone.now()+3)
-        #a = Data[2]+'/'+Data[1]+'/'+Data[0]+' - '+Hora
-        #a2 =  a.strftime("%d/%m/%Y %H:%M:%S")
-        #p = Client.objects.filter(id=a).values_list('usuario',flat=True)
-        #client = ''.join(map(str, p))
-        return a
-        
+def DescriptionName(pk):
+    if NameEquipment(pk,'description'):
+        return ''.join(map(str, NameEquipment(pk,'description')))
     return ''
 
 @register.simple_tag
-def my_tag4(pk):
-    chave = int(pk)
-    teste = Equipment.objects.filter(id=chave).values_list('description',flat=True)
-    #teste = Equipment_user.objects.get(devolution=None,equiment=Equipment.objects.get(id = chave))
-    #data = {}
-    #data['object_list'] = teste
-    if teste:
-        a = ''.join(map(str, teste))
-        #DataHora = a.split()
-        #Data = DataHora[0]
-        #Data = Data.split('-')
-        #Hora = DataHora[1]
-        #Hora = Hora.split('.')
-        #Hora = Hora[0]
-        #Hora = Hora.split(':')
-        #print(timezone.now())
-        #print(timezone.now()+3)
-        #a = Data[2]+'/'+Data[1]+'/'+Data[0]+' - '+Hora
-        #a2 =  a.strftime("%d/%m/%Y %H:%M:%S")
-        #p = Client.objects.filter(id=a).values_list('usuario',flat=True)
-        #client = ''.join(map(str, p))
-        return a
-        
-    return ''
-
-@register.simple_tag
-def my_tag5(pk):
-    chave = int(pk)
-    teste = Equipment.objects.filter(id=chave).values_list('type_equipment',flat=True)
-    #teste = Equipment_user.objects.get(devolution=None,equiment=Equipment.objects.get(id = chave))
-    #data = {}
-    #data['object_list'] = teste
-    if teste:
-        a = ''.join(map(str, teste))
-        teste = Equipment_type.objects.filter(id=int(a)).values_list('name',flat=True)
-        a = ''.join(map(str, teste))
-        #DataHora = a.split()
-        #Data = DataHora[0]
-        #Data = Data.split('-')
-        #Hora = DataHora[1]
-        #Hora = Hora.split('.')
-        #Hora = Hora[0]
-        #Hora = Hora.split(':')
-        #print(timezone.now())
-        #print(timezone.now()+3)
-        #a = Data[2]+'/'+Data[1]+'/'+Data[0]+' - '+Hora
-        #a2 =  a.strftime("%d/%m/%Y %H:%M:%S")
-        #p = Client.objects.filter(id=a).values_list('usuario',flat=True)
-        #client = ''.join(map(str, p))
-        return a
-        
-    return ''
-
-@register.simple_tag
-def my_tag6(pk):
-    chave = int(pk)
-    teste = Equipment.objects.filter(id=chave).values_list('amount_of_loans',flat=True)
-    #teste = Equipment_user.objects.get(devolution=None,equiment=Equipment.objects.get(id = chave))
-    #data = {}
-    #data['object_list'] = teste
-    if teste:
-        a = ''.join(map(str, teste))
-        #DataHora = a.split()
-        #Data = DataHora[0]
-        #Data = Data.split('-')
-        #Hora = DataHora[1]
-        #Hora = Hora.split('.')
-        #Hora = Hora[0]
-        #Hora = Hora.split(':')
-        #print(timezone.now())
-        #print(timezone.now()+3)
-        #a = Data[2]+'/'+Data[1]+'/'+Data[0]+' - '+Hora
-        #a2 =  a.strftime("%d/%m/%Y %H:%M:%S")
-        #p = Client.objects.filter(id=a).values_list('usuario',flat=True)
-        #client = ''.join(map(str, p))
-        return a
-        
+def TypeName(pk):
+    if NameEquipment(pk,'type_equipment'):
+        type_name = Equipment_type.objects.filter(id=int(''.join(map(str, NameEquipment(pk,'type_equipment'))))).values_list('name',flat=True)
+        return ''.join(map(str, type_name))  
     return ''
 
 @register.simple_tag
@@ -173,18 +81,9 @@ def Atraso(pk):
     Maximum_Time = ''.join(map(str, Equipment_time))
     TimeEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
     BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).values_list('user_loan',flat=True)
-    #data = {}
-    #data['Time']=TimeEquipment
-    #print('Time' in data)
-    #timedelta(minutes=60)
-    #print(TimeEquipment)
     for time in TimeEquipment:
         if timezone.now() >= time.limit_time:
             Equipment.objects.filter(id = pk).update(status='Atrasado')
             return 'Atrasado'
         return ''
     return ''
-    #Time = ''.join(map(str, TimeEquipment))
-    #if str(timezone.now()) >= '2020-04-04 17:55':
-    #    return 'Atrasado'
-    

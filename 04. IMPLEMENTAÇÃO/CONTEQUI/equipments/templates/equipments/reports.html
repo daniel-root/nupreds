@@ -4,13 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Conequi - Relatórios</title>
-
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-  <!-- XDSoft DateTimePicker -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
 </head>
 <body>
     <h1>Relatorios</h1>
@@ -18,7 +11,6 @@
 <a href="{% url "get_rastreio" 'Listagem' %}">Listagem</a>
 <a href="{% url "get_rastreio" 'Rastreio' %}">Rastreio</a>
 <a href="{% url "get_rastreio" 'NaoDevolvidos' %}">Não devolvidas</a>
-<!--<a href="">Uso</a> -->
 <form action="{% url "get_rastreio" type %}" method="post">
     {% csrf_token %}
     Tipo: {{ list_equipment_user_form.type_equipment }}
@@ -33,13 +25,6 @@
     {% endifequal %}
     <input type="submit" value="Submit">
 </form>
-<!--<form method="POST" action="">{% csrf_token %}
-    <input type="text" placeholder="Search.." name="search" required="required">
-    <div class="submit">
-        <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
-    </div>
-</form>
--->
 <table border="1">
 <thead>
     <tr>
@@ -58,9 +43,9 @@
     {% load my_tag %}
     {% for equipment_user in list_equipment_user %}
     <tr>
-    <td>{% my_tag5 equipment_user.equipment %}</td>
-    <td>{% my_tag3 equipment_user.equipment %}</td>
-    <td>{% my_tag4 equipment_user.equipment %}</td>
+    <td>{% TypeName equipment_user.equipment %}</td>
+    <td>{% TagName equipment_user.equipment %}</td>
+    <td>{% DescriptionName equipment_user.equipment %}</td>
     <td>{{ equipment_user.loan }}</td>
     <td>{{ equipment_user.user_loan }}</td>
     <td>{{ equipment_user.devolution }}</td>
@@ -73,9 +58,9 @@
     {% load my_tag %}
     {% for equipment_user in list_equipment_user %}
     <tr>
-    <td>{% my_tag5 equipment_user.equipment %}</td>
-    <td>{% my_tag3 equipment_user.equipment %}</td>
-    <td>{% my_tag4 equipment_user.equipment %}</td>
+    <td>{% TypeName equipment_user.equipment %}</td>
+    <td>{% TagName equipment_user.equipment %}</td>
+    <td>{% DescriptionName equipment_user.equipment %}</td>
     <td>{{ equipment_user.loan }}</td>
     <td>{{ equipment_user.user_loan }}</td>
     <td></td>
