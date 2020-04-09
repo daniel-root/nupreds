@@ -7,7 +7,6 @@ class Equipment_type(models.Model):
 
     def __str__(self):
         return self.name
-
 class Equipment(models.Model):
     STATUS_CHOICES = (
         (u'Livre', u'Livre'),
