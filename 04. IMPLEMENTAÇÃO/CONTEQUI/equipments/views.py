@@ -31,6 +31,10 @@ def EquipmentTypeAll():
     equipment_type = Equipment_type.objects.all()
     return equipment_type
 
+def EquipmentTypeAllOrderBy(value):
+    equipment_type = Equipment_type.objects.all().order_by(value)
+    return equipment_type
+
 def EquipmentTypeUnique(pk):
     equipment_type = get_object_or_404(Equipment_type, pk=pk) 
     return equipment_type   
@@ -38,6 +42,11 @@ def EquipmentTypeUnique(pk):
 def equipment_type_list(request, templete_name='equipments/equipment_type_list.html'):
     data = {}
     data['object_list'] = EquipmentTypeAll
+    return render(request, templete_name, data)
+
+def equipment_type_order_by(request,value, templete_name='equipments/equipment_type_list.html'):
+    data = {}
+    data['object_list'] = EquipmentTypeAllOrderBy(value)
     return render(request, templete_name, data)
 
 def equipment_type_view(request, pk, template_name='equipments/equipment_type_detail.html'):   
@@ -58,11 +67,16 @@ def equipment_type_update(request, pk, template_name='equipments/equipment_type_
     return render(request, template_name, {'form':form})
 
 def equipment_type_delete(request, pk, template_name='equipments/equipment_type_confirm_delete.html'):
-    if request.method=='POST':
-        equipment_type.delete()
-        return redirect('equipment_list')
-    return render(request, template_name, {'object':EquipmentTypeUnique(pk)})
-
+    if request.session.has_key('username'):
+        if request.method=='POST': 
+            if Equipment_type.objects.filter(id = pk,inative='True'):
+                Equipment_type.objects.filter(id = pk).update(inative='False')
+            else:
+                Equipment_type.objects.filter(id = pk).update(inative='True')
+            return equipment_list(request)
+        return render(request, template_name, {'object':EquipmentTypeUnique(pk)})
+    return render(request, 'login.html')
+    
 def EquipmentActiveAll():
     equipment = Equipment.objects.filter(inative=False).order_by('status','tag')
     return equipment
@@ -131,7 +145,7 @@ def equipment_delete(request, pk, template_name='equipments/equipment_confirm_de
 
 def emprestar(request,pk):
     if request.session.has_key('username'):
-        return render(request, 'equipments/emprestar.html', {'chave': pk })
+        return render(request, 'equipments/emprestar.html', {'chave': EquipmentUnique(pk) })
     return render(request, 'login.html')
 
 def devolver(request,pk):
@@ -244,9 +258,14 @@ class RastreioForm(forms.Form):
     for QuerySet in tipo:
         CHOICE.append((QuerySet,QuerySet))
     
+    equipment = Equipment.objects.all().values_list('tag','description')
+    CHOICE_EQUIPMENT = [('Todos','Todos')]
+    for QuerySet in equipment:
+        CHOICE_EQUIPMENT.append((QuerySet[0]+"-"+QuerySet[1],QuerySet[0]+"-"+QuerySet[1]))
+
     type_equipment = forms.ChoiceField(label='Tipo',choices=CHOICE)
-    tag = forms.CharField(label='Etiqueta', max_length=100)
-    description = forms.CharField(label='Descrição', max_length=100)
+    tag = forms.ChoiceField(label='Etiqueta-Descrição',choices=CHOICE_EQUIPMENT)
+    #description = forms.CharField(label='Descrição', max_length=100)
     start = forms.DateTimeField(
         label='Start',
         widget=forms.widgets.DateTimeInput(attrs={'type':'date'}),
@@ -270,8 +289,8 @@ def get_rastreio(request,value):
     if request.method == 'POST':
         if value == 'Listagem':
             type_equipment = request.POST['type_equipment']
-            tag = request.POST['tag']
-            description = request.POST['description']
+            #tag = request.POST['tag']
+            #description = request.POST['description']
             if type_equipment == 'Todos':
                 equipment_user = Equipment.objects.all().order_by('type_equipment','tag')
                 form = RastreioForm(request.POST)
@@ -293,9 +312,11 @@ def get_rastreio(request,value):
             form = RastreioForm(request.POST)
             type_equipment = request.POST['type_equipment']
             tag = request.POST['tag']
-            description = request.POST['description']
+            #description = request.POST['description']
             inicio = request.POST['start']
             fim = request.POST['end']
+            tag_ = tag.split('-')
+            tag_ = tag_[0] 
             if type_equipment == 'Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
                 data = {}
@@ -321,7 +342,7 @@ def get_rastreio(request,value):
             form = RastreioForm(request.POST)
             type_equipment = request.POST['type_equipment']
             tag = request.POST['tag']
-            description = request.POST['description']
+            #description = request.POST['description']
             inicio = request.POST['start']
             if type_equipment == 'Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None)
@@ -354,3 +375,14 @@ def get_rastreio(request,value):
         data['list_equipment_user_form']= form
         data['type'] = value
     return render(request, 'equipments/reports.html', data)
+
+def filter_report(request,value,templete_name='equipments/equipment_list.html'):
+    if request.session.has_key('username'):
+        equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value)).order_by('status','tag')
+        data = {}
+        data['list_equipment'] = equipment
+        data['type_equipment']= EquipmentTypeAll()
+        data['form_inactive'] = InactiveForm()
+        data['type'] = value
+        return render(request, templete_name, data)
+    return render(request, 'login.html')

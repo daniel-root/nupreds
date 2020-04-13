@@ -1,9 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import ModelForm
-#from django.http import HttpResponse
-#from django.views.generic import ListView, DetailView
-#from django.views.generic.edit import CreateView, UpdateView, DeleteView
-#rom django.urls import reverse_lazy
 from users.models import Client
 from django.db.models import Q
 from django.contrib import messages 
@@ -13,13 +9,16 @@ class ClientForm(ModelForm):
         model = Client
         fields = ['usuario','email','telefone','whatsapp','cpf','senha']
 
+def UserAll():
+    user = Client.objects.all()
+    return user
+
 def user_list(request, templete_name='users/user_list.html'):
     if request.session.has_key('username'):
-        user = Client.objects.all()
         name = request.session['username']
         type_privilegio = Client.objects.filter(usuario=name)
         data = {}
-        data['object_list'] = user
+        data['object_list'] = UserAll()
         data['type_user'] = type_privilegio
         return render(request, templete_name, data)
     return render(request, 'login.html')
@@ -67,9 +66,6 @@ def loginpage(request):
             username = request.POST['username']
             request.session['username'] = username
             return render(request, 'home.html')
-            #return redirect('/')
-            #tag = 'tag'
-            #,{'tag':tag})
         elif Client.objects.filter(usuario=username,senha=password):
             messages.error(request, 'Usuario não autorizado.')
             return render(request, 'login.html')
@@ -77,6 +73,7 @@ def loginpage(request):
             messages.error(request, 'Usuario e Senha inválidos. Favor Tentar novamente.')
             return render(request, 'login.html')
     return render(request, 'login.html')
+    
 def logout_user(request):
     try:
         del request.session['username']

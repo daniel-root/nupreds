@@ -1,5 +1,5 @@
-{{chave}}
-<form method="POST" id="add_form" action="{% url 'emprestar_user' chave %}">{% csrf_token %}
+
+<form method="POST" id="add_form" action="{% url 'emprestar_user' chave.id %}">{% csrf_token %}
       <div class="form-group">
         <label >User Name</label>
         <div class="input"><input type="text" name="username" required="required"></div>
@@ -10,8 +10,9 @@
         <div class="input"><input type="password" name="password" required="required"></div>
         <div class="clear"></div>
     </div>
+    {% load my_tag %}
     <div class="form-group">
-        <label >Deseja mudar o tempo limite</label>
+        <label >Deseja mudar o tempo limite atual: {{ chave.maximum_time }} </label>
         <div class="input"><input type="text" name="maximum_time"></div>
         <div class="clear"></div>
     </div>

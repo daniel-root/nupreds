@@ -14,13 +14,13 @@
 <form action="{% url "get_rastreio" type %}" method="post">
     {% csrf_token %}
     Tipo: {{ list_equipment_user_form.type_equipment }}
-    Etiqueta: {{ list_equipment_user_form.tag }}
-    Descrição: {{ list_equipment_user_form.description }}
     {% ifequal type 'Rastreio' %}
+    Etiqueta/Descrição: {{ list_equipment_user_form.tag }}
     Inicio: {{ list_equipment_user_form.start }}
     Fim: {{ list_equipment_user_form.end }}
     {% endifequal %}
     {% ifequal type 'NaoDevolvidos' %}
+    Etiqueta/Descrição: {{ list_equipment_user_form.tag }}
     Inicio: {{ list_equipment_user_form.start }}
     {% endifequal %}
     <input type="submit" value="Submit">

@@ -76,6 +76,13 @@ def ActiveOrInactive(pk):
     return 'Ativar'
 
 @register.simple_tag
+def ActiveOrInactiveType(pk):
+    ActiveEquipment = Equipment_type.objects.filter(id = pk,inative=False)
+    if ActiveEquipment:
+        return 'Desativar'
+    return 'Ativar'
+
+@register.simple_tag
 def Atraso(pk):
     Equipment_time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
     Maximum_Time = ''.join(map(str, Equipment_time))
@@ -84,6 +91,9 @@ def Atraso(pk):
     for time in TimeEquipment:
         if timezone.now() >= time.limit_time:
             Equipment.objects.filter(id = pk).update(status='Atrasado')
-            return 'Atrasado'
+            time = str(timezone.now() - time.limit_time)
+            time = time.split('.')
+            time = time[0]
+            return 'Atrasado'+' '+time
         return ''
     return ''

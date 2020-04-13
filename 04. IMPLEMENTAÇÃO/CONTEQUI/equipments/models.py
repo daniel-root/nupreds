@@ -4,6 +4,7 @@ from users.models import Client
 
 class Equipment_type(models.Model):
     name = models.CharField(max_length=20)
+    inative = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

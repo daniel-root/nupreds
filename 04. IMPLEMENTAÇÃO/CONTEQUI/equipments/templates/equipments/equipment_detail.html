@@ -8,5 +8,15 @@
       <strong>Error!</strong> {{ message }}
     </div>
 {% endfor %}
-<h2><a href="{% url "emprestar" object.pk %}">emprestar</a> <a href="{% url "devolver" object.pk %}">devolver</a></h2>
+<h2>
+{% ifequal object.status 'Livre' %}
+    <a href="{% url "emprestar" object.pk %}">emprestar</a>
+    <a href="">devolver</a>
+{% endifequal %}
+{% ifnotequal object.status 'Livre' %}
+    <a href="">emprestar</a>
+    <a href="{% url "devolver" object.pk %}">devolver</a>
+{% endifnotequal %}
+
+</h2>
 <a href="{% url "equipment_list" %}">voltar</a>
