@@ -26,5 +26,8 @@ urlpatterns = [
     path('Tipo/Inativar/<int:pk>', views.equipment_type_delete, name='equipment_type_delete'),
     path('Inativos/<str:value>', views.equipment_list_inactive, name='equipment_list_inactive'),
     path('Tipo/<str:value>', views.equipment_type_order_by, name='equipment_type_order_by'),
+    path('Listagem/<str:order_by>/<str:type_equipment_>', views.listagem, name='listagem'),
+    path('Rastreio/<str:order_by>/<str:type_equipment_>/<str:tag>/<str:start>/<str:end>', views.rastreio, name='rastreio'),
+    path('NaoDevolvidos/<str:order_by>/<str:type_equipment_>/<str:tag>/<str:start>', views.nao_devolvidos, name='nao_devolvidos'),
    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

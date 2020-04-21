@@ -281,6 +281,10 @@ def reports_list(request,templete_name='equipments/reports.html'):
         data = {}
         data['list_equipment_user_form']= form
         data['type'] = 'Todos'
+        data['type_equipment_'] = 'Todos'
+        data['tag_'] = 'Todos'
+        data['start_'] = 'Todos'
+        data['end_'] = 'Todos'
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -289,12 +293,15 @@ def get_rastreio(request,value):
     if request.method == 'POST':
         if value == 'Listagem':
             type_equipment = request.POST['type_equipment']
-            #tag = request.POST['tag']
-            #description = request.POST['description']
+            data = {}
+            data['type_equipemnt_'] = type_equipment
+            data['type_equipment_'] = 'Todos'
+            data['tag_'] = 'Todos'
+            data['start_'] = 'Todos'
+            data['end_'] = 'Todos'
             if type_equipment == 'Todos':
                 equipment_user = Equipment.objects.all().order_by('type_equipment','tag')
                 form = RastreioForm(request.POST)
-                data = {}
                 data['list_equipment_user']= equipment_user
                 data['list_equipment_user_form']= form
                 data['type'] = value
@@ -304,7 +311,6 @@ def get_rastreio(request,value):
                 EquipmentType = int(EquipmentType)
                 equipment_user = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType))
                 form = RastreioForm(request.POST)
-                data = {}
                 data['list_equipment_user']= equipment_user
                 data['list_equipment_user_form']= form
                 data['type'] = value
@@ -312,14 +318,17 @@ def get_rastreio(request,value):
             form = RastreioForm(request.POST)
             type_equipment = request.POST['type_equipment']
             tag = request.POST['tag']
-            #description = request.POST['description']
             inicio = request.POST['start']
             fim = request.POST['end']
             tag_ = tag.split('-')
             tag_ = tag_[0] 
+            data = {}
+            data['type_equipment_'] = type_equipment
+            data['tag_'] = tag_
+            data['start_'] = inicio
+            data['end_'] = fim
             if type_equipment == 'Todos' and tag=='Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
-                data = {}
                 data['list_equipment_user']= equipment_user
                 data['list_equipment_user_form']= form
                 data['type'] = value
@@ -334,7 +343,6 @@ def get_rastreio(request,value):
                 for i in EquipmentFilter:
                     number.append(int(i))
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment__in =  number)
-                data = {}
                 data['list_equipment_user']= equipment_user
                 data['list_equipment_user_form']= form
                 data['type'] = value
@@ -342,7 +350,6 @@ def get_rastreio(request,value):
                 EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
                 EquipmentFilter = ' '.join(map(str, EquipmentFilter))
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter))
-                data = {}
                 data['list_equipment_user']= equipment_user
                 data['list_equipment_user_form']= form
                 data['type'] = value
@@ -350,13 +357,15 @@ def get_rastreio(request,value):
             form = RastreioForm(request.POST)
             type_equipment = request.POST['type_equipment']
             tag = request.POST['tag']
-            #description = request.POST['description']
             inicio = request.POST['start']
             tag_ = tag.split('-')
             tag_ = tag_[0] 
+            data = {}
+            data['type_equipment_'] = type_equipment
+            data['tag_'] = tag_
+            data['start_'] = inicio
             if type_equipment == 'Todos' and tag=='Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None)
-                data = {}
                 data['list_equipment_user']= equipment_user
                 data['list_equipment_user_form']= form
                 data['type'] = value
@@ -371,7 +380,6 @@ def get_rastreio(request,value):
                 for i in EquipmentFilter:
                     number.append(int(i))
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment__in =  number)
-                data = {}
                 data['list_equipment_user']= equipment_user
                 data['list_equipment_user_form']= form
                 data['type'] = value
@@ -379,7 +387,6 @@ def get_rastreio(request,value):
                 EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
                 EquipmentFilter = ' '.join(map(str, EquipmentFilter))
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment =  int(EquipmentFilter))
-                data = {}
                 data['list_equipment_user']= equipment_user
                 data['list_equipment_user_form']= form
                 data['type'] = value
@@ -392,15 +399,48 @@ def get_rastreio(request,value):
         data = {}
         data['list_equipment_user_form']= form
         data['type'] = value
+        data['type_equipment_'] = 'Todos'
+        data['tag_'] = 'Todos'
+        data['start_'] = 'Todos'
+        data['end_'] = 'Todos'
     return render(request, 'equipments/reports.html', data)
 
-def filter_report(request,value,templete_name='equipments/equipment_list.html'):
-    if request.session.has_key('username'):
-        equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value)).order_by('status','tag')
-        data = {}
-        data['list_equipment'] = equipment
-        data['type_equipment']= EquipmentTypeAll()
-        data['form_inactive'] = InactiveForm()
-        data['type'] = value
-        return render(request, templete_name, data)
-    return render(request, 'login.html')
+def listagem(request,order_by,type_equipment_):
+    form = RastreioForm()
+    data = {}
+    equipment_user = Equipment_user.objects.all()
+    data['list_equipment_user']= equipment_user
+    data['list_equipment_user_form']= form
+    data['type'] = 'Rastreio'
+    data['type_equipment_'] = type_equipment_
+    data['tag_'] = 'Todos'
+    data['start_'] = 'Todos'
+    data['end_'] = 'Todos'
+
+    return render(request, 'equipments/reports.html', data)
+
+def rastreio(request,order_by,type_equipment_,tag,start,end):
+    form = RastreioForm()
+    equipment_user = Equipment_user.objects.all()
+    data = {}
+    data['list_equipment_user']= equipment_user
+    data['list_equipment_user_form']= form
+    data['type'] = 'Rastreio'
+    data['type_equipment_'] = type_equipment_
+    data['tag_'] = tag
+    data['start_'] = start
+    data['end_'] = end
+    return render(request, 'equipments/reports.html', data)
+
+def nao_devolvidos(request,order_by,type_equipment_,tag,start):
+    form = RastreioForm()
+    equipment_user = Equipment_user.objects.all()
+    data = {}
+    data['list_equipment_user']= equipment_user
+    data['list_equipment_user_form']= form
+    data['type'] = 'NaoDevolvidos'
+    data['type_equipment_'] = 'Todos'
+    data['tag_'] = 'Todos'
+    data['start_'] = 'Todos'
+    data['end_'] = 'Todos'  
+    return render(request, 'equipments/reports.html', data)
