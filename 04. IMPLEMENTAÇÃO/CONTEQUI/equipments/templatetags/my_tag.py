@@ -91,9 +91,10 @@ def Atraso(pk):
     for time in TimeEquipment:
         if timezone.now() >= time.limit_time:
             Equipment.objects.filter(id = pk).update(status='Atrasado')
-            time = str(timezone.now() - time.limit_time)
-            time = time.split('.')
-            time = time[0]
-            return 'Atrasado'+' '+time
+            #time = str(timezone.now() - time.limit_time)
+            #time = time.split('.')
+            #time = time[0]
+            return ''
+            #+' '+time
         return ''
     return ''

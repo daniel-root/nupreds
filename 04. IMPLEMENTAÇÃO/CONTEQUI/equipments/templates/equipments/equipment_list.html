@@ -27,9 +27,18 @@
     <td>{{ equipment.description }}</td>
     {% load my_tag %}
     <td>{% NameUser equipment.id %}</td>
-    <td><a href="{% url "equipment_view" equipment.id %}">{% LoanOrDevolution equipment.id %}</a>     
+    {% ifequal 'Atrasado' equipment.status %}
+    <td  bgcolor="#ff0000" >
+    <a href="{% url "equipment_view" equipment.id %}">{% LoanOrDevolution equipment.id %}</a>     
     <a href="{% url "equipment_edit" equipment.id %}">Editar</a>
     <a href="{% url "equipment_delete" equipment.id %}">{% ActiveOrInactive equipment.id %}</a>{% Atraso equipment.id %}</td>
+    {% endifequal %}
+    {% if 'Atrasado' != equipment.status %}
+    <td>
+    <a href="{% url "equipment_view" equipment.id %}">{% LoanOrDevolution equipment.id %}</a>     
+    <a href="{% url "equipment_edit" equipment.id %}">Editar</a>
+    <a href="{% url "equipment_delete" equipment.id %}">{% ActiveOrInactive equipment.id %}</a>{% Atraso equipment.id %}</td>
+    {% endif %}
     </tr>
     {% endfor %}
 </tbody>

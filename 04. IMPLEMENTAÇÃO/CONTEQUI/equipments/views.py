@@ -421,15 +421,43 @@ def listagem(request,order_by,type_equipment_):
 
 def rastreio(request,order_by,type_equipment_,tag,start,end):
     form = RastreioForm()
-    equipment_user = Equipment_user.objects.all()
     data = {}
-    data['list_equipment_user']= equipment_user
     data['list_equipment_user_form']= form
     data['type'] = 'Rastreio'
     data['type_equipment_'] = type_equipment_
     data['tag_'] = tag
     data['start_'] = start
     data['end_'] = end
+    type_equipment = type_equipment_
+    inicio = start
+    fim = end
+    tag_ = tag
+    if type_equipment == 'Todos' and tag=='Todos':
+        equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim).order_by(order_by)
+        data['list_equipment_user']= equipment_user
+        data['list_equipment_user_form']= form
+        data['type'] = 'Rastreio'
+    elif type_equipment != 'Todos' and tag == 'Todos':
+        EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+        EquipmentType = ''.join(map(str, EquipmentType))
+        EquipmentType = int(EquipmentType)
+        EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+        EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+        EquipmentFilter = EquipmentFilter.split()
+        number = []
+        for i in EquipmentFilter:
+            number.append(int(i))
+        equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment__in =  number).order_by(order_by)
+        data['list_equipment_user']= equipment_user
+        data['list_equipment_user_form']= form
+        data['type'] = 'Rastreio'
+    elif tag != 'Todos':
+        EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
+        EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+        equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter)).order_by(order_by)
+        data['list_equipment_user']= equipment_user
+        data['list_equipment_user_form']= form
+        data['type'] = 'Rastreio'
     return render(request, 'equipments/reports.html', data)
 
 def nao_devolvidos(request,order_by,type_equipment_,tag,start):
