@@ -28,7 +28,7 @@
 <thead>
     {% ifequal type 'Listagem' %}
     <tr>    
-    <th><a href="{% url "listagem" 'type_equipment' type_equipment_  %}">Tipo</a></th>
+    <th><a href="{% url "listagem" 'type_equipment__name' type_equipment_  %}">Tipo</a></th>
     <th><a href="{% url "listagem" 'tag' type_equipment_ %}">Etiqueta</a></th>
     <th><a href="{% url "listagem" 'description' type_equipment_ %}">Descrição</a></th>
     <th>Solicitação</th>
@@ -40,9 +40,9 @@
     {% endifequal %}
      {% ifequal type 'Rastreio' %}
     <tr>    
-    <th><a href="{% url "rastreio" 'type_equipment' type_equipment_ tag_ start_ end_ %}">Tipo</a></th>
-    <th><a href="{% url "rastreio" 'tag' type_equipment_ tag_ start_ end_ %}">Etiqueta</a></th>
-    <th><a href="{% url "rastreio" 'description' type_equipment_ tag_ start_ end_ %}">Descrição</a></th>
+    <th><a href="{% url "rastreio" 'equipment__type_equipment__name' type_equipment_ tag_ start_ end_ %}">Tipo</a></th>
+    <th><a href="{% url "rastreio" 'equipment__tag' type_equipment_ tag_ start_ end_ %}">Etiqueta</a></th>
+    <th><a href="{% url "rastreio" 'equipment__description' type_equipment_ tag_ start_ end_ %}">Descrição</a></th>
     <th><a href="{% url "rastreio" 'loan' type_equipment_ tag_ start_ end_ %}">Solicitação</a></th>
     <th><a href="{% url "rastreio" 'user_loan' type_equipment_ tag_ start_ end_ %}">Responsavel</a></th>
     <th><a href="{% url "rastreio" 'devolution' type_equipment_ tag_ start_ end_ %}">Solicitação</a></th>
@@ -52,9 +52,9 @@
     {% endifequal %}
     {% ifequal type 'NaoDevolvidos' %}
     <tr>    
-    <th><a href="{% url "nao_devolvidos" 'type_equipment' type_equipment_ tag_ start_ %}">Tipo</a></th>
-    <th><a href="{% url "nao_devolvidos" 'tag' type_equipment_ tag_ start_ %}">Etiqueta</a></th>
-    <th><a href="{% url "nao_devolvidos" 'description' type_equipment_ tag_ start_ %}">Descrição</a></th>
+    <th><a href="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}">Tipo</a></th>
+    <th><a href="{% url "nao_devolvidos" 'equipment__tag' type_equipment_ tag_ start_ %}">Etiqueta</a></th>
+    <th><a href="{% url "nao_devolvidos" 'equipment__description' type_equipment_ tag_ start_ %}">Descrição</a></th>
     <th><a href="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}">Solicitação</a></th>
     <th><a href="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}">Responsavel</a></th>
     <th>Solicitação</th>

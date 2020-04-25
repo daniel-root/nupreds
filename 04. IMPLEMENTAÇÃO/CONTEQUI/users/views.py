@@ -74,12 +74,18 @@ def loginpage(request):
             return render(request, 'login.html')
     return render(request, 'login.html')
     
-def logout_user(request):
-    try:
-        del request.session['username']
-    except:
-        pass
-    return render(request,'login.html')
+def logout_user(request,template_name='confirm_logout.html'):
+    if request.session.has_key('username'):
+        if request.method=='POST': 
+            try:
+                del request.session['username']
+            except:
+                pass
+            return render(request,'login.html')
+        return render(request, template_name)
+    return render(request, 'login.html')
+
+    
 
 def type_user(request,pk):
     if request.session.has_key('username'):

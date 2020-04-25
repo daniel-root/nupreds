@@ -6,11 +6,11 @@ class Client(models.Model):
         (u'Administrador', u'Administrador'),
         (u'Super', u'Super'),
     )
-    usuario = models.CharField(max_length=255, null=False)
+    usuario = models.CharField(max_length=255, null=False,unique=True)
     email = models.EmailField()
     telefone = models.CharField(max_length=20, null=True)
     whatsapp = models.CharField(max_length=20, null=True)
-    cpf = models.CharField(max_length=255, null=False)
+    cpf = models.CharField(max_length=255, null=False,unique=True)
     #data_de_nascimento = models.DateField(null=False)
     user_type = models.CharField(max_length=13, null=False, choices=TYPES_CHOICES,default='Comum')
     senha = models.CharField(max_length=50, null=False)

@@ -3,7 +3,7 @@ from django.urls import reverse
 from users.models import Client
 
 class Equipment_type(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20,unique=True)
     inative = models.BooleanField(default=False)
 
     def __str__(self):
@@ -14,7 +14,7 @@ class Equipment(models.Model):
         (u'Ocupado', u'Ocupado'),
         (u'Atrasado', u'Atrasado'),
     )
-    tag = models.CharField(max_length=10)
+    tag = models.CharField(max_length=10,unique=True)
     description = models.TextField()
     type_equipment = models.ForeignKey('Equipment_type',on_delete=models.SET_NULL, null=True)
     maximum_time = models.IntegerField(default=4)

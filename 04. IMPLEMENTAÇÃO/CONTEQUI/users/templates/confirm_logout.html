@@ -1,0 +1,5 @@
+<h1>Confirme</h1>
+<form method="post">{% csrf_token %}
+    Você tem certeza que deseja sair?
+    <input type="submit" value="Submit" />
+</form><a href="{% url "home" %}">voltar</a>
