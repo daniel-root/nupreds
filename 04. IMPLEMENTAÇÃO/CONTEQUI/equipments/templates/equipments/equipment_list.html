@@ -1,7 +1,7 @@
 <h1>Equipments</h1>
 <table border="1">
 {% for type in type_equipment %}
-<a href="{% url "filter_type" type %}">{{ type }}</a>
+<a href="{% url "filter_type" type.name %}">{{ type.name }}</a>
 {% endfor %}
 <form method="POST" action="{% url 'search' type %}">{% csrf_token %}
     <input type="text" placeholder="Search.." name="search" required="required">

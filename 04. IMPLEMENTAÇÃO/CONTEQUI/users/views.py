@@ -47,8 +47,20 @@ def user_update(request, pk, template_name='users/user_form.html'):
             return redirect('user_list')
         return render(request, template_name, {'form':form})
     return render(request, 'login.html')
+    
 
 def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
+    if request.session.has_key('username'):
+        user= get_object_or_404(Client, pk=pk) 
+        if request.method=='POST': 
+            if Client.objects.filter(id = pk,inative='True'):
+                Client.objects.filter(id = pk).update(inative='False')
+            else:
+                Client.objects.filter(id = pk).update(inative='True')
+            return user_list(request)
+        return render(request, template_name, {'object':user})
+    return render(request, 'login.html')
+    '''
     if request.session.has_key('username'):
         user= get_object_or_404(Client, pk=pk)    
         if request.method=='POST':
@@ -56,6 +68,7 @@ def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
             return redirect('user_list')
         return render(request, template_name, {'object':user})
     return render(request, 'login.html')
+    '''
 
 def loginpage(request):
     if request.method == 'POST':
