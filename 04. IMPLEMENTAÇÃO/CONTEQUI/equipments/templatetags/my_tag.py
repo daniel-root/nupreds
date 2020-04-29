@@ -83,6 +83,14 @@ def ActiveOrInactiveType(pk):
     return 'Ativar'
 
 @register.simple_tag
+def ActiveOrInactiveUser(pk):
+    ActiveEquipment = Client.objects.filter(id = pk,inative=False)
+    if ActiveEquipment:
+        return 'Desativar'
+    return 'Ativar'
+
+
+@register.simple_tag
 def Atraso(pk):
     Equipment_time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
     Maximum_Time = ''.join(map(str, Equipment_time))

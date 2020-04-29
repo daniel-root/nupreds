@@ -5,6 +5,7 @@ from users.models import Client
 class Equipment_type(models.Model):
     name = models.CharField(max_length=20,unique=True)
     inative = models.BooleanField(default=False)
+    time_maximum = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -17,10 +18,15 @@ class Equipment(models.Model):
     tag = models.CharField(max_length=10,unique=True)
     description = models.TextField()
     type_equipment = models.ForeignKey('Equipment_type',on_delete=models.SET_NULL, null=True)
-    maximum_time = models.IntegerField(default=4)
+    maximum_time = models.IntegerField(default=5)
     inative = models.BooleanField(default=False)
     status =  models.CharField(max_length=9, null=False, choices=STATUS_CHOICES,default='Livre')
     amount_of_loans = models.IntegerField(default=0)
+    '''
+    def contact_default():
+    return {"email": "to1@example.com"}
+    contact_info = JSONField("ContactInfo", default=contact_default)
+    '''
 
     def __int__(self):
         return self.id

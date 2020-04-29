@@ -6,7 +6,7 @@
 
 <form method="POST" action="{% url 'type_user' object.id %}">{% csrf_token %}
   <p>Selecione:</p>
-  <input type="radio" id="Comum" name="type" value="Comum">
+  <input type="radio" id="Comum" name="type" value="Comum" checked>
   <label for="Comum">Comum</label><br>
   <input type="radio" id="Administrador" name="type" value="Administrador">
   <label for="Administrador">Administrador</label><br>

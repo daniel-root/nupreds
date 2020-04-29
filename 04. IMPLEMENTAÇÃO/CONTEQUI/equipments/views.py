@@ -17,7 +17,7 @@ def home(request):
 class TypeForm(ModelForm):
     class Meta:
         model = Equipment_type
-        fields = ['name']
+        fields = ['name','time_maximum']
 
 class InactiveForm(forms.Form):
     inactive = forms.BooleanField(widget=forms.CheckboxInput(attrs={'onclick':'this.form.submit();'}),required=False, label="Ver inativos")
@@ -28,7 +28,7 @@ class EquipmentForm(ModelForm):
         fields = ['tag','description','type_equipment','maximum_time']
 
 def EquipmentTypeAll():
-    equipment_type = Equipment_type.objects.all()
+    equipment_type = Equipment_type.objects.all().values('name')
     return equipment_type
 
 def EquipmentTypeAllOrderBy(value):
@@ -41,7 +41,7 @@ def EquipmentTypeUnique(pk):
 
 def equipment_type_list(request, templete_name='equipments/equipment_type_list.html'):
     data = {}
-    data['object_list'] = EquipmentTypeAll
+    data['object_list'] = Equipment_type.objects.all()
     return render(request, templete_name, data)
 
 def equipment_type_order_by(request,value, templete_name='equipments/equipment_type_list.html'):
