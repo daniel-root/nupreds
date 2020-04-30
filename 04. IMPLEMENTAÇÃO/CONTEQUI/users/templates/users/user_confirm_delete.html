@@ -1,0 +1,7 @@
+<h1>Client Delete</h1>
+<form method="post">{% csrf_token %}
+{% load my_tag %}
+    Você tem certeza que deseja {% ActiveOrInactiveUser object.id %} "{{ object.usuario }}" ?
+    <input type="submit" value="Submit" />
+</form>
+<a href="{% url "user_list" %}">voltar</a>

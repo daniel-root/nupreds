@@ -1,0 +1,45 @@
+<h1>Client</h1>
+<a href="">Comum</a>
+<a href="">Admnistrador</a>
+<a href="">Super</a>
+<form method="POST" action="">{% csrf_token %}
+    <input type="text" placeholder="Search.." name="search" required="required">
+    <div class="submit">
+        <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
+    </div>
+</form>
+<table border="1">
+<thead>
+    <tr>
+    <th>Nome</th>
+    <th>CPF</th>
+    <th>Previlegio</th>
+    {% for type in type_user %}
+    {% ifequal type.user_type 'Super' %}
+    <th>Type</th>
+    {% endifequal %}
+    {% endfor %}
+    <th>Edit</th>
+    <th>Delete</th>
+    </tr>
+</thead>
+<tbody>
+{% load my_tag %}
+    {% for user in object_list %}
+    <tr>
+    <td>{{ user.usuario }}</td>
+    <td>{{ user.cpf }}</td>
+    <td>{{ user.user_type }}</td>
+        {% for type in type_user %}
+            {% ifequal type.user_type 'Super' %}
+            <td><a href="{% url "user_view" user.id %}">type</a></td>
+            {% endifequal %}
+        {% endfor %}
+    <td><a href="{% url "user_edit" user.id %}">edit</a></td>
+    <td><a href="{% url "user_delete" user.id %}">{% ActiveOrInactiveUser user.id %}</a></a></td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<a href="{% url "user_new" %}">New</a>
+<a href="{% url "home" %}">voltar</a>

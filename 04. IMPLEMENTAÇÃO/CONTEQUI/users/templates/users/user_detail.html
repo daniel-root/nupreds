@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>TIPO DE USUARIO</h1>
+
+<form method="POST" action="{% url 'type_user' object.id %}">{% csrf_token %}
+  <p>Selecione:</p>
+  <input type="radio" id="Comum" name="type" value="Comum" checked>
+  <label for="Comum">Comum</label><br>
+  <input type="radio" id="Administrador" name="type" value="Administrador">
+  <label for="Administrador">Administrador</label><br>
+  <input type="radio" id="Super" name="type" value="Super">
+  <label for="Super">Super</label><br>
+  <input type="submit" value="Submit">
+</form>
+<a href="{% url "user_list" %}">Voltar</a>
+
+</body>
+</html>
+

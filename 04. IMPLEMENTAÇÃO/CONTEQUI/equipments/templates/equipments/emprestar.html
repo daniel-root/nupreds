@@ -1,0 +1,26 @@
+
+<form method="POST" id="add_form" action="{% url 'emprestar_user' chave.id %}">{% csrf_token %}
+      <div class="form-group">
+        <label >User Name</label>
+        <div class="input"><input type="text" name="username" required="required"></div>
+        <div class="clear"></div>
+    </div>
+    <div class="form-group">
+        <label >Password</label>
+        <div class="input"><input type="password" name="password" required="required"></div>
+        <div class="clear"></div>
+    </div>
+    {% load my_tag %}
+    <div class="form-group">
+        <label >Deseja mudar o tempo limite atual: {{ chave.maximum_time }} </label>
+        <div class="input"><input type="text" name="maximum_time"></div>
+        <div class="clear"></div>
+    </div>
+    <div class="form-group"> 
+      <label></label>
+        <div class="submit">
+          <button type="submit" class="btn-primary">CONFIMAR</button>
+        </div>
+        <button type="button" class="btn-primary"><a href="{% url "equipment_list" %}">VOLTAR</a></button>
+        <div class="clear"></div> </div>
+</form>

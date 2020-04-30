@@ -1,0 +1,15 @@
+https://www.figma.com/file/vMzJzEtHVcHN1J8infVr75/Controle-de-Chaves?node-id=0%3A1
+
+tentar remover elementos do wix deixando o html puro.
+tela para ativar e desativar equipamentos.
+tela de usuário com opções de privacidades
+procurar ferramentos que possam limpar o codigo
+diagramas de sequencia 
+diagrma de atividades falar com o Antonio Carlos ou BVU
+
+Tem esse na BVU: DESENVOLVENDO SOFTWARE COM UML 2.0 DEFINITIVO 
+
+
+Editores HTML:
+Atom, 
+
