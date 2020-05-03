@@ -39,3 +39,4 @@ class Equipment_user(models.Model):
     user_devolution = models.ForeignKey(Client,on_delete=models.SET_NULL, null=True,related_name='devolução')
     amount_of_loans = models.IntegerField(default=0)
     limit_time = models.DateTimeField(blank=True,null=True)
+
