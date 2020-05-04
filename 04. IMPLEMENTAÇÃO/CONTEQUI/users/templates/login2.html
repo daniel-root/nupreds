@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="{{ STATIC_URL }}static/users/te.css">
+{% block content %}
+<div class="container" onclick="onclick">
+  <div class="top"></div>
+  <div class="bottom"></div>
+  <div class="center">
+    <h2>Please Sign In</h2>
+    <form method="POST" id="add_form" action="{% url 'login' %}">
+    {% csrf_token %}
+        <div class="input"><input type="text" name="username" placeholder="usuario"/></div>
+        <div class="input"><input type="password" name="password" placeholder="password"/></div>
+        
+        <button type="submit">Entrar</button>
+    </form>
+    {% for message in messages %}
+    <div class="alert alert-danger">
+      <strong>Error!</strong> {{ message }}
+    </div>
+    {% endfor %}
+    <h2>&nbsp;</h2>
+  </div>
+</div>
+{% endblock %}
+<!--
+<form method="POST" id="add_form" action="{% url 'login' %}">{% csrf_token %}
+        <label >User Name</label>
+        <div class="input"><input type="text" name="username" required="required"></div>
+        <div class="clear"></div>
+    </div>
+    <div class="form-group">
+        <label >Password</label>
+        <div class="input"><input type="password" name="password" required="required"></div>
+        <div class="clear"></div>
+    </div>
+    <div class="form-group"> 
+      <label></label>
+        <div class="submit">
+          <button type="submit" class="btn-primary">Login</button>
+        </div>
+        <div class="clear"></div> </div>
+</form>
+-->

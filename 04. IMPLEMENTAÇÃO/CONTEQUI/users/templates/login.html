@@ -1,42 +1,67 @@
-<link rel="stylesheet" href="{{ STATIC_URL }}static/users/te.css">
-{% block content %}
-<div class="container" onclick="onclick">
-  <div class="top"></div>
-  <div class="bottom"></div>
-  <div class="center">
-    <h2>Please Sign In</h2>
-    <form method="POST" id="add_form" action="{% url 'login' %}">
-    {% csrf_token %}
-        <div class="input"><input type="text" name="username" placeholder="usuario"/></div>
-        <div class="input"><input type="password" name="password" placeholder="password"/></div>
-        
-        <button type="submit">Entrar</button>
-    </form>
-    {% for message in messages %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+	<title>Login</title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}static/users/bootstrap.min.css">
+    {% block content %}
+</head>
+<body  style="margin-top: 5%">
+    <div class="text-center">
+    <img src="{{STATIC_URL}}static/images/logo1.png" lign=”middle alt="Responsive image" / >
+	</div>	
+		<div class="container">
+            <div class="row justify-content-center">
+                <form id="add_form" action="{% url 'login' %}" method="POST" class="col-md-4">
+                   {% csrf_token %}
+                   <!-- <fieldset >-->
+                        <div class="form-group">
+                            <label  for="clogin">Login:</label>
+                            <div class="input-group">
+                        <div class="input-group-grepend">
+                            <span class="rounded-0 border-0 input-group-text">
+                                <img src="{{STATIC_URL}}static/images/usuário.png" style="height: 26px; width: 25px">
+                            </span>
+                        </div>
+                            <input class="form-control border-0 rounded-0" type="text" name="username" id="clogin" style="background-color:#e9ecef;">
+                        </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="csenha">Senha:</label>
+                        <div class="input-group">
+                            <div class="input-group-grepend">
+                                <span class=" rounded-0 border-0 input-group-text">
+                                    <img src="{{STATIC_URL}}static/images/senha.png" style="height: 26px; width: 25px">
+                                </span>
+                            </div>
+                            <input class="form-control border-0 rounded-0 "type="password" id="senha" name="password" style="background-color:#e9ecef;">
+                        </div>
+                        </div>
+                   <!-- </fieldset>-->
+                    <div class="text-center">
+                    <button class="btn btn-primary">Enviar</button>
+                    </div>
+                    <div class="text-right">
+        				<button class="btn btn-link">Esqueceu a Senha?</button>
+    				</div>
+                 {% for message in messages %}
     <div class="alert alert-danger">
       <strong>Error!</strong> {{ message }}
     </div>
     {% endfor %}
-    <h2>&nbsp;</h2>
-  </div>
-</div>
-{% endblock %}
-<!--
-<form method="POST" id="add_form" action="{% url 'login' %}">{% csrf_token %}
-        <label >User Name</label>
-        <div class="input"><input type="text" name="username" required="required"></div>
-        <div class="clear"></div>
-    </div>
-    <div class="form-group">
-        <label >Password</label>
-        <div class="input"><input type="password" name="password" required="required"></div>
-        <div class="clear"></div>
-    </div>
-    <div class="form-group"> 
-      <label></label>
-        <div class="submit">
-          <button type="submit" class="btn-primary">Login</button>
+                </form>
+               
+            </div>
         </div>
-        <div class="clear"></div> </div>
-</form>
--->
+        
+
+	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="static/users/js/bootstrap.min.js"></script>
+
+
+</body>
+{% endblock %}
+</html>
