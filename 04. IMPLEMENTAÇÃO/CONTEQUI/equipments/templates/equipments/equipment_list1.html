@@ -1,0 +1,47 @@
+<h1>Equipments</h1>
+<table border="1">
+{% for type in type_equipment %}
+<a href="{% url "filter_type" type.name %}">{{ type.name }}</a>
+{% endfor %}
+<form method="POST" action="{% url 'search' type %}">{% csrf_token %}
+    <input type="text" placeholder="Search.." name="search" required="required">
+    <div class="submit">
+        <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
+    </div>
+</form>
+<form action="{% url 'equipment_list_inactive' type %}" method="post">{% csrf_token %}
+    {{ form_inactive.as_p }}
+</form>
+<thead>
+    <tr>
+    <th><a href="{% url "filter_list" 'Etiqueta' type %}">Etiqueta</a></th>
+    <th><a href="{% url "filter_list" 'Descricao' type %}">Descrição</a></th>
+    <th><a href="{% url "filter_list" 'EmPosse' type %}">Em posse</a></th>
+    <th>Ações</th>
+    </tr>
+</thead>
+<tbody>
+    {% for equipment in list_equipment %}
+    <tr>
+    <td>{{ equipment.tag }}</td>
+    <td>{{ equipment.description }}</td>
+    {% load my_tag %}
+    <td>{% NameUser equipment.id %}</td>
+    {% ifequal 'Atrasado' equipment.status %}
+    <td  bgcolor="#ff0000" >
+    <a href="{% url "equipment_view" equipment.id %}">{% LoanOrDevolution equipment.id %}</a>     
+    <a href="{% url "equipment_edit" equipment.id %}">Editar</a>
+    <a href="{% url "equipment_delete" equipment.id %}">{% ActiveOrInactive equipment.id %}</a>{% Atraso equipment.id %}</td>
+    {% endifequal %}
+    {% if 'Atrasado' != equipment.status %}
+    <td>
+    <a href="{% url "equipment_view" equipment.id %}">{% LoanOrDevolution equipment.id %}</a>     
+    <a href="{% url "equipment_edit" equipment.id %}">Editar</a>
+    <a href="{% url "equipment_delete" equipment.id %}">{% ActiveOrInactive equipment.id %}</a>{% Atraso equipment.id %}</td>
+    {% endif %}
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<a href="{% url "equipment_new" %}">New</a>
+<a href="{% url "home" %}">voltar</a>

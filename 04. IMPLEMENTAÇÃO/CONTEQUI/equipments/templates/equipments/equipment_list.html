@@ -1,47 +1,122 @@
-<h1>Equipments</h1>
-<table border="1">
-{% for type in type_equipment %}
-<a href="{% url "filter_type" type.name %}">{{ type.name }}</a>
-{% endfor %}
-<form method="POST" action="{% url 'search' type %}">{% csrf_token %}
-    <input type="text" placeholder="Search.." name="search" required="required">
-    <div class="submit">
-        <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
-    </div>
-</form>
-<form action="{% url 'equipment_list_inactive' type %}" method="post">{% csrf_token %}
-    {{ form_inactive.as_p }}
-</form>
-<thead>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+  <title>Equipamentos</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css" >
+  <link rel="stylesheet" href="{{ STATIC_URL }}static/users/bootstrap.min.css">
+  {% block content %}
+</head>
+<body style="margin-top: 3%;">
+  <div class="container">
+    <div class="row " style="padding-left: 15%;">
+        <span>
+          <img src="{{STATIC_URL}}static/images/equipamentos.png" style="height: 30px; width: 30px; ">
+        </span>
+        <p style="margin-left: 10px; font-size: 140%">Equipamentos </p>
+      </div>
+      <div class="row justify-content-center">
+      {% for type in type_equipment %}
+         <form action="{% url "filter_type" type.name %}">
+        <button class="btn btn-link text-dark ">
+         {{ type.name }}  
+        </button>
+        </form>
+      {% endfor %}
+      </div>
+      <div style="margin-top: 10px;" class="row justify-content-center">
+        <form class="form-inline" method="POST" action="{% url 'search' type %}">{% csrf_token %}
+          <div class="input-group">
+            <input class="form-control mr-2 rounded-pill"  type="text" placeholder="Search.." name="search" required="required" style="width: 600px; background: #e9ecef">
+            <div class="submit">
+            <button class="border-0" type="submit" style="background: #FFFFFF;">
+              <span>
+                <img src="{{STATIC_URL}}static/images/lupa.png" style="height: 30px; width: 30px">
+              </span>
+            </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <table class="table" style="width: 700px;  margin:auto; margin-top: 10px;" >
+  <thead>
     <tr>
-    <th><a href="{% url "filter_list" 'Etiqueta' type %}">Etiqueta</a></th>
-    <th><a href="{% url "filter_list" 'Descricao' type %}">Descrição</a></th>
-    <th><a href="{% url "filter_list" 'EmPosse' type %}">Em posse</a></th>
-    <th>Ações</th>
+      <th scope="col" width="15%" style="text-align: center;">Etiqueta</th>
+      <th scope="col" width="15%" style="text-align: center;">Descrição</th>
+      <th scope="col" width="33%" style="text-align: center;">Em posse</th>
+      <th scope="col" width="37%" style="text-align: center;">Ações</th>
     </tr>
-</thead>
-<tbody>
-    {% for equipment in list_equipment %}
+    </thead>
+  <tbody>
+  {% for equipment in list_equipment %}
     <tr>
-    <td>{{ equipment.tag }}</td>
-    <td>{{ equipment.description }}</td>
-    {% load my_tag %}
-    <td>{% NameUser equipment.id %}</td>
-    {% ifequal 'Atrasado' equipment.status %}
-    <td  bgcolor="#ff0000" >
-    <a href="{% url "equipment_view" equipment.id %}">{% LoanOrDevolution equipment.id %}</a>     
-    <a href="{% url "equipment_edit" equipment.id %}">Editar</a>
-    <a href="{% url "equipment_delete" equipment.id %}">{% ActiveOrInactive equipment.id %}</a>{% Atraso equipment.id %}</td>
-    {% endifequal %}
+      <td>{{ equipment.tag }}</td>
+      <td>{{ equipment.description }}</td>
+      {% load my_tag %}
+      <td>{% NameUser equipment.id %}</td>
+       {% ifequal 'Atrasado' equipment.status %}
+      <td >
+      <form action="{% url "equipment_edit" equipment.id %}">
+        <button class="rounded-pill">
+            Editar
+          </button>
+          </form>
+          <form action="{% url "equipment_delete" equipment.id %}">
+          <button class="rounded-pill" style="margin-left: 5px;">
+            {% ActiveOrInactive equipment.id %}
+          </button>
+          </form>
+          <form action="{% url "equipment_view" equipment.id %}">
+          <button class="rounded-pill" style="margin-left: 5px; color:red;">
+            {% LoanOrDevolution equipment.id %}
+          </button>
+          </form>
+      </td>
+      {% endifequal %}
     {% if 'Atrasado' != equipment.status %}
-    <td>
-    <a href="{% url "equipment_view" equipment.id %}">{% LoanOrDevolution equipment.id %}</a>     
-    <a href="{% url "equipment_edit" equipment.id %}">Editar</a>
-    <a href="{% url "equipment_delete" equipment.id %}">{% ActiveOrInactive equipment.id %}</a>{% Atraso equipment.id %}</td>
-    {% endif %}
+      <td>
+        <form action="{% url "equipment_edit" equipment.id %}">
+        <button class="rounded-pill">
+            Editar
+          </button>
+          </form>
+          <form action="{% url "equipment_delete" equipment.id %}">
+          <button class="rounded-pill" style="margin-left: 5px;">
+            {% ActiveOrInactive equipment.id %}
+          </button>
+          </form>
+          <form action="{% url "equipment_view" equipment.id %}">
+          <button class="rounded-pill" style="margin-left: 5px; ">
+            {% LoanOrDevolution equipment.id %}
+          </button>
+          </form>
+      </td>
+      {% endif %}
     </tr>
-    {% endfor %}
-</tbody>
+     {% endfor %}
+  </tbody>
 </table>
-<a href="{% url "equipment_new" %}">New</a>
-<a href="{% url "home" %}">voltar</a>
+<hr width="700px" style="margin-top: -1px;">
+  <div class="" style="padding-left: 75%; margin-top: 10px;"  >
+        <form action="{% url "equipment_new" %}">
+        <button class="rounded-pill">
+          Novo
+        </button>
+        </form>
+        <form action="{% url "home" %}">
+        <button class="rounded-pill" style="margin-left: 5px;">
+          Voltar
+        </button>
+        </form>
+      </div>
+  </div>
+	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+
+</body>
+{% endblock %}
+</html>
