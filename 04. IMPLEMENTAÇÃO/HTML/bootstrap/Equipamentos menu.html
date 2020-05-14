@@ -1,46 +1,51 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
-  <title>Equipamentos</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css" >
-  <link href="css/open-iconic-master/font/css/open-iconic-bootstrap.css" rel="stylesheet">
-</head>
-<body style="margin-top: 3%;">
-  <div class="container">
-    <div class="row " style="padding-left: 15%;">
-        <span>
-          <img src="equipamentos.png" style="height: 30px; width: 30px; ">
-        </span>
-        <p style="margin-left: 10px; font-size: 140%">Equipamentos </p>
-      </div>
-      <div class="row justify-content-center">
-        <button class="btn btn-link text-dark ">
-          Chaves  
-        </button>
-        <button class="btn btn-link text-dark" style="margin-left: 20px;">
-          Controles
-        </button>
-        <button class="btn btn-link text-dark" style="margin-left: 20px;">
+  <!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+    <title>Equipamentos</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" >
+    <link href="css/open-iconic-master/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+  </head>
+  <body style="margin-top: 3%;">
+    <div class="container">
+      <div class="row " style="padding-left: 5%;">
+          <span>
+            <img src="equipamentos.png" style="height: 30px; width: 30px; ">
+          </span>
+          <p style="margin-left: 10px; font-size: 150%">Equipamentos </p>
+        </div>
+        <div class="row justify-content-center">
+          <button class="btn btn-link text-dark ">
+            Chaves  
+          </button>
+          <button class="btn btn-link text-dark" style="margin-left: 45px;">
+            Controles
+          </button>
+        <button class="btn btn-link text-dark" style="margin-left: 45px;">
           Aparelhos de Som
         </button>
-        <button class="btn btn-link text-dark" style="margin-left: 20px;">
+        <button class="btn btn-link text-dark" style="margin-left: 45px;">
           Projetores
         </button>
-        <button class="btn btn-link text-dark" style="margin-left: 20px;">
+        <button class="btn btn-link text-dark" style="margin-left: 45px;">
           Adaptadores
         </button>
-        <button class="border-0" style="background: #FFFFFF; margin-left: 20px;">
+         <button class="btn btn-link text-dark" style="margin-left: 45px;">
+          Ver Inativos
+        </button>
+        <button class="border-0" style="background: #FFFFFF; margin-left: 45px;">
           <span>
           <img src="seta.png" style="height: 30px; width: 30px">
         </span>
         </button>
       </div>
+
+       
       <div style="margin-top: 10px;" class="row justify-content-center">
         <form class="form-inline">
           <div class="input-group">
-            <input class="form-control mr-2 rounded-pill" type="cemquipamento" name="cemquipamento" style="width: 600px; background: #e9ecef">
+            <input class="form-control mr-2 rounded-pill" type="cemquipamento" name="cemquipamento" style="width: 900px; background: #e9ecef">
             <button class="border-0" style="background: #FFFFFF;">
               <span>
                 <img src="lupa.png" style="height: 30px; width: 30px">
@@ -50,13 +55,29 @@
         </form>
       </div>
       
-      <table class="table" style="width: 700px;  margin:auto; margin-top: 10px;" >
+      <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
   <thead>
     <tr>
-      <th scope="col" width="15%" style="text-align: center;">Etiqueta</th>
-      <th scope="col" width="15%" style="text-align: center;">Descrição</th>
-      <th scope="col" width="33%" style="text-align: center;">Em posse</th>
-      <th scope="col" width="37%" style="text-align: center;">Ações</th>
+      <th scope="col" width="15%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Etiquetas
+        </button>
+      </th>
+      <th scope="col" width="15%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Descrição
+        </button>
+      </th>
+      <th scope="col" width="30%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Em Posse
+        </button>
+      </th>
+      <th scope="col" width="40%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Ações
+        </button>
+      </th>
     </tr>
     </thead>
   <tbody>
@@ -64,7 +85,7 @@
       <td></td>
       <td></td>
       <td></td>
-      <td>
+      <td style="text-align: center;">
         <button class="rounded-pill">
             Editar
           </button>
@@ -80,7 +101,7 @@
       <td></td>
       <td></td>
       <td></td>
-      <td>
+      <td style="text-align: center;">
         <button class="rounded-pill" style="box-shadow: none;">
             Editar
           </button>
@@ -94,8 +115,8 @@
     </tr>
   </tbody>
 </table>
-<hr width="700px" style="margin-top: -1px;">
-  <div class="" style="padding-left: 75%; margin-top: 10px;"  >
+<hr width="1000px" style="margin-top: -1px;">
+  <div class="" style="padding-left: 85%; margin-top: 10px;"  >
         <button class="rounded-pill">
           Novo
         </button>
