@@ -95,7 +95,7 @@
       </td>
       {% endifequal %}
     {% if 'Atrasado' != equipment.status %}
-      <td style="text-align: center;">
+      <td style="display: inline-block">
         <form action="{% url "equipment_edit" equipment.id %}">
         <button class="rounded-pill">
             Editar
