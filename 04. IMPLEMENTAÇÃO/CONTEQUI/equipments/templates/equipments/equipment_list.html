@@ -10,7 +10,7 @@
 </head>
 <body style="margin-top: 3%;">
   <div class="container">
-    <div class="row " style="padding-left: 15%;">
+    <div class="row " style="padding-left: 5%;">
         <span>
           <img src="{{STATIC_URL}}static/images/equipamentos.png" style="height: 30px; width: 30px; ">
         </span>
@@ -24,6 +24,9 @@
         </button>
         </form>
       {% endfor %}
+      <button class="btn btn-link text-dark" style="margin-left: 45px;">
+          Ver Inativos
+        </button>
       </div>
       <div style="margin-top: 10px;" class="row justify-content-center">
         <form class="form-inline" method="POST" action="{% url 'search' type %}">{% csrf_token %}
@@ -40,14 +43,30 @@
         </form>
       </div>
       
-      <table class="table" style="width: 700px;  margin:auto; margin-top: 10px;" >
+      <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
   <thead>
     <tr>
-      <th scope="col" width="15%" style="text-align: center;">Etiqueta</th>
-      <th scope="col" width="15%" style="text-align: center;">Descrição</th>
-      <th scope="col" width="30%" style="text-align: center;">Em posse</th>
-      <th scope="col" width="40%" style="text-align: center;">Ações</th>
-    </tr>
+      <th scope="col" width="15%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Etiquetas
+        </button>
+      </th>
+      <th scope="col" width="15%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Descrição
+        </button>
+      </th>
+      <th scope="col" width="30%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Em Posse
+        </button>
+      </th>
+      <th scope="col" width="40%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Ações
+        </button>
+      </th>
+      </tr>
     </thead>
   <tbody>
   {% for equipment in list_equipment %}
