@@ -42,26 +42,26 @@
           </div>
         </form>
       </div>
-      <div style="overflow-x:auto;">
+      
       <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
   <thead>
     <tr>
-      <th scope="col" style="text-align: center;">
+      <th scope="col" width="15%" style="text-align: center;">
         <button class="btn btn-link text-dark" >
           Etiquetas
         </button>
       </th>
-      <th scope="col" style="text-align: center;">
+      <th scope="col" width="15%" style="text-align: center;">
         <button class="btn btn-link text-dark" >
           Descrição
         </button>
       </th>
-      <th scope="col" style="text-align: center;">
+      <th scope="col" width="30%" style="text-align: center;">
         <button class="btn btn-link text-dark" >
           Em Posse
         </button>
       </th>
-      <th scope="col" style="text-align: center;">
+      <th scope="col" width="40%" style="text-align: center;">
         <button class="btn btn-link text-dark" >
           Ações
         </button>
@@ -77,47 +77,51 @@
       <td>{% NameUser equipment.id %}</td>
        {% ifequal 'Atrasado' equipment.status %}
       <td >
-      <form action="{% url "equipment_edit" equipment.id %}">
-        <button class="rounded-pill">
-            Editar
+      <div class="row">
+        <form class="form-inline" action="{% url "equipment_edit" equipment.id %}">
+          <button class="rounded-pill">
+              Editar
           </button>
-          </form>
-          <form action="{% url "equipment_delete" equipment.id %}">
+        </form>
+        <form class="form-inline" action="{% url "equipment_delete" equipment.id %}">
           <button class="rounded-pill" style="margin-left: 5px;">
-            {% ActiveOrInactive equipment.id %}
+          {% ActiveOrInactive equipment.id %}
           </button>
-          </form>
-          <form action="{% url "equipment_view" equipment.id %}">
+        </form>
+        <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
           <button class="rounded-pill" style="margin-left: 5px; color:red;">
-            {% LoanOrDevolution equipment.id %}
+          {% LoanOrDevolution equipment.id %}
           </button>
-          </form>
+        </form>
+      </div>
+
       </td>
       {% endifequal %}
     {% if 'Atrasado' != equipment.status %}
-      <td style="display: inline-block">
-        <form action="{% url "equipment_edit" equipment.id %}">
-        <button class="rounded-pill">
-            Editar
+      <td >
+         <div class="row">
+        <form class="form-inline" action="{% url "equipment_edit" equipment.id %}">
+          <button class="rounded-pill">
+              Editar
           </button>
-          </form>
-          <form action="{% url "equipment_delete" equipment.id %}">
+        </form>
+        <form class="form-inline" action="{% url "equipment_delete" equipment.id %}">
           <button class="rounded-pill" style="margin-left: 5px;">
-            {% ActiveOrInactive equipment.id %}
+          {% ActiveOrInactive equipment.id %}
           </button>
-          </form>
-          <form action="{% url "equipment_view" equipment.id %}">
-          <button class="rounded-pill" style="margin-left: 5px; ">
-            {% LoanOrDevolution equipment.id %}
+        </form>
+        <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
+          <button class="rounded-pill" style="margin-left: 5px; color:red;">
+          {% LoanOrDevolution equipment.id %}
           </button>
-          </form>
+        </form>
+      </div>
       </td>
       {% endif %}
     </tr>
      {% endfor %}
   </tbody>
 </table>
-</div>
 <hr width="1000px" style="margin-top: -1px;">
   <div class="" style="padding-left: 85%; margin-top: 10px;"  >
         <form action="{% url "equipment_new" %}">
