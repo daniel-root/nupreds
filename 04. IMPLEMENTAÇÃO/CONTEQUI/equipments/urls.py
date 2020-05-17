@@ -30,4 +30,5 @@ urlpatterns = [
     path('Rastreio/<str:order_by>/<str:type_equipment_>/<str:tag>/<str:start>/<str:end>', views.rastreio, name='rastreio'),
     path('NaoDevolvidos/<str:order_by>/<str:type_equipment_>/<str:tag>/<str:start>', views.nao_devolvidos, name='nao_devolvidos'),
    
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] 
+#+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

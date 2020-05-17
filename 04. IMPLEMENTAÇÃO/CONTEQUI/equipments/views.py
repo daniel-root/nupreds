@@ -82,7 +82,7 @@ def EquipmentActiveAll():
     return equipment
 
 def EquipmentAll():
-    equipment = Equipment.objects.all().order_by('status','tag')
+    equipment = Equipment.objects.filter(inative=True).order_by('status','tag')
     return equipment
 
 def EquipmentUnique(pk):
@@ -202,7 +202,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
                 filtro = 'description'
             elif pk == 'EmPosse':
                 filtro = 'tag'
-            equipment = Equipment.objects.all().order_by('status',filtro)
+            equipment = Equipment.objects.filter(inative=False).order_by('status',filtro)
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= EquipmentTypeAll()
@@ -216,7 +216,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
                 filtro = 'description'
             elif pk == 'EmPosse':
                 filtro = 'tag'
-            equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value)).order_by('status',filtro)
+            equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value),inative=False).order_by('status',filtro)
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= EquipmentTypeAll()
@@ -227,7 +227,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
 
 def filter_type(request,value,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
-        equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value)).order_by('status','tag')
+        equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value),inative=False).order_by('status','tag')
         data = {}
         data['list_equipment'] = equipment
         data['type_equipment']= EquipmentTypeAll()
