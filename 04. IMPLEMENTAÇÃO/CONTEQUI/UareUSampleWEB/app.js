@@ -240,6 +240,7 @@ function sampleAcquired(s){
                 localStorage.setItem("imageSrc", "");                
                 var samples = JSON.parse(s.samples);            
                 localStorage.setItem("imageSrc", "data:image/png;base64," + Fingerprint.b64UrlTo64(samples[0]));
+                
                 if(state == document.getElementById("content-capture")){ 
                     var vDiv = document.getElementById('imagediv');
                     vDiv.innerHTML = "";
@@ -292,9 +293,12 @@ function sampleAcquired(s){
                 // It returns Base64 encoded feature set
                 localStorage.setItem("intermediate", "");
                 var samples = JSON.parse(s.samples);
+                alert(s.samples)
                 var sampleData = Fingerprint.b64UrlTo64(samples[0].Data);
                 localStorage.setItem("intermediate", sampleData);
-
+                let nomeGuardado = samples[0].Data;
+                let meuCabecalho = document.querySelector('h1');
+                meuCabecalho.textContent = nomeGuardado;
                 var vDiv = document.getElementById('imagediv').innerHTML = '<div id="animateText" style="display:none">Intermediate Sample Acquired <br>'+Date()+'</div>';
                 setTimeout('delayAnimate("animateText","table-cell")',100); 
 
@@ -465,7 +469,7 @@ function onImageDownload(){
          if(localStorage.getItem("intermediate") == "" || localStorage.getItem("intermediate") == null || document.getElementById('imagediv').innerHTML == "" ){
            alert("Intermediate data not available.");
         }else{
-            let nomeGuardado = localStorage.getItem("intermediate")
+            let nomeGuardado = localStorage.getItem("intermediate");
             let meuCabecalho = document.querySelector('h1');
             meuCabecalho.textContent = nomeGuardado;
             downloadURI("data:application/octet-stream;base64,"+localStorage.getItem("intermediate"), "FeatureSet.bin", "application/octet-stream");
