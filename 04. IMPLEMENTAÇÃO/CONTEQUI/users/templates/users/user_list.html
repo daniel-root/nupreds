@@ -17,10 +17,10 @@
           <p style="margin-left: 10px; font-size: 150%">Usuário</p>
         </div>
         <div class="row justify-content-center">
-          <button class="btn btn-link text-dark" style="margin-left: 25px;">
+          <button class="btn btn-link text-dark" >
             Todos
           </button>
-          <button class="btn btn-link text-dark ">
+          <button class="btn btn-link text-dark "style="margin-left: 45px;" >
             Super Usuário  
           </button>
           <button class="btn btn-link text-dark" style="margin-left: 45px;">
@@ -86,19 +86,20 @@
       <td>{{ user.cpf }}</td>
       <td>{{ user.user_type }}</td>
       <td>
-        <form action="{% url "user_edit" user.id %}">
+        <div class="row">
+        <form class="form-inline" action="{% url "user_edit" user.id %}">
         <button class="rounded-pill">
             Editar
           </button>
           </form>
-          <form action="{% url "user_delete" user.id %}">
+          <form class="form-inline" action="{% url "user_delete" user.id %}">
           <button class="rounded-pill" style="margin-left: 5px;">
            {% ActiveOrInactiveUser user.id %}
           </button>
           </form>
            {% for type in type_user %}
           {% ifequal type.user_type 'Super' %}
-          <form action="{% url "user_view" user.id %}">
+          <form class="form-inline"action="{% url "user_view" user.id %}">
           <button class="border-0" style="background: #FFFFFF;">
               <span>
                 <img src={% static "images/engrenagem.png" %} style="height: 25px; width: 25px">
@@ -107,19 +108,20 @@
             </form>
             {% endifequal %}
           {% endfor %}
+        </div>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 <hr width="1000px" style="margin-top: -1px;">
-  <div class="" style="padding-left: 85%; margin-top: 10px;"  >
-        <form action="{% url "user_new" %}">
+  <div class="row" style="padding-left: 85%; margin-top: 10px;"  >
+        <form class="form-inline" action="{% url "user_new" %}">
         <button class="rounded-pill">
           Novo
         </button>
         </form>
-        <form action="{% url "home" %}">
+        <form class="form-inline" action="{% url "home" %}">
         <button class="rounded-pill" style="margin-left: 5px;">
           Voltar
         </button>
