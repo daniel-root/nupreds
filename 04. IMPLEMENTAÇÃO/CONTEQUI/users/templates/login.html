@@ -4,12 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
 	<title>Login</title>
-    <link rel="stylesheet" href="{{ STATIC_URL }}static/users/bootstrap.min.css">
+    {% load static %}
+    <link rel="stylesheet" href={% static "users/bootstrap.min.css" %}>
     {% block content %}
 </head>
 <body  style="margin-top: 5%">
     <div class="text-center">
-    <img src="{{STATIC_URL}}static/images/logo1.png" lign=”middle alt="Responsive image" / >
+    <img src={% static "images/logo1.png" %} lign=”middle alt="Responsive image" / >
 	</div>	
 		<div class="container">
             <div class="row justify-content-center">
@@ -21,7 +22,7 @@
                             <div class="input-group">
                         <div class="input-group-grepend">
                             <span class="rounded-0 border-0 input-group-text">
-                                <img src="{{STATIC_URL}}static/images/usuário.png" style="height: 26px; width: 25px">
+                                <img src={% static "images/usuário.png" %} style="height: 26px; width: 25px">
                             </span>
                         </div>
                             <input class="form-control border-0 rounded-0" type="text" name="username" id="clogin" style="background-color:#e9ecef;">
@@ -33,7 +34,7 @@
                         <div class="input-group">
                             <div class="input-group-grepend">
                                 <span class=" rounded-0 border-0 input-group-text">
-                                    <img src="{{STATIC_URL}}static/images/senha.png" style="height: 26px; width: 25px">
+                                    <img src={% static "images/senha.png" %} style="height: 26px; width: 25px">
                                 </span>
                             </div>
                             <input class="form-control border-0 rounded-0 "type="password" id="senha" name="password" style="background-color:#e9ecef;">

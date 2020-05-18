@@ -6,17 +6,17 @@
 	<title>Pagina Inicial</title>
     {% load static %}
     <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
-    <link rel="stylesheet" href="{{ STATIC_URL }}static/users/bootstrap.min.css">
+    <link rel="stylesheet" href={% static "users/bootstrap.min.css" %}>
     {% block content %}
 </head>
 <body  style="margin-top: 5%">
     <div class="text-center">
-	   <img src="{{STATIC_URL}}static/images/image.png" align=”middle alt="Responsive image" style="height: 150px; width: 200px">
+	   <img src={% static "images/image.png" %} align=”middle alt="Responsive image" style="height: 150px; width: 200px">
 	</div>
         <form action="{% url "logout" %}">
         <button type="submit" class="border-0" style="position: absolute; left: 1000px; top: 100px; background-color: #FFFFFF;">
             Sair
-            <span><img src="{{STATIC_URL}}static/images/enter.png" style="height: 20px; width: 20px"></span>
+            <span><img src={% static "images/enter.png" %} style="height: 20px; width: 20px"></span>
         </button>
         </form>
     
@@ -26,7 +26,7 @@
             <form action="{% url "equipment_list"%}">
               <button  type="submit" class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px; margin-top: 20px; ">
                   <span>
-                      <img src="{{STATIC_URL}}static/images/equipamentos.png" style="height: 30px; width: 30px">
+                      <img src={% static "images/equipamentos.png" %} style="height: 30px; width: 30px">
                   </span>
                   Equipamentos
               </button>
@@ -34,7 +34,7 @@
             <form action="{% url "user_list" %}">
               <button class="btn btn-lg rounded" style=" background-color: #C0C0C0; height: 80px; width: 250px; margin-top: 20px;">
                  <span>
-                    <img src="{{STATIC_URL}}static/images/usuario.png" style="height: 30px; width: 30px">
+                    <img src={% static "images/usuario.png" %}  style="height: 30px; width: 30px">
                  </span>
                   Usuários
               </button>
@@ -42,7 +42,7 @@
               <form action="{% url "get_rastreio" 'Listagem' %}">
               <button class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px;  margin-top: 20px;">
                   <span>
-                    <img src="{{STATIC_URL}}static/images/relatorio.png" style="height: 30px; width: 30px">
+                    <img src={% static "images/relatorio.png" %} style="height: 30px; width: 30px">
                  </span>
                   Relatórios
               </button>
@@ -53,14 +53,14 @@
 
 
 <div class="text-center">
-<div style="float:left; width:50%"><img src="{{STATIC_URL}}static/images/ifce.png" style="height: 70px; width: 240px;"></div>
-<div style="float:left; width:50%">Feito por:<img src="{{STATIC_URL}}static/images/nupreds.png" style="height: 100px; width: 260px;"></div>
+<div style="float:left; width:50%"><img src={% static "images/ifce.png" %} style="height: 70px; width: 240px;"></div>
+<div style="float:left; width:50%">Feito por:<img src={% static "images/nupreds.png" %} style="height: 100px; width: 260px;"></div>
 </div>
         
         
 	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="{{STATIC_URL}}static/users/js/bootstrap.min.js"></script>
+    <script src={% static "users/js/bootstrap.min.js" %}></script>
 
 
 </body>
