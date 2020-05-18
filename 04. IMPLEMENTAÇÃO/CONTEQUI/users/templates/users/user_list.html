@@ -1,45 +1,130 @@
-<h1>Client</h1>
-<a href="">Comum</a>
-<a href="">Admnistrador</a>
-<a href="">Super</a>
-<form method="POST" action="">{% csrf_token %}
-    <input type="text" placeholder="Search.." name="search" required="required">
-    <div class="submit">
-        <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
-    </div>
-</form>
-<table border="1">
-<thead>
+  <!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+    <title>Usuários</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}">
+    <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
+  </head>
+  <body style="margin-top: 3%;">
+    <div class="container">
+      <div class="row " style="padding-left: 5%;">
+          <span>
+            <img src={% static "images/usuario.png" %} style="height: 30px; width: 30px; ">
+          </span>
+          <p style="margin-left: 10px; font-size: 150%">Usuário</p>
+        </div>
+        <div class="row justify-content-center">
+          <button class="btn btn-link text-dark" style="margin-left: 25px;">
+            Todos
+          </button>
+          <button class="btn btn-link text-dark ">
+            Super Usuário  
+          </button>
+          <button class="btn btn-link text-dark" style="margin-left: 25px;">
+            Administrador
+          </button>
+          <button class="btn btn-link text-dark" style="margin-left: 25px;">
+            Usuário Comum
+          </button>
+          <button class="btn btn-link text-dark" style="margin-left: 25px;">
+            Ver Inativos
+          </button>
+       </div>
+    <div style="margin-top: 10px;" class="row justify-content-center">
+        <form class="form-inline"method="POST" action="?">{% csrf_token %}
+          <div class="input-group">
+            <input class="form-control mr-2 rounded-pill" type="cemquipamento" name="cemquipamento" style="width: 900px; background: #e9ecef">
+            <button class="border-0" style="background: #FFFFFF;">
+              <span>
+                <img src={% static "images/lupa.png" %} style="height: 30px; width: 30px">
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+            
+      <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+  <thead>
     <tr>
-    <th>Nome</th>
-    <th>CPF</th>
-    <th>Previlegio</th>
-    {% for type in type_user %}
-    {% ifequal type.user_type 'Super' %}
-    <th>Type</th>
-    {% endifequal %}
-    {% endfor %}
-    <th>Edit</th>
-    <th>Delete</th>
+      <th scope="col" width="15%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Código
+        </button>
+      </th>
+      <th scope="col" width="20%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Nome
+        </button>
+      </th>
+      <th scope="col" width="20%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+         CPF
+        </button>
+      </th>
+      
+      <th scope="col" width="20%" style="text-align: center;">
+      <button class="btn btn-link text-dark" >
+          Privilégio
+      </button>
+      </th>
+      <th scope="col" width="25%" style="text-align: center;">
+      <button class="btn btn-link text-dark" >
+          Ações
+        </button>
+      </th>
     </tr>
-</thead>
-<tbody>
-{% load my_tag %}
+    </thead>
+  <tbody>
+  {% load my_tag %}
     {% for user in object_list %}
     <tr>
-    <td>{{ user.usuario }}</td>
-    <td>{{ user.cpf }}</td>
-    <td>{{ user.user_type }}</td>
-        {% for type in type_user %}
-            {% ifequal type.user_type 'Super' %}
-            <td><a href="{% url "user_view" user.id %}">type</a></td>
+      <td>{{ user.id }}</td>
+      <td>{{ user.usuario }}</td>
+      <td>{{ user.cpf }}</td>
+      <td>{{ user.user_type }}</td>
+      <td>
+        <form action="{% url "user_edit" user.id %}">
+        <button class="rounded-pill">
+            Editar
+          </button>
+          </form>
+          <form action="{% url "user_delete" user.id %}">
+          <button class="rounded-pill" style="margin-left: 5px;">
+           {% ActiveOrInactiveUser user.id %}
+          </button>
+          </form>
+           {% for type in type_user %}
+          {% ifequal type.user_type 'Super' %}
+          <form action="{% url "user_view" user.id %}">
+          <button class="border-0" style="background: #FFFFFF;">
+              <span>
+                <img src={% static "images/engrenagem.png" %} style="height: 25px; width: 25px">
+              </span>
+            </button>
+            </form>
             {% endifequal %}
-        {% endfor %}
-    <td><a href="{% url "user_edit" user.id %}">edit</a></td>
-    <td><a href="{% url "user_delete" user.id %}">{% ActiveOrInactiveUser user.id %}</a></a></td>
+          {% endfor %}
+      </td>
     </tr>
     {% endfor %}
-</tbody>
+  </tbody>
 </table>
-<a href="{% url "user_new" %}">New</a>
-<a href="{% url "home" %}">voltar</a>
+<hr width="1000px" style="margin-top: -1px;">
+  <div class="" style="padding-left: 85%; margin-top: 10px;"  >
+        <form action="{% url "user_new" %}">
+        <button class="rounded-pill">
+          Novo
+        </button>
+        </form>
+        <form action="{% url "home" %}">
+        <button class="rounded-pill" style="margin-left: 5px;">
+          Voltar
+        </button>
+        </form>
+      </div>
+  </div>
+</body>
+</html>
