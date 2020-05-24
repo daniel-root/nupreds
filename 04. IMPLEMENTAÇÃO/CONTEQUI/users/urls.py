@@ -8,4 +8,5 @@ urlpatterns = [
     path('Editar/<int:pk>', views.user_update, name='user_edit'),
     path('Inativar/<int:pk>', views.user_delete, name='user_delete'),
     path('TipoUsuario/<int:pk>', views.type_user, name='type_user'),
+    path('Inativos/', views.user_list_inactive, name='user_list_inactive'),
 ]

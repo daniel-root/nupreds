@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Conequi - Relatórios</title>
+</head>
+<body>
+    <h1>Relatorios</h1>
+<a href="{% url "get_rastreio" 'Listagem' %}">Listagem</a>
+<a href="{% url "get_rastreio" 'Rastreio' %}">Rastreio</a>
+<a href="{% url "get_rastreio" 'NaoDevolvidos' %}">Não devolvidas</a>
+<form action="{% url "get_rastreio" type %}" method="post">
+    {% csrf_token %}
+    Tipo: {{ list_equipment_user_form.type_equipment }}
+    {% ifequal type 'Rastreio' %}
+    Etiqueta/Descrição: {{ list_equipment_user_form.tag }}
+    Inicio: {{ list_equipment_user_form.start }}
+    Fim: {{ list_equipment_user_form.end }}
+    {% endifequal %}
+    {% ifequal type 'NaoDevolvidos' %}
+    Etiqueta/Descrição: {{ list_equipment_user_form.tag }}
+    Inicio: {{ list_equipment_user_form.start }}
+    {% endifequal %}
+    <input type="submit" value="Submit">
+</form>
+<table border="1">
+<thead>
+    {% ifequal type 'Listagem' %}
+    <tr>    
+    <th><a href="{% url "listagem" 'type_equipment__name' type_equipment_  %}">Tipo</a></th>
+    <th><a href="{% url "listagem" 'tag' type_equipment_ %}">Etiqueta</a></th>
+    <th><a href="{% url "listagem" 'description' type_equipment_ %}">Descrição</a></th>
+    <th>Solicitação</th>
+    <th>Responsavel</th>
+    <th>Solicitação</th>
+    <th>Responsavel</th>
+    <th><a href="{% url "listagem" 'amount_of_loans' type_equipment_ %}">Qtd. Emprestimos</a></th>
+    </tr>
+    {% endifequal %}
+     {% ifequal type 'Rastreio' %}
+    <tr>    
+    <th><a href="{% url "rastreio" 'equipment__type_equipment__name' type_equipment_ tag_ start_ end_ %}">Tipo</a></th>
+    <th><a href="{% url "rastreio" 'equipment__tag' type_equipment_ tag_ start_ end_ %}">Etiqueta</a></th>
+    <th><a href="{% url "rastreio" 'equipment__description' type_equipment_ tag_ start_ end_ %}">Descrição</a></th>
+    <th><a href="{% url "rastreio" 'loan' type_equipment_ tag_ start_ end_ %}">Solicitação</a></th>
+    <th><a href="{% url "rastreio" 'user_loan' type_equipment_ tag_ start_ end_ %}">Responsavel</a></th>
+    <th><a href="{% url "rastreio" 'devolution' type_equipment_ tag_ start_ end_ %}">Solicitação</a></th>
+    <th><a href="{% url "rastreio" 'user_devolution' type_equipment_ tag_ start_ end_ %}">Responsavel</a></th>
+    <th><a href="{% url "rastreio" 'amount_of_loans' type_equipment_ tag_ start_ end_ %}">Qtd. Emprestimos</a></th>
+    </tr>
+    {% endifequal %}
+    {% ifequal type 'NaoDevolvidos' %}
+    <tr>    
+    <th><a href="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}">Tipo</a></th>
+    <th><a href="{% url "nao_devolvidos" 'equipment__tag' type_equipment_ tag_ start_ %}">Etiqueta</a></th>
+    <th><a href="{% url "nao_devolvidos" 'equipment__description' type_equipment_ tag_ start_ %}">Descrição</a></th>
+    <th><a href="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}">Solicitação</a></th>
+    <th><a href="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}">Responsavel</a></th>
+    <th>Solicitação</th>
+    <th>Responsavel</th>
+    <th><a href="{% url "nao_devolvidos" 'amount_of_loans' type_equipment_ tag_ start_ %}">Qtd. Emprestimos</a></th>
+    </tr>
+    {% endifequal %}
+</thead>
+{% load my_tag %}
+<tbody>
+    {# list_equipment_user|dictsort:"amount_of_loans" #}
+    {% ifequal type 'Rastreio' %}
+    
+    {% for equipment_user in list_equipment_user %}
+    <tr>
+    <td>{% TypeName equipment_user.equipment %}</td>
+    <td>{% TagName equipment_user.equipment %}</td>
+    <td>{% DescriptionName equipment_user.equipment %}</td>
+    <td>{{ equipment_user.loan }}</td>
+    <td>{{ equipment_user.user_loan }}</td>
+    <td>{{ equipment_user.devolution }}</td>
+    <td>{{ equipment_user.user_devolution }}</td>
+    <td>{{ equipment_user.amount_of_loans }}</td>
+    </tr>
+    {% endfor %}
+    {% endifequal %}
+    {% ifequal type 'NaoDevolvidos' %}
+    {% load my_tag %}
+    {% for equipment_user in list_equipment_user %}
+    <tr>
+    <td>{% TypeName equipment_user.equipment %}</td>
+    <td>{% TagName equipment_user.equipment %}</td>
+    <td>{% DescriptionName equipment_user.equipment %}</td>
+    <td>{{ equipment_user.loan }}</td>
+    <td>{{ equipment_user.user_loan }}</td>
+    <td></td>
+    <td></td>
+    <td>{{ equipment_user.amount_of_loans }}</td>
+    </tr>
+    {% endfor %}
+    {% endifequal %}
+    {% ifequal type 'Listagem' %}
+    {% for equipment_user in list_equipment_user %}
+    <tr>
+    <td>{{ equipment_user.type_equipment }}</td>
+    <td>{{ equipment_user.tag }}</td>
+    <td>{{ equipment_user.description }}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>{{ equipment_user.amount_of_loans }}</td>
+    </tr>
+    {% endfor %}
+    {% endifequal %}
+</tbody>
+</table>
+<a href="{% url "home" %}">voltar</a>
+</body>
+</html>

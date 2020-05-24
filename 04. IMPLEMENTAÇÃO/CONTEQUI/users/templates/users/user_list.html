@@ -17,9 +17,11 @@
           <p style="margin-left: 10px; font-size: 150%">Usuário</p>
         </div>
         <div class="row justify-content-center">
+        <form action="{% url "user_list" %}">
           <button class="btn btn-link text-dark" >
             Todos
           </button>
+          </form>
           <button class="btn btn-link text-dark "style="margin-left: 45px;" >
             Super Usuário  
           </button>
@@ -29,9 +31,11 @@
           <button class="btn btn-link text-dark" style="margin-left: 45px;">
             Usuário Comum
           </button>
+          <form action="{% url "user_list_inactive" %}">
           <button class="btn btn-link text-dark" style="margin-left: 45px;">
             Ver Inativos
           </button>
+          </form>
        </div>
     <div style="margin-top: 10px;" class="row justify-content-center">
         <form class="form-inline"method="POST" action="?">{% csrf_token %}

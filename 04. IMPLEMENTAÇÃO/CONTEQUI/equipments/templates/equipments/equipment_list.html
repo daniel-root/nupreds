@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
   <title>Equipamentos</title>
   {% load static %}
+  <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
   <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}" >
-  <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}">
   {% block content %}
 </head>
 <body style="margin-top: 3%;">
@@ -103,7 +103,7 @@
           </button>
         </form>
         <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
-          <button class="rounded-pill" style="margin-left: 5px; color:red;">
+          <button class="rounded-pill" style="margin-left: 5px; background:red;">
           {% LoanOrDevolution equipment.id %}
           </button>
         </form>

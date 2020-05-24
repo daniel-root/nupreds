@@ -1,71 +1,268 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Conequi - Relatórios</title>
-</head>
-<body>
-    <h1>Relatorios</h1>
-<a href="{% url "get_rastreio" 'Listagem' %}">Listagem</a>
-<a href="{% url "get_rastreio" 'Rastreio' %}">Rastreio</a>
-<a href="{% url "get_rastreio" 'NaoDevolvidos' %}">Não devolvidas</a>
-<form action="{% url "get_rastreio" type %}" method="post">
-    {% csrf_token %}
-    Tipo: {{ list_equipment_user_form.type_equipment }}
-    {% ifequal type 'Rastreio' %}
-    Etiqueta/Descrição: {{ list_equipment_user_form.tag }}
-    Inicio: {{ list_equipment_user_form.start }}
-    Fim: {{ list_equipment_user_form.end }}
-    {% endifequal %}
-    {% ifequal type 'NaoDevolvidos' %}
-    Etiqueta/Descrição: {{ list_equipment_user_form.tag }}
-    Inicio: {{ list_equipment_user_form.start }}
-    {% endifequal %}
-    <input type="submit" value="Submit">
-</form>
-<table border="1">
-<thead>
-    {% ifequal type 'Listagem' %}
-    <tr>    
-    <th><a href="{% url "listagem" 'type_equipment__name' type_equipment_  %}">Tipo</a></th>
-    <th><a href="{% url "listagem" 'tag' type_equipment_ %}">Etiqueta</a></th>
-    <th><a href="{% url "listagem" 'description' type_equipment_ %}">Descrição</a></th>
-    <th>Solicitação</th>
-    <th>Responsavel</th>
-    <th>Solicitação</th>
-    <th>Responsavel</th>
-    <th><a href="{% url "listagem" 'amount_of_loans' type_equipment_ %}">Qtd. Emprestimos</a></th>
-    </tr>
-    {% endifequal %}
-     {% ifequal type 'Rastreio' %}
-    <tr>    
-    <th><a href="{% url "rastreio" 'equipment__type_equipment__name' type_equipment_ tag_ start_ end_ %}">Tipo</a></th>
-    <th><a href="{% url "rastreio" 'equipment__tag' type_equipment_ tag_ start_ end_ %}">Etiqueta</a></th>
-    <th><a href="{% url "rastreio" 'equipment__description' type_equipment_ tag_ start_ end_ %}">Descrição</a></th>
-    <th><a href="{% url "rastreio" 'loan' type_equipment_ tag_ start_ end_ %}">Solicitação</a></th>
-    <th><a href="{% url "rastreio" 'user_loan' type_equipment_ tag_ start_ end_ %}">Responsavel</a></th>
-    <th><a href="{% url "rastreio" 'devolution' type_equipment_ tag_ start_ end_ %}">Solicitação</a></th>
-    <th><a href="{% url "rastreio" 'user_devolution' type_equipment_ tag_ start_ end_ %}">Responsavel</a></th>
-    <th><a href="{% url "rastreio" 'amount_of_loans' type_equipment_ tag_ start_ end_ %}">Qtd. Emprestimos</a></th>
-    </tr>
-    {% endifequal %}
-    {% ifequal type 'NaoDevolvidos' %}
-    <tr>    
-    <th><a href="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}">Tipo</a></th>
-    <th><a href="{% url "nao_devolvidos" 'equipment__tag' type_equipment_ tag_ start_ %}">Etiqueta</a></th>
-    <th><a href="{% url "nao_devolvidos" 'equipment__description' type_equipment_ tag_ start_ %}">Descrição</a></th>
-    <th><a href="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}">Solicitação</a></th>
-    <th><a href="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}">Responsavel</a></th>
-    <th>Solicitação</th>
-    <th>Responsavel</th>
-    <th><a href="{% url "nao_devolvidos" 'amount_of_loans' type_equipment_ tag_ start_ %}">Qtd. Emprestimos</a></th>
-    </tr>
-    {% endifequal %}
-</thead>
-{% load my_tag %}
-<tbody>
-    {# list_equipment_user|dictsort:"amount_of_loans" #}
+ <!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+    <title>Relatórios</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}" >
+    <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
+    
+  </head>
+  <body style="margin-top: 3%;">
+    <div class="container">
+      <div class="row " style="padding-left: 5%;">
+          <span>
+            <img src={% static "images/relatorio.png" %} style="height: 30px; width: 30px; ">
+          </span>
+          <p style="margin-left: 10px; font-size: 150%">Relatórios</p>
+        </div>
+        <div class="row justify-content-center">
+          <form action="{% url "get_rastreio" 'Listagem' %}">
+          <button class="btn btn-link text-dark ">
+            Listagem   
+          </button>
+          </form>
+          <form action="{% url "get_rastreio" 'Rastreio' %}">
+          <button class="btn btn-link text-dark" style="margin-left: 45px;">
+            Rastreio
+          </button>
+          </form>
+          <form action="{% url "get_rastreio" 'NaoDevolvidos' %}">
+          <button class="btn btn-link text-dark" style="margin-left: 45px;">
+            Não devolvidos
+          </button>
+          </form>
+       </div>
+    <div style="margin-top: 10px;" class="row justify-content-center">
+        <form action="{% url "get_rastreio" type %}" method="post">
+            {% csrf_token %}
+           <div class=" form-inline row"  style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="tipo">Tipo:</label>
+            <div class="col-sm-10">
+            {{ list_equipment_user_form.type_equipment }}
+            </div>
+          </div>
+           {% ifequal type 'Rastreio' %}
+          <div class=" form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="etiqueta/descrição">Etiqueta/Descrição:</label>
+            <div class="col-sm-10">
+             {{ list_equipment_user_form.tag }}
+          </div>
+          <div  class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;"> Início:</label>
+            <div class="col-sm-10">
+            {{ list_equipment_user_form.start }}
+          </div>
+          </div>
+          <div  class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;">Fim:</label>
+            <div class="col-sm-10">
+           {{ list_equipment_user_form.end }}
+          </div>
+          </div>
+          {% endifequal %}
+           {% ifequal type 'NaoDevolvidos' %}
+          <div class=" form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="etiqueta/descrição">Etiqueta/Descrição:</label>
+            <div class="col-sm-10">
+             {{ list_equipment_user_form.tag }}
+          </div>
+          <div  class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;"> Início:</label>
+            <div class="col-sm-10">
+            {{ list_equipment_user_form.start }}
+          </div>
+          </div>
+          {% endifequal %}
+          <div style="padding-left: 90%; padding-top: 10px;">
+          <button class="rounded-pill ">
+            Enviar
+          </button>
+          </div>
+        </form>
+      </div>
+            
+      <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+  <thead>
+    <tr>
+     {% ifequal type 'Listagem' %}
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "listagem" 'type_equipment__name' type_equipment_  %}">
+        <button class="btn btn-link text-dark" >
+          Tipo
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "listagem" 'tag' type_equipment_ %}">
+        <button class="btn btn-link text-dark" >
+          Etiqueta
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "listagem" 'description' type_equipment_ %}">
+        <button class="btn btn-link text-dark" >
+         Descrição
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="">
+        <button class="btn btn-link text-dark" >
+         Solicitação
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="">
+        <button class="btn btn-link text-dark" >
+         Responsável
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="">
+        <button class="btn btn-link text-dark" >
+         Devolução
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="">
+        <button class="btn btn-link text-dark" >
+         Responsável
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="20%" style="text-align: center;">
+      <form action="{% url "listagem" 'amount_of_loans' type_equipment_ %}">
+      <button class="btn btn-link text-dark" >
+          Qtd. Emprestimo
+      </button>
+      </form>
+      </th>
+      {% endifequal %}
+      {% ifequal type 'Rastreio' %}
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "rastreio" 'equipment__type_equipment__name' type_equipment_ tag_ start_ end_ %}">
+        <button class="btn btn-link text-dark" >
+          Tipo
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "rastreio" 'equipment__tag' type_equipment_ tag_ start_ end_ %}">
+        <button class="btn btn-link text-dark" >
+          Etiqueta
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "rastreio" 'equipment__description' type_equipment_ tag_ start_ end_ %}">
+        <button class="btn btn-link text-dark" >
+         Descrição
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "rastreio" 'loan' type_equipment_ tag_ start_ end_ %}">
+        <button class="btn btn-link text-dark" >
+         Solicitação
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "rastreio" 'user_loan' type_equipment_ tag_ start_ end_ %}">
+        <button class="btn btn-link text-dark" >
+         Responsável
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "rastreio" 'devolution' type_equipment_ tag_ start_ end_ %}">
+        <button class="btn btn-link text-dark" >
+         Devolução
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "rastreio" 'user_devolution' type_equipment_ tag_ start_ end_ %}">
+        <button class="btn btn-link text-dark" >
+        Responsável
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="20%" style="text-align: center;">
+      <form action="{% url "rastreio" 'amount_of_loans' type_equipment_ tag_ start_ end_ %}">
+      <button class="btn btn-link text-dark" >
+          Qtd. Emprestimo
+      </button>
+      </form>
+      </th>
+      {% endifequal %}
+      {% ifequal type 'NaoDevolvidos' %}
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}">
+        <button class="btn btn-link text-dark" >
+          Tipo
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "nao_devolvidos" 'equipment__tag' type_equipment_ tag_ start_ %}">
+        <button class="btn btn-link text-dark" >
+          Etiqueta
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "nao_devolvidos" 'equipment__description' type_equipment_ tag_ start_ %}">
+        <button class="btn btn-link text-dark" >
+         Descrição
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}">
+        <button class="btn btn-link text-dark" >
+         Solicitação
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}">
+        <button class="btn btn-link text-dark" >
+         Responsável
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="">
+        <button class="btn btn-link text-dark" >
+         Devolução
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="10%" style="text-align: center;">
+        <form action="">
+        <button class="btn btn-link text-dark" >
+         Responsável
+        </button>
+        </form>
+      </th>
+      <th scope="col" width="20%" style="text-align: center;">
+      <form action="{% url "nao_devolvidos" 'amount_of_loans' type_equipment_ tag_ start_ %}">
+      <button class="btn btn-link text-dark" >
+          Qtd. Emprestimo
+      </button>
+      </form>
+      </th>
+      {% endifequal %}
+    </thead>
+    {% load my_tag %}
+  <tbody>
     {% ifequal type 'Rastreio' %}
     
     {% for equipment_user in list_equipment_user %}
@@ -110,8 +307,25 @@
     </tr>
     {% endfor %}
     {% endifequal %}
-</tbody>
+
+       </tbody>
 </table>
-<a href="{% url "home" %}">voltar</a>
+<hr width="1000px" style="margin-top: -1px;">
+  <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
+    <form class="form-inline">
+      <button class="rounded-pill">
+        Salvar
+      </button>
+    </form>
+    <form class="form-inline">  
+      <button class="rounded-pill" style="margin-left: 5px;">
+          Voltar
+        </button>
+      </div>
+    </form>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+   <script src={% static "users/js/bootstrap.min.js" %}></script>
 </body>
 </html>

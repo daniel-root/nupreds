@@ -10,7 +10,11 @@ class ClientForm(ModelForm):
         fields = ['usuario','email','telefone','whatsapp','cpf','senha']
 
 def UserAll():
-    user = Client.objects.all()
+    user = Client.objects.filter(inative=False)
+    return user
+
+def UserInactive():
+    user = Client.objects.filter(inative=True)
     return user
 
 def user_list(request, templete_name='users/user_list.html'):
@@ -19,6 +23,16 @@ def user_list(request, templete_name='users/user_list.html'):
         type_privilegio = Client.objects.filter(usuario=name)
         data = {}
         data['object_list'] = UserAll()
+        data['type_user'] = type_privilegio
+        return render(request, templete_name, data)
+    return render(request, 'login.html')
+
+def user_list_inactive(request,templete_name='users/user_list.html'):
+    if request.session.has_key('username'):
+        name = request.session['username']
+        type_privilegio = Client.objects.filter(usuario=name)
+        data = {}
+        data['object_list'] = UserInactive()
         data['type_user'] = type_privilegio
         return render(request, templete_name, data)
     return render(request, 'login.html')
@@ -48,7 +62,6 @@ def user_update(request, pk, template_name='users/user_form.html'):
         return render(request, template_name, {'form':form})
     return render(request, 'login.html')
     
-
 def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
     if request.session.has_key('username'):
         user= get_object_or_404(Client, pk=pk) 
