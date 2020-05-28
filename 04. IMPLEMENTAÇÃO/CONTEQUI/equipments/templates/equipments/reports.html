@@ -105,56 +105,56 @@
   <thead>
     <tr>
      {% ifequal type 'Listagem' %}
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "listagem" 'type_equipment__name' type_equipment_  %}">
         <button class="btn btn-link text-dark" >
           Tipo
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "listagem" 'tag' type_equipment_ %}">
         <button class="btn btn-link text-dark" >
           Etiqueta
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "listagem" 'description' type_equipment_ %}">
         <button class="btn btn-link text-dark" >
          Descrição
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="">
         <button class="btn btn-link text-dark" >
          Solicitação
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="">
         <button class="btn btn-link text-dark" >
          Responsável
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="">
         <button class="btn btn-link text-dark" >
          Devolução
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="">
         <button class="btn btn-link text-dark" >
          Responsável
         </button>
         </form>
       </th>
-      <th scope="col" width="20%" style="text-align: center;">
+      <th scope="col" width="20%" style="text-align: left;">
       <form action="{% url "listagem" 'amount_of_loans' type_equipment_ %}">
       <button class="btn btn-link text-dark" >
           Qtd. Emprestimo
@@ -163,56 +163,56 @@
       </th>
       {% endifequal %}
       {% ifequal type 'Rastreio' %}
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "rastreio" 'equipment__type_equipment__name' type_equipment_ tag_ start_ end_ %}">
         <button class="btn btn-link text-dark" >
           Tipo
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "rastreio" 'equipment__tag' type_equipment_ tag_ start_ end_ %}">
         <button class="btn btn-link text-dark" >
           Etiqueta
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "rastreio" 'equipment__description' type_equipment_ tag_ start_ end_ %}">
         <button class="btn btn-link text-dark" >
          Descrição
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "rastreio" 'loan' type_equipment_ tag_ start_ end_ %}">
         <button class="btn btn-link text-dark" >
          Solicitação
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "rastreio" 'user_loan' type_equipment_ tag_ start_ end_ %}">
         <button class="btn btn-link text-dark" >
          Responsável
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "rastreio" 'devolution' type_equipment_ tag_ start_ end_ %}">
         <button class="btn btn-link text-dark" >
          Devolução
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "rastreio" 'user_devolution' type_equipment_ tag_ start_ end_ %}">
         <button class="btn btn-link text-dark" >
         Responsável
         </button>
         </form>
       </th>
-      <th scope="col" width="20%" style="text-align: center;">
+      <th scope="col" width="20%" style="text-align: left;">
       <form action="{% url "rastreio" 'amount_of_loans' type_equipment_ tag_ start_ end_ %}">
       <button class="btn btn-link text-dark" >
           Qtd. Emprestimo
@@ -221,56 +221,56 @@
       </th>
       {% endifequal %}
       {% ifequal type 'NaoDevolvidos' %}
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}">
         <button class="btn btn-link text-dark" >
           Tipo
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "nao_devolvidos" 'equipment__tag' type_equipment_ tag_ start_ %}">
         <button class="btn btn-link text-dark" >
           Etiqueta
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "nao_devolvidos" 'equipment__description' type_equipment_ tag_ start_ %}">
         <button class="btn btn-link text-dark" >
          Descrição
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}">
         <button class="btn btn-link text-dark" >
          Solicitação
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}">
         <button class="btn btn-link text-dark" >
          Responsável
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="">
         <button class="btn btn-link text-dark" >
          Devolução
         </button>
         </form>
       </th>
-      <th scope="col" width="10%" style="text-align: center;">
+      <th scope="col" width="10%" style="text-align: left;">
         <form action="">
         <button class="btn btn-link text-dark" >
          Responsável
         </button>
         </form>
       </th>
-      <th scope="col" width="20%" style="text-align: center;">
+      <th scope="col" width="20%" style="text-align: left;">
       <form action="{% url "nao_devolvidos" 'amount_of_loans' type_equipment_ tag_ start_ %}">
       <button class="btn btn-link text-dark" >
           Qtd. Emprestimo
