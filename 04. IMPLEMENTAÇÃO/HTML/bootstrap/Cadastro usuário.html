@@ -1,0 +1,86 @@
+ <!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+    <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" >
+    <link href="css/open-iconic-master/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+  </head>
+  <body style="margin-top: 3%;">
+    <div class="container">
+      <div class="row " style="padding-left: 5%;">
+          <span>
+            <img src="equipamentos.png" style="height: 30px; width: 30px; ">
+          </span>
+          <p style="margin-left: 10px; font-size: 150%">Usuário</p>
+        </div>
+       
+    <div style="margin-top: 10px;" class="row justify-content-center">
+        <form>
+          <div class="form-inline row ">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputNome">Nome:</label>
+             <div class="input-group col-sm-10">
+              <input class="form-control mr-2 rounded-pill" type="texto" required="required" name="text" pattern="[A-Za-z\s]+$" style="width: 900px; background: #e9ecef">
+             </div>
+          </div>
+          <div class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputCPF">CPF:</label>
+            <div  class="input-group col-sm-10">
+            <input type="text" class="form-control mr-2 rounded-pill" id="cpf" name="cpf" required onkeypress="$(this).mask('000.000.000-00');" pattern="[0-9]+$" style="width: 900px; background: #e9ecef">  
+            </div>
+          </div>
+           <div class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputEmail">Email:</label>
+            <div class="input-group col-sm-10">
+            <input type="email" class="form-control mr-2 rounded-pill" id="cpf" name="cpf" required="required"  name=“email” pattern="[^@\s]+@[^@\s]+\.[^@\s]+" style="width: 900px; background: #e9ecef">  
+            </div>
+          </div>
+          <div class="row" style="padding-top: 10px;">
+          <div class="form-inline" style="padding-right: 10px;">
+              <label class="col col-form-label" style="padding-right: 60px;padding-left: 60px;" for="InputEmail" >Telefone:</label>
+              <div class="input-group col">
+              <input type="text" name="telefone" class="form-control mr-2 rounded-pill" onkeyup="mascara( this, mtel );" maxlength="15" required style="width: 360px; background: #e9ecef">
+              </div>
+          </div>
+          <div class="form-inline">
+              <label class="col col-form-label" style="padding-right: 10px;" for="InputEmail" >Whatsapp:</label>
+              <div class="input-group col">
+              <input type="text" name="telefone" class="form-control mr-2 rounded-pill" onkeyup="mascara( this, mtel );" maxlength="15" required style= "width: 360px; background: #e9ecef">
+              </div>
+          </div>
+          </div>
+          <div class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputSenha">Senha:</label>
+            <div  class="input-group col-sm-10">
+            <input type="text" class="form-control mr-2 rounded-pill" id="senhs" name="Senha" required  style="width: 900px; background: #e9ecef">  
+            </div>
+          </div>
+          <div class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputSenha">Confirmar senha:</label>
+            <div  class="input-group col-sm-10">
+            <input type="text" class="form-control mr-2 rounded-pill" id="senhs" name="Senha" required  style="width: 900px; background: #e9ecef">  
+            </div>
+          </div>
+          <div class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputSenha">Impressão digital:</label>
+            <div  class="input-group col-sm-10">
+            <input type="text" class="form-control mr-2 rounded-pill" id="senhs" name="Senha" required  style="width: 900px; background: #e9ecef">  
+            </div>
+          </div>
+          <div style="padding-left: 85%; padding-top: 10px;">
+          <button class="rounded-pill ">
+            Cancelar
+          </button>
+          <button class="rounded-pill ">
+            Salvar
+          </button>
+          </div>
+        </form>
+      </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>          
+     
+</body>
+</html>
