@@ -1,7 +1,77 @@
-<h1>Equipments Create</h1>
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
-<a href="{% url "equipment_type_list" %}">new type</a>
-<a href="{% url "equipment_list" %}">voltar</a>
+<!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+    <title>Cadastro de Equipamentos</title>
+    {% load static %}
+  <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
+  <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}" >
+  {% block content %}
+  </head>
+  <body style="margin-top: 3%;">
+    <div class="container">
+      <div class="row " style="padding-left: 5%;">
+          <span>
+            <img src="{% static "images/equipamentos.png" %}" style="height: 30px; width: 30px; ">
+          </span>
+          <p style="margin-left: 10px; font-size: 150%">Equipamento</p>
+        </div>
+       
+    <div style="margin-top: 10px;" class="row justify-content-center">
+        <form>
+          <div class="form-inline row ">
+            <label class="col-sm-2 col-form-label" for="tipo">Etiqueta:</label>
+             <div class="input-group col-sm-10">
+              
+              {{ form.tag }}
+             </div>
+          </div>
+          <div class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="tipo">Descrição:</label>
+             <div class="input-group col-sm-10">
+              
+              {{ form.description }}   
+             </div>
+          </div>
+          <div class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="tipo">Tipo:</label>
+             <div class="input-group col-sm-10">
+              {{ form.type_equipment }}
+              <form action="{% url "equipment_type_list" %}">
+              <button  class="rounded-pill border" style="background: #e9ecef">
+                <span>
+                  <img "{% static "images/plus.png" %}" style="height: 30px; width: 30px">
+                </span>
+              </button>
+              </form>
+             </div>
+          </div>
+          <div class="form-inline row" style="padding-top: 10px;">
+            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="tipo">Tempo Máximo:</label>
+             <div class="input-group col-sm-10">
+              {{ form.maximum_time }}
+             </div>
+          </div>
+          
+          <div class="row" style="padding-left: 90%; margin-top: 30%; margin-bottom: 15px;">
+            <form class="form-inline">
+              <button class="rounded-pill">
+                Salvar
+              </button>
+            </form>
+            <form action="{% url "equipment_list" %}" class="form-inline">  
+              <button class="rounded-pill" style="margin-left: 5px;">
+                Voltar
+              </button>
+          </div>
+        </form>
+      </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="{% static "users/js/bootstrap.min.js" %}"></script>
+
+
+</body>
+{% endblock %}
+</html>
