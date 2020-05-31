@@ -17,9 +17,29 @@
           </span>
           <p style="margin-left: 10px; font-size: 150%">Relatórios</p>
         </div>
-        <button type="submit" class="border-0" style="position: absolute; left: 1150px; top: 50px; background-color: #FFFFFF;">
+        <button type="submit" class="border-0" data-toggle="modal" data-target="#modalExemplo"style="position: absolute; left: 1150px; top: 50px; background-color: #FFFFFF;">
             <span><img src={% static "images/indice.png" %} style="height: 20px; width: 20px"></span>
         </button>
+        <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Relatórios</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Os relatórios são subdivididos em tipos:<br>
+          Listagem- Lista de equipamentos cadastrados;<br>
+          Rastreio- Lista a movimentação de equipamentos;<br>
+          Não devolvidos- Lista equipamentos não devolvidos.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
         <div class="row justify-content-center">
           <form action="{% url "get_rastreio" 'Listagem' %}">
           <button class="btn btn-link text-dark ">
