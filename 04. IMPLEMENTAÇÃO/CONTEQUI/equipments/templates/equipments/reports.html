@@ -17,29 +17,29 @@
           </span>
           <p style="margin-left: 10px; font-size: 150%">Relatórios</p>
         </div>
-        <button type="submit" class="border-0" data-toggle="modal" data-target="#modalExemplo"style="position: absolute; left: 1150px; top: 50px; background-color: #FFFFFF;">
+        <button type="submit" class="btn border-0" data-toggle="modal" data-target="#modalExemplo" style="position: absolute; left: 1150px; top: 50px; background-color: #FFFFFF;">
             <span><img src={% static "images/indice.png" %} style="height: 20px; width: 20px"></span>
         </button>
-        <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Relatórios</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>
-          Os relatórios são subdivididos em tipos:<br>
-          Listagem- Lista de equipamentos cadastrados;<br>
-          Rastreio- Lista a movimentação de equipamentos;<br>
-          Não devolvidos- Lista equipamentos não devolvidos.
-        </p>
+      <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Relatórios</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <div class="modal-body">
+          <p>
+            Os relatórios são subdivididos em tipos:<br>
+            Listagem- Lista de equipamentos cadastrados;<br>
+            Rastreio- Lista a movimentação de equipamentos;<br>
+            Não devolvidos- Lista equipamentos não devolvidos.
+          </p>
+        </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
         <div class="row justify-content-center">
           <form action="{% url "get_rastreio" 'Listagem' %}">
           <button class="btn btn-link text-dark ">
@@ -85,13 +85,13 @@
           <div  class="form-inline row" style="padding-top: 10px;">
             <label class="col-sm-2 col-form-label" style="padding-right: 10px;"> Início:</label>
             <div class="col-sm-10">
-            <input type="date" class="rounded-pill" name="start"required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="background: #e9ecef; width:800px; height: 35px;">
+            <input type="date" class="btn rounded-pill" name="start"required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="background: #e9ecef; width:800px; height: 35px;">
           </div>
           </div>
           <div  class="form-inline row" style="padding-top: 10px;">
             <label class="col-sm-2 col-form-label" style="padding-left: 100px;">Fim:</label>
             <div class="col-sm-10">
-          <input type="date" class="rounded-pill" name="end" required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="background: #e9ecef; width:800px; height: 35px;">
+          <input type="date" class="btn rounded-pill" name="end" required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="background: #e9ecef; width:800px; height: 35px;">
           </div>
           </div>
           {% endifequal %}
@@ -109,12 +109,12 @@
           <div  class="form-inline row" style="padding-top: 10px;">
             <label class="col-sm-9 col-form-label" style="padding-right: 10px;"> Início:</label>
             <div class="col-sm-2">
-           <input type="date" class="rounded-pill" name="start" required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="background: #e9ecef; height: 35px;">
+           <input type="date" class="btn rounded-pill" name="start" required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="background: #e9ecef; height: 35px;">
           </div>
           </div>
           {% endifequal %}
           <div style="padding-left: 90%; padding-top: 10px;">
-          <button class="rounded-pill ">
+          <button class="btn rounded-pill " style="background: #e9ecef">
             Enviar
           </button>
           </div>
@@ -351,12 +351,12 @@
 <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
     <form action="" class="form-inline">
-      <button class="rounded-pill">
+      <button class="btn rounded-pill" style="background: #e9ecef">
         Salvar
       </button>
     </form>
     <form action="{% url "home" %}" class="form-inline">  
-      <button class="rounded-pill" style="margin-left: 5px;">
+      <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef;">
           Voltar
         </button>
       </div>

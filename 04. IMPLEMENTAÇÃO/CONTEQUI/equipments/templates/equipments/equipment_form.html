@@ -45,9 +45,9 @@
               <option>Projetor</option>
             </select>
               <form action="{% url "equipment_type_list" %}">
-              <button type="button" class="rounded-pill border" style="background: #e9ecef">
+              <button type="button" class="btn rounded-pill border" style="background: #e9ecef">
                 <span>
-                  <img src="{% static "images/plus.png" %}" style="height: 30px; width: 30px">
+                  <img src="{% static "images/plus.png" %}" style="height: 25px; width: 25px">
                 </span>
               </button>
               </form>
@@ -56,18 +56,18 @@
           <div class="form-inline row" style="padding-top: 10px;">
             <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="tipo">Tempo Máximo:</label>
              <div class="input-group col-sm-10">
-              <input class="form-control mr-2 rounded-pill" type="ctempo" name="ctempo" required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="width: 900px; background: #e9ecef">
+              <input class="form-control mr-2 rounded-pill" type="ctempo" name="ctempo" required " pattern="[0-9]+$" style="width: 900px; background: #e9ecef">
              </div>
           </div>
           
           <div class="row" style="padding-left: 90%; margin-top: 30%; margin-bottom: 15px;">
             <form class="form-inline">
-              <button type="submit" class="rounded-pill">
+              <button type="submit" class="btn rounded-pill" style="background: #e9ecef">
                 Salvar
               </button>
             </form>
             <form action="{% url "equipment_list" %}" class="form-inline">  
-              <button class="rounded-pill" style="margin-left: 5px;">
+              <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef">
                 Voltar
               </button>
             </form>

@@ -68,14 +68,14 @@
         </button>
         </form>
       </th>
-      <th scope="col" width="25%" style="text-align: left;">
+      <th scope="col" width="20%" style="text-align: left;">
         <form action="{% url "filter_list" 'EmPosse' type %}">
         <button class="btn btn-link text-dark" >
           Em Posse
         </button>
         </form>
       </th>
-      <th scope="col" width="25%" style="text-align: left;">
+      <th scope="col" width="30%" style="text-align: left;">
         <button class="btn btn-link text-dark" >
           Ações
         </button>
@@ -93,17 +93,17 @@
       <td>
       <div class="row">
         <form class="form-inline" action="{% url "equipment_edit" equipment.id %}">
-          <button class="rounded-pill">
+          <button class="btn rounded-pill" style="background: #e9ecef">
               Editar
           </button>
         </form>
         <form class="form-inline" action="{% url "equipment_delete" equipment.id %}">
-          <button class="rounded-pill" style="margin-left: 5px;">
+          <button class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef">
           {% ActiveOrInactive equipment.id %}
           </button>
         </form>
         <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
-          <button class="rounded-pill" style="margin-left: 5px; background:red;">
+          <button class="btn rounded-pill" style="margin-left: 5px; background:red;">
           {% LoanOrDevolution equipment.id %}
           </button>
         </form>
@@ -115,17 +115,17 @@
       <td >
          <div class="row">
         <form class="form-inline" action="{% url "equipment_edit" equipment.id %}">
-          <button class="rounded-pill">
+          <button class="btn rounded-pill" style="background: #e9ecef">
               Editar
           </button>
         </form>
         <form class="form-inline" action="{% url "equipment_delete" equipment.id %}">
-          <button class="rounded-pill" style="margin-left: 5px;">
+          <button class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef">
           {% ActiveOrInactive equipment.id %}{% Atraso equipment.id %}
           </button>
         </form>
         <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
-          <button class="rounded-pill" style="margin-left: 5px; ">
+          <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef">
           {% LoanOrDevolution equipment.id %}
           </button>
         </form>
@@ -139,12 +139,12 @@
 <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
         <form class="form-inline" action="{% url "equipment_new" %}">
-        <button class="rounded-pill">
+        <button class="btn rounded-pill" style="background: #e9ecef">
           Novo
         </button>
         </form>
         <form class="form-inline" action="{% url "home" %}">
-        <button class="rounded-pill" style="margin-left: 5px;">
+        <button class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef">
           Voltar
         </button>
         </form>

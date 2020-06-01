@@ -41,7 +41,7 @@
         <form class="form-inline"method="POST" action="?">{% csrf_token %}
           <div class="input-group">
             <input class="form-control mr-2 rounded-pill" type="cemquipamento" name="cemquipamento" style="width: 900px; background: #e9ecef">
-            <button class="border-0" style="background: #FFFFFF;">
+            <button class="btn border-0" style="background: #FFFFFF;">
               <span>
                 <img src={% static "images/lupa.png" %} style="height: 30px; width: 30px">
               </span>
@@ -92,19 +92,19 @@
       <td>
         <div class="row">
         <form class="form-inline" action="{% url "user_edit" user.id %}">
-        <button class="rounded-pill">
+        <button class="btn rounded-pill" style="background: #e9ecef">
             Editar
           </button>
           </form>
           <form class="form-inline" action="{% url "user_delete" user.id %}">
-          <button class="rounded-pill" style="margin-left: 5px;">
+          <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef;">
            {% ActiveOrInactiveUser user.id %}
           </button>
           </form>
            {% for type in type_user %}
           {% ifequal type.user_type 'Super' %}
           <form class="form-inline"action="{% url "user_view" user.id %}">
-          <button class="border-0" style="background: #FFFFFF;">
+          <button class="btn border-0" style="background: #FFFFFF;">
               <span>
                 <img src={% static "images/engrenagem.png" %} style="height: 25px; width: 25px">
               </span>
@@ -121,12 +121,12 @@
 <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 85%; margin-top: 10px;"  >
         <form class="form-inline" action="{% url "user_new" %}">
-        <button class="rounded-pill">
+        <button class="btn rounded-pill" style="background: #e9ecef">
           Novo
         </button>
         </form>
         <form class="form-inline" action="{% url "home" %}">
-        <button class="rounded-pill" style="margin-left: 5px;">
+        <button class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef;">
           Voltar
         </button>
         </form>
