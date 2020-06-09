@@ -14,7 +14,7 @@ class Client(models.Model):
     #data_de_nascimento = models.DateField(null=False)
     user_type = models.CharField(max_length=13, null=False, choices=TYPES_CHOICES,default='Comum')
     senha = models.CharField(max_length=50, null=False)
-    #repetir_senha = models.CharField(max_length=50, null=False, default="")
+    fingerprint = models.CharField(max_length=1630,null=True,unique=True)
     inative = models.BooleanField(default=False)
     
     def __str__(self):

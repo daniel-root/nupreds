@@ -294,7 +294,8 @@ function sampleAcquired(s){
                 localStorage.setItem("intermediate", "");
                 var samples = JSON.parse(s.samples);
                 alert(s.samples)
-                var sampleData = Fingerprint.b64UrlTo64(samples[0].Data);
+                alert(Fingerprint.b64Url(samples[0].Data))
+                var sampleData = Fingerprint.b64Url(samples[0].Data);
                 localStorage.setItem("intermediate", sampleData);
                 let nomeGuardado = samples[0].Data;
                 let meuCabecalho = document.querySelector('h1');

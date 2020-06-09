@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from users.models import Client
 from django.db.models import Q
 from django.contrib import messages 
+import users.DigitalPersona.enrollment as finger
 
 class ClientForm(ModelForm):
     class Meta:
@@ -64,12 +65,17 @@ def user_update(request, pk, template_name='users/user_form.html'):
     
 def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
     if request.session.has_key('username'):
-        user= get_object_or_404(Client, pk=pk) 
+        user= get_object_or_404(Client, pk=pk)
         if request.method=='POST': 
             if Client.objects.filter(id = pk,inative='True'):
                 Client.objects.filter(id = pk).update(inative='False')
+                a = finger.main()
+                
+                Client.objects.filter(id = pk).update(fingerprint=a)
             else:
                 Client.objects.filter(id = pk).update(inative='True')
+                a = Client.objects.filter(id = pk).values_list('fingerprint',flat=True)
+                print(type(a[0]))
             return user_list(request)
         return render(request, template_name, {'object':user})
     return render(request, 'login.html')
