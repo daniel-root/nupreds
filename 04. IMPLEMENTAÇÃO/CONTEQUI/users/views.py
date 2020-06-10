@@ -46,9 +46,10 @@ def user_view(request, pk, template_name='users/user_detail.html'):
 
 def user_create(request, template_name='users/user_form.html'):
     if request.session.has_key('username'):
+        data = {}
         form = ClientForm(request.POST or None)
         data['form']= form
-        data['name']= pk
+        data['name']= 'None'
         if form.is_valid():
             form.save()
             return redirect('user_list')
@@ -74,11 +75,8 @@ def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
         if request.method=='POST': 
             if Client.objects.filter(id = pk,inative='True'):
                 Client.objects.filter(id = pk).update(inative='False')
-                Client.objects.filter(id = pk).update(fingerprint=finger.main())
             else:
                 Client.objects.filter(id = pk).update(inative='True')
-                a = Client.objects.filter(id = pk).values_list('fingerprint',flat=True)
-                print(a[0])
             return user_list(request)
         return render(request, template_name, {'object':user})
     return render(request, 'login.html')
@@ -206,6 +204,7 @@ def Verification(hReader):
                         #print(falsematch_rate)
                         if(falsematch_rate.value == 0):
                             print("Fingerprints matched.")
+                            return a[0]
 
                         else:
                             print("Fingerprints did not match.")
@@ -261,7 +260,8 @@ def main():
                     print("----------------------")
                     
                     
-                    Verification(pdev)
+                    result = Verification(pdev)
+                    
 
                 else:
                     print("Funcionalidades não adiquiridas")   
@@ -282,6 +282,7 @@ def main():
         
         #Finalizar
         mydll.dpfpdd_exit()
+        return result
 
     else: print("error when calling dpfpdd_init()") 
 
@@ -290,9 +291,14 @@ def main():
 def user_teste(request, template_name='users/user_teste.html'):
     if request.session.has_key('username'):
         user= Client.objects.all()
+        data = {}
+        data['nome']= None
         if request.method=='POST':
-            main()
-            return render(request, template_name)
+            result = main()
+            if result:
+                data['nome']= ('Bem Vindx, ' + result)
+            else: data['nome'] = 'Digital não reconhecida no banco de dados! Tente novamente'
+            return render(request, template_name,data )
             return redirect('user_list')
         return render(request, template_name)
     return render(request, 'login.html')
