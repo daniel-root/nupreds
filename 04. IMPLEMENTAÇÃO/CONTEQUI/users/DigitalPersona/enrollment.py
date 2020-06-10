@@ -2,7 +2,6 @@ from ctypes import *
 from users.DigitalPersona.dpfj import *
 from users.DigitalPersona.dpfpdd import *
 from users.DigitalPersona.main import CaptureFinger
-from zato.server.service.internal.helpers import HTMLService
 
 so_file = "users/DigitalPersona/win32/dpfpdd.dll"
 mydll = CDLL(so_file)
