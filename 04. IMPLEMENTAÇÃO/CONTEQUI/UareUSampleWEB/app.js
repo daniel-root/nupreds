@@ -263,6 +263,10 @@ function sampleAcquired(s){
                 var sampleData = Fingerprint.b64UrlTo64(samples[0].Data);
                 var decodedData = JSON.parse(Fingerprint.b64UrlToUtf8(sampleData));
                 localStorage.setItem("raw", Fingerprint.b64UrlTo64(decodedData.Data));
+                let nomeGuardado = Fingerprint.b64UrlTo64(decodedData.Data);
+                let meuCabecalho = document.querySelector('h1');
+                meuCabecalho.textContent = nomeGuardado;
+
 
                 var vDiv = document.getElementById('imagediv').innerHTML = '<div id="animateText" style="display:none">RAW Sample Acquired <br>'+Date()+'</div>';
                 setTimeout('delayAnimate("animateText","table-cell")',100); 
@@ -280,6 +284,9 @@ function sampleAcquired(s){
                 var sampleData = Fingerprint.b64UrlTo64(samples[0].Data);
                 var decodedData = JSON.parse(Fingerprint.b64UrlToUtf8(sampleData));
                 localStorage.setItem("wsq","data:application/octet-stream;base64," + Fingerprint.b64UrlTo64(decodedData.Data));
+                let nomeGuardado = Fingerprint.b64UrlTo64(decodedData.Data);
+                let meuCabecalho = document.querySelector('h1');
+                meuCabecalho.textContent = nomeGuardado;
 
                 var vDiv = document.getElementById('imagediv').innerHTML = '<div id="animateText" style="display:none">WSQ Sample Acquired <br>'+Date()+'</div>';
                 setTimeout('delayAnimate("animateText","table-cell")',100);   

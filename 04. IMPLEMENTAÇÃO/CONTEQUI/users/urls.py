@@ -9,4 +9,6 @@ urlpatterns = [
     path('Inativar/<int:pk>', views.user_delete, name='user_delete'),
     path('TipoUsuario/<int:pk>', views.type_user, name='type_user'),
     path('Inativos/', views.user_list_inactive, name='user_list_inactive'),
+    path('Fingerprint/<int:pk>', views.user_fingerprint, name='user_fingerprint'),
+    path('Teste/', views.user_teste, name='user_teste'),
 ]

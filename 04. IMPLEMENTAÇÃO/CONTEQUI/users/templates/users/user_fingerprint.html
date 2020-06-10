@@ -1,0 +1,7 @@
+<h1>Client Fingerprint</h1>
+<form method="post">{% csrf_token %}
+{% load my_tag %}
+    {{ object.usuario }}, retire e coloce seu dedo 4 vezes
+    <input type="submit" value="Submit" />
+</form>
+<a href="{% url "user_list" %}">voltar</a>

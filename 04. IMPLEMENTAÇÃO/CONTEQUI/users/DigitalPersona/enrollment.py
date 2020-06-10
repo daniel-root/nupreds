@@ -4,9 +4,9 @@ from users.DigitalPersona.dpfpdd import *
 from users.DigitalPersona.main import CaptureFinger
 
 so_file = "users/DigitalPersona/win32/dpfpdd.dll"
-mydll = WinDLL(so_file)
+mydll = CDLL(so_file)
 so_file = "users/DigitalPersona/win32/dpfj.dll"
-my_dll = WinDLL(so_file)
+my_dll = CDLL(so_file)
 
 #printf c++
 libc = cdll.msvcrt
@@ -60,21 +60,14 @@ def Enrollment(hReader):
                 result = my_dll.dpfj_create_enrollment_fmd(pEnrollmentFmd, byref(nEnrollmentFmdSize))
                 if result == DPFJ_SUCCESS and 0 != nEnrollmentFmdSize:
                     print("Enrollment template created, size: ", nEnrollmentFmdSize.value)
-                    teste = bytes(pEnrollmentFmd)
-                    import base64
-                    encoded = base64.b64encode(teste)
-                    print(encoded.decode("utf-8"))
-                    a = encoded.unicode("utf-8")
-                    a = base64.b64decode(a)
-                    print(a)
-                    
-                    
+                                        
             result = my_dll.dpfj_finish_enrollment()
             mydll.dpfpdd_exit()
             if(DPFJ_SUCCESS != result):
                 print("dpfj_finish_enrollment()")
-            print(teste)
-            return pEnrollmentFmd
+            string = ''.join(chr(i) for i in pEnrollmentFmd)
+            print(string)
+            return string
         else:
             print("dpfj_start_enrollment()")
 
