@@ -1,5 +1,6 @@
-
-<form method="POST" id="add_form" action="{% url 'emprestar_user' chave.id %}">{% csrf_token %}
+ {% block content %}
+<form method="POST" id="add_form" action="{% url 'emprestar_user' chave.id 'por digital' %}">{% csrf_token %}
+     {% ifequal tipo 'por senha' %}
       <div class="form-group">
         <label >User Name</label>
         <div class="input"><input type="text" name="username" required="required"></div>
@@ -19,8 +20,10 @@
     <div class="form-group"> 
       <label></label>
         <div class="submit">
+      {% endifequal %}
           <button type="submit" class="btn-primary">CONFIMAR</button>
         </div>
         <button type="button" class="btn-primary"><a href="{% url "equipment_list" %}">VOLTAR</a></button>
         <div class="clear"></div> </div>
 </form>
+{% endblock %}

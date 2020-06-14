@@ -4,9 +4,9 @@ from users.DigitalPersona.dpfpdd import *
 from users.DigitalPersona.main import CaptureFinger
 
 so_file = "users/DigitalPersona/win32/dpfpdd.dll"
-mydll = CDLL(so_file)
+mydll = WinDLL(so_file)
 so_file = "users/DigitalPersona/win32/dpfj.dll"
-my_dll = CDLL(so_file)
+my_dll = WinDLL(so_file)
 
 #printf c++
 libc = cdll.msvcrt

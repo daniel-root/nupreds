@@ -51,13 +51,17 @@ def user_create(request, template_name='users/user_form.html'):
         data['form']= form
         data['name']= 'None'
         if form.is_valid():
+            new = request.POST['usuario']
             form.save()
-            return redirect('user_list')
+            new = Client.objects.filter(usuario=new)
+            print(new[0].id)
+            return user_update(request, new[0].id)
         return render(request, template_name, data)
     return render(request, 'login.html')
 
 def user_update(request, pk, template_name='users/user_form.html'):
     if request.session.has_key('username'):
+        print('chequi')
         data = {}
         user= get_object_or_404(Client, pk=pk)
         form = ClientForm(request.POST or None, instance=user)
@@ -65,7 +69,7 @@ def user_update(request, pk, template_name='users/user_form.html'):
         data['name']= pk
         if form.is_valid():
             form.save()
-            return redirect('user_list')
+            return render(request, template_name, data)
         return render(request, template_name, data)
     return render(request, 'login.html')
     
@@ -77,16 +81,6 @@ def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
                 Client.objects.filter(id = pk).update(inative='False')
             else:
                 Client.objects.filter(id = pk).update(inative='True')
-            return user_list(request)
-        return render(request, template_name, {'object':user})
-    return render(request, 'login.html')
-
-def user_fingerprint(request, pk, template_name='users/user_fingerprint.html'):
-    if request.session.has_key('username'):
-        user= get_object_or_404(Client, pk=pk)
-        if request.method=='POST': 
-            print(Client.objects.filter(id = pk))
-            Client.objects.filter(id = pk).update(fingerprint=finger.main())
             return user_list(request)
         return render(request, template_name, {'object':user})
     return render(request, 'login.html')
@@ -135,7 +129,7 @@ def CaptureFinger(szFingerName, hReader, nFtType, ppFt, pFtSize):
             ds.size = sizeof(DPFPDD_DEV_STATUS)
             result = mydll.dpfpdd_get_device_status(hReader, byref(ds))
             if(DPFPDD_SUCCESS != result):
-                print("dpfpdd_get_device_status()")
+                return "dpfpdd_get_device_status()"
                 break
             if(DPFPDD_STATUS_READY == ds.status or DPFPDD_STATUS_NEED_CALIBRATION == ds.status):
                 is_ready = 1
@@ -144,14 +138,14 @@ def CaptureFinger(szFingerName, hReader, nFtType, ppFt, pFtSize):
         if (is_ready == 0):
             break
 
-        print("Put", szFingerName," on the reader, or press Ctrl-C to cancel...")
+        #print("Put", szFingerName," on the reader, or press Ctrl-C to cancel...")
         result = mydll.dpfpdd_capture(hReader, byref(cparam), -1, byref(cresult), byref(nImageSize), pImage)
         
         if(DPFPDD_SUCCESS != result):
-            print("Erro dpfpdd_capture()")
+            return "Erro dpfpdd_capture()"
         else:
             if cresult.success:
-                print("fingerprint captured")
+                #print("fingerprint captured")
                 nFeaturesSize = c_uint(MAX_FMD_SIZE)
                 
                 pFeatures = (c_ubyte*1562)(*b'')
@@ -163,7 +157,7 @@ def CaptureFinger(szFingerName, hReader, nFtType, ppFt, pFtSize):
                     ppFt = pFeatures
                     pFtSize = nFeaturesSize
                     
-                    print("features extracted.")
+                    #print("features extracted.")
         break
     return result, ppFt, pFtSize
                 
@@ -179,7 +173,7 @@ def Verification(hReader):
 
     bStop = False
     while(bStop != True):
-        print("Verification started")
+        #print("Verification started")
         result, pFeatures1, nFeatures1Size = CaptureFinger("any finger", hReader, DPFJ_FMD_ISO_19794_2_2005, byref(pFeatures1), byref(nFeatures1Size))
         
         if result == 0:
@@ -189,41 +183,46 @@ def Verification(hReader):
             if result == 0:
                 falsematch_rate = c_uint(0)
                 for i in user:
+                    #print(i)
+                    if i == None:
+                        continue
+                    
                     a = Client.objects.filter(fingerprint=i).values_list('usuario',flat=True)
-                    print(a[0])
+                    #print(a[0])
                     res = [] 
-                    for ele in i: 
+                    for ele in i:
                         res.extend(ord(num) for num in ele)
                     pFeatures2 = (c_ubyte * len(res))(*res)
                     nFeatures2Size = sizeof(pFeatures2)                    
                     my_dll.dpfj_compare.argtypes = [DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,POINTER(c_uint)]
                     my_dll.dpfj_compare.restype = c_int
-                    result = my_dll.dpfj_compare(DPFJ_FMD_ISO_19794_2_2005, pFeatures1, nFeatures1Size, 0, DPFJ_FMD_ANSI_378_2004, pFeatures2, nFeatures2Size, 0, byref(falsematch_rate))
+                    result = my_dll.dpfj_compare(DPFJ_FMD_ISO_19794_2_2005, pFeatures1, nFeatures1Size, 0, DPFJ_FMD_ISO_19794_2_2005, pFeatures2, nFeatures2Size, 0, byref(falsematch_rate))
                     if(DPFJ_SUCCESS == result):
                         #target_falsematch_rate = c_long(21474.83647)
                         #print(falsematch_rate)
                         if(falsematch_rate.value == 0):
-                            print("Fingerprints matched.")
+                            #print("Fingerprints matched.")
                             return a[0]
 
                         else:
-                            print("Fingerprints did not match.")
+                            continue
+                            #print("Fingerprints did not match.")
                     else:
-                        print("dpfj_compare()")
+                        return "dpfj_compare()"
             else: 
-                print("Error")
+               return "Error"
         bStop = True
 
 
 
 
 # Defining main function 
-def main():
+def main(tipo):
     #Inicializar
     result = mydll.dpfpdd_init()
     if(DPFPDD_SUCCESS == result): 
-        print("calling dpfpdd_init()")
-        print("----------------------")
+        #print("calling dpfpdd_init()")
+        #print("----------------------")
 
 
         #Informações sobre o leitor
@@ -233,10 +232,10 @@ def main():
         mydll.dpfpdd_query_devices.restype = c_int
         result = mydll.dpfpdd_query_devices(dev_cnt,byref(dev_infos))
         if(DPFPDD_SUCCESS == result):
-            print("Varredura Completa")
-            print("----------------------")
-            printf(b"Nome do dispositivo conectado: %s\n", dev_infos.name)
-            print("----------------------")
+            #print("Varredura Completa")
+            #print("----------------------")
+            #printf(b"Nome do dispositivo conectado: %s\n", dev_infos.name)
+            #print("----------------------")
 
 
             #Inicia o leitor
@@ -247,45 +246,101 @@ def main():
             #result = mydll.dpfpdd_open(dev_name,byref(pdev))
             result = mydll.dpfpdd_open_ext(dev_name, DPFPDD_PRIORITY_EXCLUSIVE, byref(pdev))
             if(DPFPDD_SUCCESS == result):
-                print("Dispositivo Selecionado")
-                print("----------------------")
+                #print("Dispositivo Selecionado")
+                #print("----------------------")
 
                 #funcionalidades do leitor
                 dev_caps = DPFPDD_DEV_CAPS(60)
                 mydll.dpfpdd_get_device_capabilities.argtypes = [DPFPDD_DEV,POINTER(DPFPDD_DEV_CAPS)]
                 mydll.dpfpdd_get_device_capabilities.restype = c_int
                 if DPFPDD_SUCCESS == mydll.dpfpdd_get_device_capabilities(pdev,dev_caps):
-                    print("Funcionalidades adquiridas")
-                    print("dpi do leitor: ",dev_caps.resolutions[0])
-                    print("----------------------")
+                    #print("Funcionalidades adquiridas")
+                    #print("dpi do leitor: ",dev_caps.resolutions[0])
+                    #print("----------------------")
                     
-                    
-                    result = Verification(pdev)
+                    if tipo == "Verification":
+                        result = Verification(pdev)
+                    else:
+                        pFeatures1 = c_ubyte()
+                        nFeatures1Size = c_uint(0) 
+                        result, pFeatures1, nFeatures1Size = CaptureFinger("any finger", pdev, DPFJ_FMD_ISO_19794_2_2005, byref(pFeatures1), byref(nFeatures1Size))
+                        if(DPFPDD_SUCCESS == result):
+                            result = ''.join(chr(i) for i in pFeatures1)
+                        else:
+                            result = "Erro ao adquirir impresão"
+                        
                     
 
                 else:
-                    print("Funcionalidades não adiquiridas")   
+                    return "Erro ao adiquirir Funcionalidades"
             
             else:
-                print("Erro ao selecionar dispositivo.")
+                return "Erro ao selecionar dispositivo."
             
             #Fecha o despositivo
             mydll.dpfpdd_close.argtypes = [DPFPDD_DEV]
             mydll.dpfpdd_close.restype = c_int
-            if DPFPDD_SUCCESS == mydll.dpfpdd_close(pdev):
-                print("Dispositivo encerrado")
-                print("----------------------")
+            if DPFPDD_SUCCESS != mydll.dpfpdd_close(pdev):
+               return "Erro ao encerrar"
+                #print("----------------------")
+
 
         else:
-            print("Erro ao fazer varredura")
-            print("----------------------")
+            return "Erro ao fazer varredura"
+            #print("----------------------")
         
         #Finalizar
         mydll.dpfpdd_exit()
         return result
 
-    else: print("error when calling dpfpdd_init()") 
+    else: return "error when calling dpfpdd_init()" 
 
+def user_fingerprint(request, pk, template_name='users/user_fingerprint.html'):
+    if request.session.has_key('username'):
+        data = {}
+        data['object'] = get_object_or_404(Client, pk=pk)
+        data['frase'] = 'Click em inicar!'
+        if request.method=='POST':
+            #result, pFeatures1, nFeatures1Size = CaptureFinger("any finger", hReader, DPFJ_FMD_ISO_19794_2_2005, byref(pFeatures1), byref(nFeatures1Size))
+            #string = ''.join(chr(i) for i in nFeatures1Size)
+            #print(string)
+            #return string
+            #data['frase'] = 'Coloque o dedo no leitor!'
+            #print("Aqui")
+            result = main("Registro")
+            if result[0] != 'F':
+                data['frase'] = result
+            #print(result,len(result))
+            else:
+                Client.objects.filter(id = data['object'].id).update(fingerprint=result)
+                data['frase'] = 'Registro Completo!'
+            return render(request, template_name, data)
+            #return user_fingerprint_registration(request,data['frase'],pk )
+        
+        return render(request, template_name, data)
+    return render(request, 'login.html')
+
+
+def user_fingerprint_registration(request, frase,pk, template_name='users/user_fingerprint.html'):
+    if request.session.has_key('username'):
+        data = {}
+        data['object'] = get_object_or_404(Client, pk=pk)
+        if frase == 'Click em inicar!':
+            #print(data['object'].id)
+            #Client.objects.filter(id = data['object'].id).update(fingerprint=finger.main())
+            data['frase'] = 'Coloque o dedo no leitor'
+            return render(request, template_name, data)
+        if frase == 'Coloque o dedo no leitor':
+            
+            data['frase'] = 'Coloque o mesmo dedo no leitor'
+            return render(request, template_name, data)
+        if data['frase'] == 'Coloque o dedo indicado no leitor':
+            data['frase'] = 'Coloque o dedo novamente no leitor'
+            return render(request, template_name, data)
+        
+        data['frase'] = 'Cadastro completo!'
+        return render(request, template_name, data)
+    return render(request, 'login.html')
 
 
 def user_teste(request, template_name='users/user_teste.html'):
@@ -294,7 +349,7 @@ def user_teste(request, template_name='users/user_teste.html'):
         data = {}
         data['nome']= None
         if request.method=='POST':
-            result = main()
+            result = main("Verification")
             if result:
                 data['nome']= ('Bem Vindx, ' + result)
             else: data['nome'] = 'Digital não reconhecida no banco de dados! Tente novamente'
