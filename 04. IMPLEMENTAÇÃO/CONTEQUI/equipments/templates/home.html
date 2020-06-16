@@ -13,14 +13,29 @@
     <div class="text-center">
 	   <img src={% static "images/image.png" %} align=”middle alt="Responsive image" style="height: 150px; width: 200px">
 	</div>
-        <form action="{% url "logout" %}">
-        <button type="submit" class="btn border-0" style="position: absolute; left: 1000px; top: 100px; background-color: #FFFFFF;">
+        <button type="button" class="btn border-0" data-toggle="modal" data-target="#modalExemplo" style="position: absolute; left: 1000px; top: 100px; background-color: #FFFFFF;">
             Sair
             <span><img src={% static "images/enter.png" %} style="height: 20px; width: 20px"></span>
         </button>
-        </form>
-    
-
+        <div class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Confirme</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Você tem certeza que deseja sair?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="text-center">
           <div class=" btn-group-vertical">
             <form action="{% url "equipment_list"%}">
