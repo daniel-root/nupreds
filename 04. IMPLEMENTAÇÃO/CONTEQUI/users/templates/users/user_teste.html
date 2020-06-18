@@ -1,0 +1,10 @@
+<h1>Client Fingerprint</h1>
+<form method="post">{% csrf_token %}
+{% load my_tag %}
+    Coloque seu dedo no leitor!
+   
+    <input type="submit" value="Iniciar leitura" />
+</form>
+ <h2>{{ nome }}</h2>
+ 
+<a href="{% url "user_list" %}">voltar</a>

@@ -57,18 +57,18 @@
           </button>
           </form>
        </div>
-    <div style="margin-top: 10px;" class="row justify-content-center">
+      <div style="margin-top: 10px;" class="row justify-content-center">
         <form action="{% url "get_rastreio" type %}" method="post">
-            {% csrf_token %}
-           <div class=" form-inline row"  style="padding-top: 10px;">
+          {% csrf_token %}
+          <div class=" form-inline row"  style="padding-top: 10px;">
             <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="tipo">Tipo:</label>
             <div class="col-sm-10">
-            <select name="type_equipment" id="inputState" class=" form-control rounded-pill" style="background: #e9ecef;width: 800px; height: 35px;">
-              <option selected>Todos</option>
-               {% for t in types %}
-              <option>{{ t }}</option>
-               {% endfor %}
-            </select>
+              <select name="type_equipment" id="inputState" class=" form-control rounded-pill" style="background: #e9ecef;width: 800px; height: 35px;">
+                <option selected>Todos</option>
+                {% for t in types %}
+                <option>{{ t }}</option>
+                {% endfor %}
+              </select>
             </div>
           </div>
            {% ifequal type 'Rastreio' %}
@@ -109,14 +109,23 @@
           <div  class="form-inline row" style="padding-top: 10px;">
             <label class="col-sm-9 col-form-label" style="padding-right: 10px;"> Início:</label>
             <div class="col-sm-2">
+<<<<<<< HEAD
            <input type="date" class="btn rounded-pill" name="start" required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="background: #e9ecef; height: 35px;">
           </div>
           </div>
           {% endifequal %}
           <div style="padding-left: 90%; padding-top: 10px;">
           <button class="btn rounded-pill " style="background: #e9ecef">
+=======
+              <input type="date" class="rounded-pill" name="start" required onkeypress="$(this).mask('00/00/0000');" pattern="[0-9]+$" style="background: #e9ecef; height: 35px;">
+            </div>
+          </div>
+          {% endifequal %}
+          <div style="padding-left: 90%; padding-top: 10px;">
+            <button class="rounded-pill ">
+>>>>>>> d1f643cb4cc96e53115ed29474686519b66027c2
             Enviar
-          </button>
+            </button>
           </div>
         </form>
       </div>

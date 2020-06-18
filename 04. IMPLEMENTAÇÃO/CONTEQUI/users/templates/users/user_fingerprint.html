@@ -1,0 +1,13 @@
+<h1>Client Fingerprint</h1>
+<p>Cadastro de Impressão Digital de {{ object.usuario }}</p>
+<p>{{ frase }}</p>
+{% load my_tag %}
+{% if frase == 'Click em inicar!' %}
+<form method="post">{% csrf_token %}
+   
+    <input type="submit" value="Iniciar" />
+</form>
+{% endif %}
+
+<a href="{% url "user_list" %}">voltar</a>
+</p>
