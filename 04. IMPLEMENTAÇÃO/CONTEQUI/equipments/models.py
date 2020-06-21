@@ -22,6 +22,7 @@ class Equipment(models.Model):
     inative = models.BooleanField(default=False)
     status =  models.CharField(max_length=9, null=False, choices=STATUS_CHOICES,default='Livre')
     amount_of_loans = models.IntegerField(default=0)
+    
     '''
     def contact_default():
     return {"email": "to1@example.com"}

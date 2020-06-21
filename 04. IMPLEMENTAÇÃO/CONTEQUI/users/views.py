@@ -3,7 +3,9 @@ from django.forms import ModelForm
 from users.models import Client
 from django.db.models import Q
 from django.contrib import messages 
-import users.DigitalPersona.enrollment as finger
+#import users.DigitalPersona.enrollment as finger
+from users.APIs.sendEmail import email_cadastro
+from users.APIs.sendTelegram import aleatorio
 
 class ClientForm(ModelForm):
     class Meta:
@@ -54,14 +56,17 @@ def user_create(request, template_name='users/user_form.html'):
             new = request.POST['usuario']
             form.save()
             new = Client.objects.filter(usuario=new)
-            print(new[0].id)
+            number = aleatorio()
+            new.update(cod_telegram=number)
+            email_cadastro(new[0].usuario,number,new[0].email)
+            #print(new[0].id)
             return user_update(request, new[0].id)
         return render(request, template_name, data)
     return render(request, 'login.html')
 
 def user_update(request, pk, template_name='users/user_form.html'):
     if request.session.has_key('username'):
-        print('chequi')
+        #print('chequi')
         data = {}
         user= get_object_or_404(Client, pk=pk)
         form = ClientForm(request.POST or None, instance=user)
