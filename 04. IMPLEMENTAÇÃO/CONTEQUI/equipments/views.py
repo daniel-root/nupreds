@@ -124,7 +124,7 @@ def equipment_create(request, template_name='equipments/equipment_form.html'):
         return render(request, template_name, {'form':form})
     return render(request, 'login.html')
 
-def equipment_update(request, pk, template_name='equipments/equipment_form.html'):
+def equipment_update(request, pk, template_name='equipments/equipment_form1.html'):
     if request.session.has_key('username'):
         form = EquipmentForm(request.POST or None, instance=EquipmentUnique(pk))
         if form.is_valid():

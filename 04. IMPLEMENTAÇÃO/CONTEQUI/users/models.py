@@ -16,6 +16,7 @@ class Client(models.Model):
     senha = models.CharField(max_length=50, null=False)
     fingerprint = models.CharField(max_length=1630,null=True,unique=True)
     inative = models.BooleanField(default=False)
+    cod_telegram = models.TextField(max_length=10, null=True)
     
     def __str__(self):
         return self.usuario
