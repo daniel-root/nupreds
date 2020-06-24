@@ -236,6 +236,8 @@ def main(tipo):
         mydll.dpfpdd_query_devices.argtypes = [POINTER(c_uint),POINTER(DPFPDD_DEV_INFO)]
         mydll.dpfpdd_query_devices.restype = c_int
         result = mydll.dpfpdd_query_devices(dev_cnt,byref(dev_infos))
+        print(dev_cnt)
+        print(result)
         if(DPFPDD_SUCCESS == result):
             #print("Varredura Completa")
             #print("----------------------")
@@ -250,6 +252,8 @@ def main(tipo):
             mydll.dpfpdd_open.restype = c_int
             #result = mydll.dpfpdd_open(dev_name,byref(pdev))
             result = mydll.dpfpdd_open_ext(dev_name, DPFPDD_PRIORITY_EXCLUSIVE, byref(pdev))
+            print(dev_name)
+            print(result)
             if(DPFPDD_SUCCESS == result):
                 #print("Dispositivo Selecionado")
                 #print("----------------------")

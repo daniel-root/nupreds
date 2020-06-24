@@ -112,7 +112,7 @@ def Atraso(pk):
             user = Equipment_user.objects.filter(equipment = pk, user_devolution=None)
             user = Client.objects.filter(usuario=user[0].user_loan)
             cod_telegram = user[0].cod_telegram
-            if cod_telegram[0] != 'D' and cod_telegram != None:
+            if cod_telegram[0] != 'D' and cod_telegram != 'NoneType':
                 enviar(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].cod_telegram)
 
             #type_equipment = Equipment_type.objects.filter(id=equipment[0].type_equipment)
