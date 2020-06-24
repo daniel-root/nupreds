@@ -55,30 +55,16 @@
   <thead>
     <tr>
       <th scope="col" width="25%" style="text-align: left;">
-        <form action="{% url "filter_list" 'Etiqueta' type %}">
-        <button class="btn btn-link text-dark" >
-          Etiquetas
-        </button>
-        </form>
+        <a href="{% url "filter_list" 'Etiqueta' type %}" style="color: black;">Etiqueta</a>
       </th>
       <th scope="col" width="25%" style="text-align: left;">
-        <form action="{% url "filter_list" 'Descricao' type %}">
-        <button class="btn btn-link text-dark" >
-          Descrição
-        </button>
-        </form>
+        <a href="{% url "filter_list" 'Descricao' type %}" style="color: black;">Descrição</a>
       </th>
       <th scope="col" width="20%" style="text-align: left;">
-        <form action="{% url "filter_list" 'EmPosse' type %}">
-        <button class="btn btn-link text-dark" >
-          Em Posse
-        </button>
-        </form>
+        <a href="{% url "filter_list" 'EmPosse' type %}" style="color: black;">Em posse</a>
       </th>
       <th scope="col" width="30%" style="text-align: left;">
-        <button class="btn btn-link text-dark" >
-          Ações
-        </button>
+        <a href="" style="color: black;">Ações</a>
       </th>
       </tr>
     </thead>
