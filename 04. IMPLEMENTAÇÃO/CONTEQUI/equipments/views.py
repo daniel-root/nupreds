@@ -184,9 +184,10 @@ def devolver(request,pk):
         username = None
         if request.method=='POST':
             username = main("Verification")
-        #print(username)
+        print("usuario ",username)
         if username != "Erro ao selecionar dispositivo.":
             post = Client.objects.filter(usuario=username).values_list('id',flat=True)
+            print(post)
             if post:
             #StringPost = ''.join(map(str, post))
                 BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
