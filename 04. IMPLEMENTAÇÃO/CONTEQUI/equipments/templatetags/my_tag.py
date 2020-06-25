@@ -94,6 +94,7 @@ def ActiveOrInactiveUser(pk):
 
 @register.simple_tag
 def Atraso(pk):
+    '''
     cod_telegram = Client.objects.filter(cod_telegram__contains='D')
     if cod_telegram:
         for i in range(0,len(cod_telegram)):
@@ -101,6 +102,7 @@ def Atraso(pk):
             atualiza_cod_telegrma = autenticar(str(cod_telegram[i].cod_telegram))
             if atualiza_cod_telegrma != False:
                 Client.objects.filter(id=cod_telegram[i].id).update(cod_telegram=atualiza_cod_telegrma)
+    '''
     Equipment_time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
     Maximum_Time = ''.join(map(str, Equipment_time))
     TimeEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
@@ -109,19 +111,37 @@ def Atraso(pk):
         if timezone.now() >= time.limit_time:
             equipment = Equipment.objects.filter(id = pk)
             equipment.update(status='Atrasado')
+            '''
             user = Equipment_user.objects.filter(equipment = pk, user_devolution=None)
             user = Client.objects.filter(usuario=user[0].user_loan)
             cod_telegram = user[0].cod_telegram
-            if cod_telegram[0] != 'D' and cod_telegram != None:
+            print(cod_telegram)
+            if cod_telegram[0] != 'D':
                 enviar(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].cod_telegram)
 
             #type_equipment = Equipment_type.objects.filter(id=equipment[0].type_equipment)
             print(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
             email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
+            '''
             #time = str(timezone.now() - time.limit_time)
             #time = time.split('.')
             #time = time[0]
             return ''
             #+' '+time
         return ''
+    return ''
+
+@register.simple_tag
+def TelegramCadastro():
+    cod_telegram = Client.objects.filter(cod_telegram__contains='D')
+    #print(cod_telegram)
+    if cod_telegram:
+        for i in range(0,len(cod_telegram)):
+            #print(cod_telegram[i].cod_telegram)
+            atualiza_cod_telegrma = autenticar(str(cod_telegram[i].cod_telegram))
+            if atualiza_cod_telegrma != 'Vazia' and atualiza_cod_telegrma != False:
+                Client.objects.filter(id=cod_telegram[i].id).update(cod_telegram=atualiza_cod_telegrma)
+            elif atualiza_cod_telegrma == 'Vazia':
+                break
+
     return ''

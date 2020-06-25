@@ -10,12 +10,14 @@
 {% endfor %}
 <h2>
 {% ifequal object.status 'Livre' %}
-    <a href="{% url "emprestar" object.pk 'por digital' %}">emprestar</a>
-    <a href="">devolver</a>
+<form method="post" action="{% url "emprestar" object.pk %}">{% csrf_token %}
+    <input type="submit" value="Emprestar" />
+</form>
 {% endifequal %}
 {% ifnotequal object.status 'Livre' %}
-    <a href="">emprestar</a>
-    <a href="{% url "devolver" object.pk 'por digital' %}">devolver</a>
+<form method="post" action="{% url "devolver" object.pk %}">{% csrf_token %}
+    <input type="submit" value="Devolver" />
+</form>
 {% endifnotequal %}
 
 </h2>

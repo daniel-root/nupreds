@@ -8,7 +8,7 @@ from django.utils import timezone
 from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from users.views import main
+from users.views import main 
 
 def home(request):
     if request.session.has_key('username'):
@@ -146,95 +146,112 @@ def equipment_delete(request, pk, template_name='equipments/equipment_confirm_de
 
 def emprestar(request,pk):
     if request.session.has_key('username'):
-        data = {}
-        data['chave'] = EquipmentUnique(pk)
-        data['tipo'] = 'por digital'
-        return render(request, 'equipments/emprestar.html', data )
+        username = None
+        if request.method=='POST':
+            username = main("Verification")
+        #print(username)
+        if username != "Erro ao selecionar dispositivo.":
+            post = Client.objects.filter(usuario=username).values_list('id',flat=True)
+            if post:
+                StringPost = ''.join(map(str, post))
+                BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
+                amout = Equipment.objects.filter(id = pk).values_list('amount_of_loans',flat=True)
+                amout_of_equipments = ''.join(map(str, amout))
+                if BusyEquipment:
+                    messages.error(request, 'Equipamento já emprestado!')
+                    return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
+                time = ''.join(map(str,time))
+                Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
+                Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
+                return equipment_list(request)
+            else:
+                messages.error(request, 'Usuario não encontrado!')
+                return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+            return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                    
+        else:
+            data = {}
+            data['chave'] = EquipmentUnique(pk)
+            data['tipo'] = 'por senha'
+            return render(request, 'equipments/emprestar.html', data )
+
+        #return render(request, 'equipments/emprestar.html', data )
     return render(request, 'login.html')
 
 def devolver(request,pk):
     if request.session.has_key('username'):
-        data = {}
-        data['chave'] = pk
-        data['tipo'] = 'por digital'
-        return render(request, 'equipments/devolver.html',data)
-    return render(request, 'login.html')
-
-def emprestar_user(request,pk,tipo):
-    if request.session.has_key('username'):
-        if request.method == 'POST':
-            if tipo == 'por senha':    
-                username = request.POST['username']
-                password =  request.POST['password']
-                post = Client.objects.filter(usuario=username,senha=password).values_list('id',flat=True)
-                if post:
-                    StringPost = ''.join(map(str, post))
-                    BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
-                    amout = Equipment.objects.filter(id = pk).values_list('amount_of_loans',flat=True)
-                    amout_of_equipments = ''.join(map(str, amout))
-                    if BusyEquipment:
-                        messages.error(request, 'Equipamento já emprestado!')
-                        return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-                    time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
-                    time = ''.join(map(str,time))
-                    Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
-                    Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
-                    return equipment_list(request)
-            else:
-                username = main("Verification")
-                post = Client.objects.filter(usuario=username).values_list('id',flat=True)
-                if post:
-                    StringPost = ''.join(map(str, post))
-                    BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
-                    amout = Equipment.objects.filter(id = pk).values_list('amount_of_loans',flat=True)
-                    amout_of_equipments = ''.join(map(str, amout))
-                    if BusyEquipment:
-                        messages.error(request, 'Equipamento já emprestado!')
-                        return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-                    time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
-                    time = ''.join(map(str,time))
-                    Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
-                    Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
+        username = None
+        if request.method=='POST':
+            username = main("Verification")
+        #print(username)
+        if username != "Erro ao selecionar dispositivo.":
+            post = Client.objects.filter(usuario=username).values_list('id',flat=True)
+            if post:
+            #StringPost = ''.join(map(str, post))
+                BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
+                if BusyEquipment:
+                    Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).update(user_devolution=Client.objects.get(id = int(post[0])),devolution=timezone.now())
+                    Equipment.objects.filter(id = pk).update(status='Livre')
                     return equipment_list(request)
                 else:
-                    messages.error(request, 'Usuario não encontrado!')
+                    messages.error(request, 'Equipamento sem emprestimo!')
                     return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+            else:
+                messages.error(request, 'Usuario não encontrado!')
+                return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+            return render(request, 'equipments/devolver.html',data)
+        else:
+            data = {}
+            data['chave'] = pk
+            #data['tipo'] = 'por senha'
+            return render(request, 'equipments/devolver.html', data )
+
+        #print(username)
+        post = Client.objects.filter(usuario=username).values_list('id',flat=True)
+        
+    return render(request, 'login.html')
+
+def emprestar_user(request,pk):
+    if request.session.has_key('username'):
+        if request.method == 'POST':
+            
+            username = request.POST['username']
+            #print(username)
+            password =  request.POST['password']
+            post = Client.objects.filter(usuario=username,senha=password).values_list('id',flat=True)
+            if post:
+                StringPost = ''.join(map(str, post))
+                BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
+                amout = Equipment.objects.filter(id = pk).values_list('amount_of_loans',flat=True)
+                amout_of_equipments = ''.join(map(str, amout))
+                if BusyEquipment:
+                    messages.error(request, 'Equipamento já emprestado!')
+                    return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
+                time = ''.join(map(str,time))
+                Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
+                Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
+                return equipment_list(request)
         return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
     return render(request, 'login.html')
 
-def devolver_user(request,pk,tipo):
+def devolver_user(request,pk):
     if request.session.has_key('username'):
-        if request.method == 'POST':
-            if tipo == 'por senha':    
-                username = request.POST['username']
-                password =  request.POST['password']
-                post = Client.objects.filter(usuario=username,senha=password).values_list('id',flat=True)
-                if post:
-                    #StringPost = ''.join(map(str, post))
-                    BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
-                    if BusyEquipment:
-                        Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).update(user_devolution=Client.objects.get(id = int(post[0])),devolution=timezone.now())
-                        Equipment.objects.filter(id = pk).update(status='Livre')
-                        return equipment_list(request)
-                messages.error(request, 'Equipamento sem emprestimo!')
-                return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-            else:
-                username = main("Verification")
-                post = Client.objects.filter(usuario=username).values_list('id',flat=True)
-                if post:
-                    #StringPost = ''.join(map(str, post))
-                    BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
-                    if BusyEquipment:
-                        Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).update(user_devolution=Client.objects.get(id = int(post[0])),devolution=timezone.now())
-                        Equipment.objects.filter(id = pk).update(status='Livre')
-                        return equipment_list(request)
-                    else:
-                        messages.error(request, 'Equipamento sem emprestimo!')
-                        return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-                else:
-                    messages.error(request, 'Usuario não encontrado!')
-                    return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-
+        if request.method == 'POST':   
+            username = request.POST['username']
+            password =  request.POST['password']
+            post = Client.objects.filter(usuario=username,senha=password).values_list('id',flat=True)
+            if post:
+                #StringPost = ''.join(map(str, post))
+                BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
+                if BusyEquipment:
+                    Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).update(user_devolution=Client.objects.get(id = int(post[0])),devolution=timezone.now())
+                    Equipment.objects.filter(id = pk).update(status='Livre')
+                    return equipment_list(request)
+            messages.error(request, 'Equipamento sem emprestimo!')
+            return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+        
         return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
     return render(request, 'login.html')
 
