@@ -18,12 +18,7 @@
        <div class="container-fluid">
 
     <form class="form-padrao" autocomplete="off">
-
-      <!-- Título do form -->
-      <div class="row" style="padding: 20px 0px"> 
-      </div>
-      
-      <!-- Text input Nome -->
+  
       <div class="form-group row">
         <label  for="txtNome" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Nome: </label>
         <div class="col-lg-10 col-md-10 col-sm-12">
@@ -31,7 +26,6 @@
         </div>
       </div> 
 
-      <!-- Text input CPF -->
       <div class="form-group row">
         <label  for="txtCPF" class="col-lg-2 col-md-2 col-sm-12 col-form-label">CPF: </label>
         <div class="col-lg-10 col-md-10 col-sm-12">
@@ -41,7 +35,6 @@
         </div>
       </div>
       
-      <!-- Text input Nome de Usuário -->
       <div class="form-group row">
         <label  for="txtEmail" class="col-lg-2 col-md-3 col-sm-12 col-form-label">Email: </label>
         <div class="col-lg-10 col-md-10 col-sm-12">
@@ -49,7 +42,6 @@
         </div>
       </div>
 
-      <!-- Text input Telefone -->
       <div class="form-group row">
         <label  for="txtTelefone" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Telefone: </label>
         <div class="col-lg-10 col-md-10 col-sm-5">
@@ -57,7 +49,6 @@
         </div>
       </div>
 
-      <!-- Senhas -->
       <div class="form-group">
         <div class="row">
           <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
@@ -91,68 +82,6 @@
       </div>
     </form>
   </div>
-
-    <div style="margin-top: 10px;" class="row justify-content-center">
-        <form>
-          <div class="form-inline row ">
-            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputNome">Nome:</label>
-             <div class="input-group col-sm-10">
-              <input class="form-control mr-2 rounded-pill" type="texto" required="required" name="text" pattern="[A-Za-z\s]+$" style="width: 900px; background: #e9ecef">
-             </div>
-          </div>
-          <div class="form-inline row" style="padding-top: 10px;">
-            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputCPF">CPF:</label>
-            <div  class="input-group col-sm-10">
-            <input type="text" class="form-control mr-2 rounded-pill" id="cpf" name="cpf" required onkeypress="$(this).mask('000.000.000-00');" pattern="[0-9]+$" style="width: 900px; background: #e9ecef">  
-            </div>
-          </div>
-           <div class="form-inline row" style="padding-top: 10px;">
-            <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="InputEmail">Email:</label>
-            <div class="input-group col-sm-10">
-            <input type="email" class="form-control mr-2 rounded-pill" id="cpf" name="cpf" required="required"  name=“email” pattern="[^@\s]+@[^@\s]+\.[^@\s]+" style="width: 900px; background: #e9ecef">  
-            </div>
-          </div>
-          <div class="form-inlin row" style="padding-right: 10px;">
-              <label class="col col-form-label" style="padding-right: 60px;padding-left: 60px;" for="InputEmail" >Telefone:</label>
-              <div class="input-group col">
-              <input type="text" name="telefone" class="form-control mr-2 rounded-pill" onkeyup="mascara( this, mtel );" maxlength="15" placeholder="(00) 0000-00000" onkeyup="mascara( this, mtel );" required style="width: 360px; background: #e9ecef">
-              </div>
-          </div>
-          <div class="form-inline">
-              <label class="col col-form-label" style="padding-right: 10px;" for="InputEmail" >Whatsapp:</label>
-              <div class="input-group col">
-              <input type="text" name="telefone" class="" onkeyup="mascara( this, mtel );" maxlength="15" required style= "width: 360px; background: #e9ecef">
-              </div>
-          </div>
-          </div>
-          <div class="form-inline row" style="padding-top: 10px;">
-            <label class="col-sm-2 col-form-label te-left" style="padding-right: 10px;" for="InputSenha">Senha:</label>
-            <div  class="input-group col-sm-10">
-            <input type="text" class="form-control mr-2 rounded-pill" id="senhs" name="Senha" required  style="width: 900px; background: #e9ecef">  
-            </div>
-          </div>
-          <div class="form-inline row" style="padding-top: 10px;">
-            <label class="col-sm-2 col-form-label" style="padding-right: 10px;text-align: left;" for="InputSenha">Confirmar senha:</label>
-            <div  class="input-group col-sm-10">
-            <input type="text" class="form-control mr-2 rounded-pill" id="senhs" name="Senha" required  style="width: 900px; background: #e9ecef">  
-            </div>
-          </div>
-          <div class="form-inline row" style="padding-top: 10px;">
-            <label class="col-sm-2 col-form-label" style="padding-right: 10px;text-align: left;" for="InputSenha">Impressão digital:</label>
-            <div  class="input-group col-sm-10">
-            <input type="text" class="form-control mr-2 rounded-pill" id="senhs" name="Senha" required  style="width: 900px; background: #e9ecef">  
-            </div>
-          </div>
-          <div style="padding-left: 85%; padding-top: 10px;">
-          <button type="button" class="btn rounded-pill" style="background: #e9ecef">
-            Cancelar
-          </button>
-          <button type="submit" class="btn rounded-pill" style="background: #e9ecef">
-            Salvar
-          </button>
-          </div>
-        </form>
-      </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="js/bootstrap.min.js"></script>          
