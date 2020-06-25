@@ -277,6 +277,9 @@
     <td>{{ equipment_user.user_devolution }}</td>
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
+     {% empty %}
+      Sem Resultados
+
     {% endfor %}
     {% endifequal %}
     {% ifequal type 'NaoDevolvidos' %}
@@ -292,21 +295,27 @@
     <td></td>
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
+    {% empty %}
+      Sem Resultados
     {% endfor %}
     {% endifequal %}
+
     {% ifequal type 'Listagem' %}
-    {% for equipment_user in list_equipment_user %}
-    <tr>
-    <td>{{ equipment_user.type_equipment }}</td>
-    <td>{{ equipment_user.tag }}</td>
-    <td>{{ equipment_user.description }}</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>{{ equipment_user.amount_of_loans }}</td>
-    </tr>
+      {% for equipment_user in list_equipment_user %}
+      <tr>
+      <td>{{ equipment_user.type_equipment }}</td>
+      <td>{{ equipment_user.tag }}</td>
+      <td>{{ equipment_user.description }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{ equipment_user.amount_of_loans }}</td>
+      </tr>
+     {% empty %}
+     Sem Resultados
     {% endfor %}
+   
     {% endifequal %}
 
        </tbody>
