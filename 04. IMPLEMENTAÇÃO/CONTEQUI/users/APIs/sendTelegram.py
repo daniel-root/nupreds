@@ -25,6 +25,6 @@ def enviar(name, equipment, tag, description,number):
     description = str(description)
     number = int(number)
     bot = telepot.Bot("1244766207:AAGjFP8KytsFILHQUjXazo1yV7JUqN5w4g8")  
-    bot.sendMessage(number,"Olá, "+ name + ", tudo bem? \n Notamos que você está muito tempo com " + equipment + ", " + tag + " - " + description + ". Quando você puder dirija-se a recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.")
+    bot.sendMessage(number,"Olá, "+ name + ", tudo bem? \n Notamos que você está muito tempo com " + equipment + ", " + tag + " - " + description + ". Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.")
 
     

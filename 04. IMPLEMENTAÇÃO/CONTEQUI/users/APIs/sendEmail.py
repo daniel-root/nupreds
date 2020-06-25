@@ -26,13 +26,13 @@ def email_atraso(name, equipment, tag, description,msgFrom):
 
         text ="""
         Olá, """ + str(name) + """, tudo bem? 
-        Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se a recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento."""
+        Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento."""
         html = """\
         <html>
         <head></head>
         <body>
                 <p>Olá, """ + str(name) + """, tudo bem?</p>
-        <p>Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se a recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.</p>
+        <p>Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.</p>
         </body>
         </html>
         """
@@ -73,17 +73,15 @@ def email_cadastro(name,codigo,msgFrom):
 
 			text = name + """
 					, seu cadastro foi realizado com sucesso no sistema Conequi, controle de equipamentos do IFCE, campus Tianguá.
-					Através deste e-mail estaremos mandando informes, se houver atraso na devolução mandaremos o e-mail de lembrete para você.
-					Também damos a opção de lembrete por meio do Telegram, basta utilizar o seguinte código:""" + number + """. Acesse o link: https://t.me/conequi_bot. 
-					Após acessar o link, irá abrir um chat com nosso robozinho, clique em start, e em seguida coloque o código que você recebeu. Nosso robozinho irá reconhecer você e mandará uma mensagem de cadastro realizado!"""	
+					Por meio deste canal mandaremos informes, especialmente, sobre atrasos na devolução. Assim, mandaremos lembretes para você.
+					Você também tem a opção de usar o aplicativo do Telegram, basta utilizar o seguinte código """ + number + """ para acordar nosso Bot. Acesse o link: https://t.me/conequi_bot."""	
 			html = """\
 			<html>
 			<head></head>
 			<body>
 				<p>""" + name + """ , seu cadastro foi realizado com sucesso no sistema Conequi, controle de equipamentos do IFCE, campus Tianguá.&#128526;</p>
-				<p>Através deste e-mail estaremos mandando informes, se houver atraso na devolução mandaremos o e-mail de lembrete para você.&#129325;&#129325;&#129325;</p>
-				<p>Também damos a opção de lembrete por meio do Telegram &#128241;, basta utilizar o seguinte código:<strong>""" + number + """</strong>. Acesse o link: https://t.me/conequi_bot.</p>
-				<p>Após acessar o link, irá abrir um chat com nosso robozinho &#129302;, clique em start, e em seguida coloque o código que você recebeu. Nosso robozinho irá reconhecer você e mandará uma mensagem de cadastro realizado!</p>
+				<p>Por meio deste canal mandaremos informes, especialmente, sobre atrasos na devolução. Assim, mandaremos lembretes para você.&#129325;&#129325;&#129325;</p>
+				<p>Você também tem a opção de usar o aplicativo do Telegram &#128241;, basta utilizar o seguinte código <strong>""" + number + """</strong> para acordar nosso Bot. Acesse o link: https://t.me/conequi_bot.</p>
 			</body>
 			</html>
 			"""

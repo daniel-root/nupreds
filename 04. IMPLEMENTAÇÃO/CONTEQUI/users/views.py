@@ -213,7 +213,7 @@ def Verification(hReader):
                             continue
                             #print("Fingerprints did not match.")
                     else:
-                        return "dpfj_compare()"
+                        return "Erro dpfj_compare()"
             else: 
                return "Error"
         bStop = True
@@ -236,8 +236,8 @@ def main(tipo):
         mydll.dpfpdd_query_devices.argtypes = [POINTER(c_uint),POINTER(DPFPDD_DEV_INFO)]
         mydll.dpfpdd_query_devices.restype = c_int
         result = mydll.dpfpdd_query_devices(dev_cnt,byref(dev_infos))
-        print(dev_cnt)
-        print(result)
+        #print(dev_cnt)
+        #print(result)
         if(DPFPDD_SUCCESS == result):
             #print("Varredura Completa")
             #print("----------------------")
@@ -252,8 +252,8 @@ def main(tipo):
             mydll.dpfpdd_open.restype = c_int
             #result = mydll.dpfpdd_open(dev_name,byref(pdev))
             result = mydll.dpfpdd_open_ext(dev_name, DPFPDD_PRIORITY_EXCLUSIVE, byref(pdev))
-            print(dev_name)
-            print(result)
+            #print(dev_name)
+            #print(result)
             if(DPFPDD_SUCCESS == result):
                 #print("Dispositivo Selecionado")
                 #print("----------------------")
@@ -288,6 +288,7 @@ def main(tipo):
             
             #Fecha o despositivo
             mydll.dpfpdd_close.argtypes = [DPFPDD_DEV]
+            #print("fechou")
             mydll.dpfpdd_close.restype = c_int
             if DPFPDD_SUCCESS != mydll.dpfpdd_close(pdev):
                return "Erro ao encerrar"
@@ -302,7 +303,7 @@ def main(tipo):
         mydll.dpfpdd_exit()
         return result
 
-    else: return "error when calling dpfpdd_init()" 
+    else: return "Erro when calling dpfpdd_init()" 
 
 def user_fingerprint(request, pk, template_name='users/user_fingerprint.html'):
     if request.session.has_key('username'):
