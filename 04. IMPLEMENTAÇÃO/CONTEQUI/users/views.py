@@ -250,8 +250,8 @@ def main(tipo):
             dev_name = dev_infos.name
             mydll.dpfpdd_open.argtypes = [POINTER(c_char),POINTER(DPFPDD_DEV)]
             mydll.dpfpdd_open.restype = c_int
-            #result = mydll.dpfpdd_open(dev_name,byref(pdev))
-            result = mydll.dpfpdd_open_ext(dev_name, DPFPDD_PRIORITY_EXCLUSIVE, byref(pdev))
+            result = mydll.dpfpdd_open(dev_name,byref(pdev))
+            #result = mydll.dpfpdd_open_ext(dev_name, DPFPDD_PRIORITY_EXCLUSIVE, byref(pdev))
             #print(dev_name)
             #print(result)
             if(DPFPDD_SUCCESS == result):
@@ -355,7 +355,7 @@ def user_fingerprint_registration(request, frase,pk, template_name='users/user_f
 
 def user_teste(request, template_name='users/user_teste.html'):
     if request.session.has_key('username'):
-        user= Client.objects.all()
+        #user= Client.objects.all()
         data = {}
         data['nome']= None
         if request.method=='POST':

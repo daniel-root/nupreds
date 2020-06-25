@@ -10,6 +10,8 @@ def autenticar(n):
     while True:
         bot = telepot.Bot("1244766207:AAGjFP8KytsFILHQUjXazo1yV7JUqN5w4g8")   
         update = bot.getUpdates()
+        if len(update) == 0:
+            return 'Vazia'
         for i in range(0,len(update)):
             if str(n) == update[i]['message']['text']:
                 number_id = int(update[i]['message']['from']['id'])
