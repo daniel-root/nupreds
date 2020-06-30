@@ -125,7 +125,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Inativar</button>
+        <form method="post" action="{% url "equipment_delete" equipment.id %}">{% csrf_token %}
+        <button type="button" class="btn btn-primary">Inativar{{ equipment.id }}</button>
+        </form>
       </div>
     </div>
   </div>
