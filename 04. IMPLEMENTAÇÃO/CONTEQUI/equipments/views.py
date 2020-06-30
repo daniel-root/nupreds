@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import ModelForm
 from equipments.models import *
+from equipments.APIs import *
 from datetime import datetime, timedelta
 from users.models import *
 from django.db.models import Q
@@ -12,6 +13,7 @@ from users.views import main
  
 def home(request):
     if request.session.has_key('username'):
+        TelegramCadastro()
         return render(request,'home.html')
     return render(request,'login.html')
 
@@ -97,6 +99,8 @@ def equipment_list(request,templete_name='equipments/equipment_list.html'):
         data['type_equipment']= EquipmentTypeAll()
         data['form_inactive'] = InactiveForm()
         data['type'] = 'Todos'
+        for i in range(0,len(data['list_equipment'])):
+            Atraso(data['list_equipment'][i].id)
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -107,6 +111,7 @@ def equipment_list_inactive(request,value,templete_name='equipments/equipment_li
         data['type_equipment']= EquipmentTypeAll()
         data['form_inactive'] = InactiveForm()
         data['type'] = value
+
         return render(request, templete_name, data)
     return render(request, 'login.html')
 

@@ -9,6 +9,8 @@ from django.utils import timezone
 from users.APIs.sendEmail import email_atraso
 from users.APIs.sendTelegram import autenticar, enviar
 
+
+#--------------Obsletos--------------#
 def UserEquipmentInUse(pk):
     equipment_user = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).values_list('user_loan',flat=True)
     return equipment_user
@@ -61,6 +63,10 @@ def TypeName(pk):
         type_name = Equipment_type.objects.filter(id=int(''.join(map(str, NameEquipment(pk,'type_equipment'))))).values_list('name',flat=True)
         return ''.join(map(str, type_name))  
     return ''
+#-------------------------#
+
+
+
 
 @register.simple_tag
 def LoanOrDevolution(pk):
@@ -90,6 +96,10 @@ def ActiveOrInactiveUser(pk):
     if ActiveEquipment:
         return 'Desativar'
     return 'Ativar'
+
+
+
+#------------Sem Utilização------------#
 
 
 @register.simple_tag
