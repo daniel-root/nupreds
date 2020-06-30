@@ -8,8 +8,8 @@ from django.utils import timezone
 from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from users.views import main 
-
+from users.views import main
+ 
 def home(request):
     if request.session.has_key('username'):
         return render(request,'home.html')
@@ -143,10 +143,18 @@ def equipment_delete(request, pk, template_name='equipments/equipment_confirm_de
             return equipment_list(request)
         return render(request, template_name, {'object':EquipmentUnique(pk)})
     return render(request, 'login.html')
-
+count = 0
 def emprestar(request,pk):
+    global count
+    #print(count)
     if request.session.has_key('username'):
         username = None
+        if count >= 5:
+            count = 0
+            data = {}
+            data['chave'] = EquipmentUnique(pk)
+            data['tipo'] = 'por senha'
+            return render(request, 'equipments/emprestar.html', data )
         if request.method=='POST':
             username = main("Verification")
         #print(username)
@@ -167,6 +175,8 @@ def emprestar(request,pk):
                 return equipment_list(request)
             else:
                 messages.error(request, 'Usuario não encontrado!')
+                count = count + 1
+                print(count)
                 return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
             return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
                     
@@ -180,14 +190,23 @@ def emprestar(request,pk):
     return render(request, 'login.html')
 
 def devolver(request,pk):
+    global count
+    #print(count)
     if request.session.has_key('username'):
+        username = None
+        if count >= 5:
+            count = 0
+            data = {}
+            data['chave'] = pk
+            #data['tipo'] = 'por senha'
+            return render(request, 'equipments/devolver.html', data )
         username = None
         if request.method=='POST':
             username = main("Verification")
-        print("usuario ",username)
+        #print("usuario ",username)
         if username != "Erro ao selecionar dispositivo.":
             post = Client.objects.filter(usuario=username).values_list('id',flat=True)
-            print(post)
+            #print(post)
             if post:
             #StringPost = ''.join(map(str, post))
                 BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
@@ -199,6 +218,8 @@ def devolver(request,pk):
                     messages.error(request, 'Equipamento sem emprestimo!')
                     return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
             else:
+                count = count + 1
+                print(count)
                 messages.error(request, 'Usuario não encontrado!')
                 return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
             return render(request, 'equipments/devolver.html',data)
@@ -605,3 +626,27 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment =  int(EquipmentFilter)).order_by(order_by)
         data['list_equipment_user']= equipment_user
     return render(request, 'equipments/reports.html', data)
+
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+
+def some_view(request):
+    # Create a file-like buffer to receive PDF data.
+    buffer = io.BytesIO()
+
+    # Create the PDF object, using the buffer as its "file."
+    p = canvas.Canvas(buffer)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 750, "Hello world.")
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+
+    # FileResponse sets the Content-Disposition header so that browsers
+    # present the option to save the file.
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='reports.pdf')

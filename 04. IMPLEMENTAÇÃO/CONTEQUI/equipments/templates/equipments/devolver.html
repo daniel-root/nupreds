@@ -1,3 +1,4 @@
+ {% block content %}
 <form method="POST" id="add_form" action="{% url 'devolver_user' chave %}">{% csrf_token %}
       <div class="form-group">
         <label >User Name</label>
@@ -17,3 +18,4 @@
         <button type="button" class="btn-primary"><a href="{% url "equipment_list" %}">VOLTAR</a></button>
         <div class="clear"></div> </div>
 </form>
+{% endblock %}
