@@ -22,8 +22,10 @@ class TypeForm(ModelForm):
         model = Equipment_type
         fields = ['name','time_maximum']
 
+#-----------Inutil------------#
 class InactiveForm(forms.Form):
     inactive = forms.BooleanField(widget=forms.CheckboxInput(attrs={'onclick':'this.form.submit();'}),required=False, label="Ver inativos")
+#-----------------------------#
 
 class EquipmentForm(ModelForm):
     class Meta:
@@ -107,6 +109,7 @@ def equipment_list(request,templete_name='equipments/equipment_list.html'):
 def equipment_list_inactive(request,value,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
         data = {}
+        
         data['list_equipment'] = EquipmentAll()
         data['type_equipment']= EquipmentTypeAll()
         data['form_inactive'] = InactiveForm()
@@ -122,20 +125,59 @@ def equipment_view(request, pk, template_name='equipments/equipment_detail.html'
 
 def equipment_create(request, template_name='equipments/equipment_form.html'):
     if request.session.has_key('username'):
-        form = EquipmentForm(request.POST or None)
-        if form.is_valid():
-            form.save()
+        #print("Daniel")
+        data = {}
+        tipo = Equipment_type.objects.all()
+        CHOICE = []
+        for QuerySet in tipo:
+            CHOICE.append((QuerySet))
+        data['types'] = CHOICE
+        
+        data['form'] = EquipmentForm(request.POST or None)
+        # print("Daniel")
+        if request.method == 'POST':
+            a = Equipment.objects.create(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
+            print(a)
+            #['tag','description','type_equipment','maximum_time']
+            #data['form'].tag = request.POST['tag']
+            #data['form'].description = request.POST['description']
+            #type_equipment = Equipment_type.objects.get(name = request.POST['type_equipment'])
+            #print(type_equipment)
+            #data['form'].type_equipment = type_equipment
+            #data['form'].maximum_time = request.POST['maximum_time']
+            #print(data['form'])
+            #data['form'].save()
             return redirect('equipment_list')
-        return render(request, template_name, {'form':form})
+        return render(request, template_name, data)
     return render(request, 'login.html')
 
-def equipment_update(request, pk, template_name='equipments/equipment_form1.html'):
+def equipment_update(request, pk, template_name='equipments/equipment_form.html'):
     if request.session.has_key('username'):
+        data = {}
+        tipo = Equipment_type.objects.all()
+        CHOICE = []
+        for QuerySet in tipo:
+            CHOICE.append((QuerySet))
+        data['types'] = CHOICE
+        equipment = get_object_or_404(Equipment, pk=pk)
         form = EquipmentForm(request.POST or None, instance=EquipmentUnique(pk))
-        if form.is_valid():
-            form.save()
+        data['equipment']= equipment
+        data['form'] = form
+        if request.method == 'POST':
+            equipment = Equipment.objects.filter(pk=pk)
+            print(equipment)
+            equipment.update(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
+            #['tag','description','type_equipment','maximum_time']
+            #data['form'].tag = request.POST['tag']
+            #data['form'].description = request.POST['description']
+            #type_equipment = Equipment_type.objects.get(name = request.POST['type_equipment'])
+            #print(type_equipment)
+            #data['form'].type_equipment = type_equipment
+            #data['form'].maximum_time = request.POST['maximum_time']
+            #print(data['form'])
+            #data['form'].save()
             return equipment_list(request)
-        return render(request, template_name, {'form':form})
+        return render(request, template_name, data)
     return render(request, 'login.html')
 
 def equipment_delete(request, pk, template_name='equipments/equipment_confirm_delete.html'):

@@ -1,0 +1,9 @@
+<h1>Client Edit</h1>
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+<a href="{% url "user_list" %}">voltar</a>
+{% if name != "None" %}
+<a href={% url "user_fingerprint" name %}>cadastrar finger</a>
+{% endif %}

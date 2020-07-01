@@ -11,7 +11,8 @@ from users.APIs.fingerPrint import *
 class ClientForm(ModelForm):
     class Meta:
         model = Client
-        fields = ['usuario','email','telefone','whatsapp','cpf','senha']
+        fields = ['usuario','email','telefone','cpf','senha']
+        
 
 def UserAll():
     user = Client.objects.filter(inative=False)
@@ -50,12 +51,18 @@ def user_view(request, pk, template_name='users/user_detail.html'):
 def user_create(request, template_name='users/user_form.html'):
     if request.session.has_key('username'):
         data = {}
+        user = {'id': 'None'}
         form = ClientForm(request.POST or None)
         data['form']= form
-        data['name']= 'None'
-        if form.is_valid():
+        data['user']= user
+        if request.method == 'POST':
+            data['form'].usuario = request.POST['usuario']
+            data['form'].email = request.POST['email']
+            data['form'].telefone = request.POST['telefone']
+            data['form'].cpf = request.POST['cpf']
+            data['form'].senha = request.POST['senha']
             new = request.POST['usuario']
-            form.save()
+            data['form'].save()
             new = Client.objects.filter(usuario=new)
             number = aleatorio()
             new.update(cod_telegram=number)
@@ -72,9 +79,14 @@ def user_update(request, pk, template_name='users/user_form.html'):
         user= get_object_or_404(Client, pk=pk)
         form = ClientForm(request.POST or None, instance=user)
         data['form']= form
-        data['name']= pk
-        if form.is_valid():
-            form.save()
+        data['user']= user
+        if request.method == 'POST':
+            data['form'].usuario = request.POST['usuario']
+            data['form'].email = request.POST['email']
+            data['form'].telefone = request.POST['telefone']
+            data['form'].cpf = request.POST['cpf']
+            data['form'].senha = request.POST['senha']
+            data['form'].save()
             return render(request, template_name, data)
         return render(request, template_name, data)
     return render(request, 'login.html')

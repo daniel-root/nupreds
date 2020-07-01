@@ -1,9 +1,92 @@
-<h1>Client Edit</h1>
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
-<a href="{% url "user_list" %}">voltar</a>
-{% if name != "None" %}
-<a href={% url "user_fingerprint" name %}>cadastrar finger</a>
-{% endif %}
+ <!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+    <title>Cadastro de Usuário</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}">
+    <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
+  </head>
+  <body style="margin-top: 3%;">
+    <div class="container">
+      <div class="row " style="padding-left: 5%;">
+          <span>
+            <img src={% static "images/equipamentos.png" %} style="height: 30px; width: 30px; ">
+          </span>
+          <p style="margin-left: 10px; font-size: 150%">Usuário</p>
+        </div>
+       <div class="container-fluid">
+
+    <form method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
+  
+      <div class="form-group row">
+        <label  for="txtNome" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Nome: </label>
+        <div class="col-lg-10 col-md-10 col-sm-12">
+          <input class="form-control rounded-pill" type="texto" required="required" name="usuario" value="{{user.usuario}}" pattern="[A-Za-z\s]+$" style=" background: #e9ecef">
+        </div>
+      </div> 
+
+      <div class="form-group row">
+        <label  for="txtCPF" class="col-lg-2 col-md-2 col-sm-12 col-form-label">CPF: </label>
+        <div class="col-lg-10 col-md-10 col-sm-12">
+          <!-- Se cpfJaCadastrado = 1, mostra mensagem de erro dizendo que CPF já está cadastrado -->
+          <input  type="text" value="{{user.cpf}}" class="form-control rounded-pill" placeholder="000.000.000-00" onkeypress="$(this).mask('000.000.000-00');" id="cpf" name="cpf" style=" background: #e9ecef" required>
+        </div>
+      </div>
+      
+      <div class="form-group row">
+        <label  for="txtEmail" class="col-lg-2 col-md-3 col-sm-12 col-form-label">Email: </label>
+        <div class="col-lg-10 col-md-10 col-sm-12">
+          <input type="email" value="{{user.email}}" class="form-control rounded-pill" id="email" name="email" required="required"  name=“email” pattern="[^@\s]+@[^@\s]+\.[^@\s]+" style=" background: #e9ecef">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label  for="txtTelefone" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Telefone: </label>
+        <div class="col-lg-10 col-md-10 col-sm-5">
+          <input  type="text" value="{{user.telefone}}" class="form-control rounded-pill" id="telefone" name="telefone"  minlength="14" maxlength="15" placeholder="(00) 0000-00000" onkeypress="$(this).mask('(00) 0000-00009')" style=" background: #e9ecef" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="row">
+          <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
+          <div class="col-lg-10 col-md-10 col-sm-12">
+            <input type="text" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12" id="senha" name="senha" style=" background: #e9ecef"required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="row">
+          <label  for="txtSenha2" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Repetir Senha: </label>
+          <div class="col-lg-10 col-md-10 col-sm-12">
+            <input type="text" class="form-control rounded-pill" minlength="8" maxlength="12" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <label  for="txtDigital" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Impressão Digital:</label>
+          <div class="col-lg-10 col-md-10 col-sm-12">
+            {% if user.id != 'None' %}
+            <a href={% url "user_fingerprint" user.id %}>cadastrar finger</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-12 col-sm-12 text-right" style="padding: 50px 0px">
+        <a href="{% url "user_list" %}">voltar</a>
+        <button type="button" class="btn rounded-pill" style="background: #e9ecef">Cancelar</button>            
+        <button type="submit" class="btn rounded-pill" style="background: #e9ecef">Cadastrar</button>
+      </div>
+    </form>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="{% static "users/js/bootstrap.min.js" %}"></script>          
+     
+</body>
+</html>
