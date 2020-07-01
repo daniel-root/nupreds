@@ -1,6 +1,30 @@
+<div class="modal fade" id="ModalLabel{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Inativar Equipamento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% load my_tag %}
+      <div class="modal-body">
+        Você tem certeza que deseja {% ActiveOrInactive equipment.id %} o equipamento "{{equipment.tag}}-{{equipment.description}}"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <form method="post" action="{% url "equipment_delete" equipment.id %}">{% csrf_token %}
+        <button type="submit" class="btn btn-primary">Confirmar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
 <h1>Equipment Delete</h1>
 <form method="post">{% csrf_token %}
     {% load my_tag %}
-    Você tem certeza que deseja {% ActiveOrInactive object.id %} "{{object.tag}} {{object.description}}" ?
+    Você tem certeza que deseja?
     <input type="submit" value="Submit" />
 </form><a href="{% url "equipment_list" %}">voltar</a>
+ -->

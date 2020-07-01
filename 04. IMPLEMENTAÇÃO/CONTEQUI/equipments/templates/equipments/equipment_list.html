@@ -106,32 +106,11 @@
               Editar
           </button>
         </form>
-        <form class="form-inline">
-          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#exampleModal" style="margin-left: 5px;background: #e9ecef">
+          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment.id}}" style="margin-left: 5px;background: #e9ecef">
           {% ActiveOrInactive equipment.id %}
           </button>
-        </form>
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Inativar Equipamento</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Você tem certeza que Deseja inativar o equipamento?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <form method="post" action="{% url "equipment_delete" equipment.id %}">{% csrf_token %}
-        <button type="button" class="btn btn-primary">Inativar{{ equipment.id }}</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+          {% include 'equipments/equipment_confirm_delete.html' with equipment=equipment %}
+        
         <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
           <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef">
           {% LoanOrDevolution equipment.id %}
