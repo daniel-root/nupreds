@@ -12,4 +12,6 @@ urlpatterns = [
     path('Fingerprint/<str:pk>', views.user_fingerprint, name='user_fingerprint'),
     #path('Fingerprint/<str:frase>/<int:pk>', views.user_fingerprint_registration, name='user_fingerprint_registration'),
     path('Teste/', views.user_teste, name='user_teste'),
+    path('<str:pk>/<str:value>', views.filter_list, name='filter_list'),
+    path('<str:value>', views.filter_type, name='filter_type'),
 ]

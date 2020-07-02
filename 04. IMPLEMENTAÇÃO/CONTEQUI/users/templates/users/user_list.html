@@ -22,15 +22,22 @@
             Todos
           </button>
           </form>
+          
+          <form action="{% url "filter_type" 'Super' %}">
           <button class="btn btn-link text-dark "style="margin-left: 45px;" >
             Super Usuário  
           </button>
+          </form>
+          <form action="{% url "filter_type" 'Administrador' %}">
           <button class="btn btn-link text-dark" style="margin-left: 45px;">
             Administrador
           </button>
+          </form>
+          <form action="{% url "filter_type" 'Comum' %}">
           <button class="btn btn-link text-dark" style="margin-left: 45px;">
             Usuário Comum
           </button>
+          </form>
           <form action="{% url "user_list_inactive" %}">
           <button class="btn btn-link text-dark" style="margin-left: 45px;">
             Ver Inativos
@@ -54,13 +61,13 @@
   <thead>
     <tr>
       <th scope="col" width="15%" style="text-align: left;">
-        <a href="" style="color: black;">Código</a>
+        <a href="{% url "filter_list" 'Id' type %}" style="color: black;">Código</a>
       </th>
       <th scope="col" width="20%" style="text-align: left;">
-        <a href="" style="color: black;">Nome</a>
+        <a href="{% url "filter_list" 'Nome' type %}" style="color: black;">Nome</a>
       </th>
       <th scope="col" width="20%" style="text-align: left;">
-        <a href="" style="color: black;">CPF</a>
+        <a href="{% url "filter_list" 'CPF' type %}" style="color: black;">CPF</a>
       </th>
       
       <th scope="col" width="20%" style="text-align: left;">
