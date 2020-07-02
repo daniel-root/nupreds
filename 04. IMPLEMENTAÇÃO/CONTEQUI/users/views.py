@@ -29,6 +29,7 @@ def user_list(request, templete_name='users/user_list.html'):
         data = {}
         data['object_list'] = UserAll()
         data['type_user'] = type_privilegio
+        data['type'] = 'Todos'
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -39,6 +40,7 @@ def user_list_inactive(request,templete_name='users/user_list.html'):
         data = {}
         data['object_list'] = UserInactive()
         data['type_user'] = type_privilegio
+        data['type'] = 'Todos'
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -216,4 +218,58 @@ def type_user(request,pk):
                 return user_list(request)
         user= get_object_or_404(Client, pk=pk)
         return render(request, 'users/user_detail.html', {'object':user})
+    return render(request, 'login.html')
+
+def filter_type(request,value,templete_name='users/user_list.html'):
+    if request.session.has_key('username'):
+        user = Client.objects.filter(user_type = value)
+        data = {}
+        name = request.session['username']
+        type_privilegio = Client.objects.filter(usuario=name)
+        data = {}
+        data['object_list'] = user
+        data['type_user'] = type_privilegio
+
+        #data['list_equipment'] = equipment
+        #data['type_equipment']= User
+        #data['form_inactive'] = InactiveForm()
+        data['type'] = value
+        return render(request, templete_name, data)
+    return render(request, 'login.html')
+
+def filter_list(request,pk,value,templete_name='users/user_list.html'):
+    if request.session.has_key('username'):
+        if value == 'Todos':
+            if pk == 'Id':
+                filtro = 'id'
+            elif pk == 'Nome':
+                filtro = 'usuario'
+            elif pk == 'CPF':
+                filtro = 'cpf'
+            user = Client.objects.filter(inative=False).order_by(filtro)
+            data = {}
+            data = {}
+            name = request.session['username']
+            type_privilegio = Client.objects.filter(usuario=name)
+            data = {}
+            data['object_list'] = user
+            data['type_user'] = type_privilegio
+            data['type'] = value
+            return render(request, templete_name, data)
+        else:
+            if pk == 'Id':
+                filtro = 'id'
+            elif pk == 'Nome':
+                filtro = 'usuario'
+            elif pk == 'CPF':
+                filtro = 'cpf'
+            user = Client.objects.filter(user_type = value, inative=False).order_by(filtro)
+            data = {}
+            name = request.session['username']
+            type_privilegio = Client.objects.filter(usuario=name)
+            data = {}
+            data['object_list'] = user
+            data['type_user'] = type_privilegio
+            data['type'] = value
+            return render(request, templete_name, data)
     return render(request, 'login.html')
