@@ -15,7 +15,7 @@ class Equipment(models.Model):
         (u'Ocupado', u'Ocupado'),
         (u'Atrasado', u'Atrasado'),
     )
-    tag = models.CharField(max_length=10,unique=True)
+    tag = models.CharField(max_length=10)
     description = models.TextField()
     type_equipment = models.ForeignKey('Equipment_type',on_delete=models.SET_NULL, null=True)
     maximum_time = models.IntegerField(default=5)
