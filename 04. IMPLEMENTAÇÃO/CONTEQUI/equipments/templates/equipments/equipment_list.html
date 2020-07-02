@@ -84,11 +84,9 @@
               Editar
           </button>
         </form>
-        <form class="form-inline" action="{% url "equipment_delete" equipment.id %}">
-          <button class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef">
+        <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment.id}}" style="margin-left: 5px;background: #e9ecef">
           {% ActiveOrInactive equipment.id %}
           </button>
-        </form>
         <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
           <button class="btn rounded-pill" style="margin-left: 5px; background:red;">
           {% LoanOrDevolution equipment.id %}
@@ -111,10 +109,10 @@
           </button>
           {% include 'equipments/equipment_confirm_delete.html' with equipment=equipment %}
     
-          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal"style="margin-left: 5px; background: #e9ecef">
+          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
           {% LoanOrDevolution equipment.id %}
           </button>
-          <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="Modal{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -124,14 +122,32 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <button type="submit" class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
-                  <span><img src="digital.png" style="height: 80px; width: 80px;" ></span>
+                <p style="margin-left: 20%;">Clique na imagem para ler a digital</p>
+                  
+                  {% ifequal equipment.status 'Livre' %}
+                  <form method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
+                      <button type="submit" onclick='insereTexto()' class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
+                  <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
                 </button>
-                 <p style="margin-left: 20%;">Clique na imagem para ler a digital</p>
+                  </form>
+                  {% endifequal %}
+                  {% ifnotequal equipment.status 'Livre' %}
+                  <form method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
+                      <button type="submit" onclick='insereTexto()' class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
+                  <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
+                  </button>
+                  </form>
+                  {% endifnotequal %}
+                  
+                <script type="text/javascript">
+                function insereTexto()
+                {document.getElementById('divTeste').innerHTML = 'Coloque o dedo no leitor';}
+                </script>
+                <p style="margin-left: 20%;" id="divTeste"></p>                 
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">voltar</button>
-                  <button type="button" class="btn btn-primary">Confirmar</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                  
                 </div>
               </div>
             </div>
