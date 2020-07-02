@@ -70,6 +70,32 @@
         <div class="row">
           <label  for="txtDigital" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Impressão Digital:</label>
           <div class="col-lg-10 col-md-10 col-sm-12">
+            <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef">
+              cadastrar
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Cadastrar Digital</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <button type="submit" class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
+                      <span><img src="digital.png" style="height: 80px; width: 80px;" ></span>
+                    </button>
+                    <p style="margin-left: 10%;">Clique na imagem para cadastrar impressão de digital</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                    <button type="button" class="btn btn-primary">Salvar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             {% if user.id != 'None' %}
             <a href={% url "user_fingerprint" user.id %}>cadastrar finger</a>
             {% endif %}
