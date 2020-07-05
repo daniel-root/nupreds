@@ -158,49 +158,25 @@
           <a href="{% url "rastreio" 'equipment__type_equipment__name' type_equipment_ tag_ start_ end_ %}" style="color: black;">Tipo</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <a href="{% url "rastreio" 'equipment__tag' type_equipment_ tag_ start_ end_ %}">Etiqueta</a>
+        <a href="{% url "rastreio" 'equipment__tag' type_equipment_ tag_ start_ end_ %}" style="color: black;">Etiqueta</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "rastreio" 'equipment__description' type_equipment_ tag_ start_ end_ %}">
-        <button class="btn btn-link text-dark" >
-         Descrição
-        </button>
-        </form>
+        <a href="{% url "rastreio" 'equipment__description' type_equipment_ tag_ start_ end_ %}" style="color: black;">Descrição</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "rastreio" 'loan' type_equipment_ tag_ start_ end_ %}">
-        <button class="btn btn-link text-dark" >
-         Solicitação
-        </button>
-        </form>
+          <a href="{% url "rastreio" 'loan' type_equipment_ tag_ start_ end_ %}" style="color: black;">Solicitação</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "rastreio" 'user_loan' type_equipment_ tag_ start_ end_ %}">
-        <button class="btn btn-link text-dark" >
-         Responsável
-        </button>
-        </form>
+        <a href="{% url "rastreio" 'user_loan' type_equipment_ tag_ start_ end_ %}" style="color: black;">Responsável</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "rastreio" 'devolution' type_equipment_ tag_ start_ end_ %}">
-        <button class="btn btn-link text-dark" >
-         Devolução
-        </button>
-        </form>
+        <a href="{% url "rastreio" 'devolution' type_equipment_ tag_ start_ end_ %}" style="color: black;">Devolução</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "rastreio" 'user_devolution' type_equipment_ tag_ start_ end_ %}">
-        <button class="btn btn-link text-dark" >
-        Responsável
-        </button>
-        </form>
+        <a href="{% url "rastreio" 'user_devolution' type_equipment_ tag_ start_ end_ %}" style="color: black;">Responsável</a>
       </th>
       <th scope="col" width="20%" style="text-align: left;">
-      <form action="{% url "rastreio" 'amount_of_loans' type_equipment_ tag_ start_ end_ %}">
-      <button class="btn btn-link text-dark" >
-          Qtd. Emprestimo
-      </button>
-      </form>
+        <a href="{% url "rastreio" 'amount_of_loans' type_equipment_ tag_ start_ end_ %}" style="color: black;">Qtd. Emprestimo</a>
       </th>
       {% endifequal %}
       {% ifequal type 'NaoDevolvidos' %}
