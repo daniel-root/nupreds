@@ -113,11 +113,10 @@
           </div>
           </div>
           {% endifequal %}
-          <div style="padding-left: 90%; padding-top: 10px;">
-            <button class="btn rounded-pill" style="background: #e9ecef">
-            Enviar
-            </button>
-          </div>
+          
+          <div class="col-lg-12 col-sm-12 text-right" style="padding: 30px 0px">
+        <button type="submit" class="btn rounded-pill"style="background-color: #e9ecef; color: black;">Enviar</button>            
+      </div>
         </form>
       </div>
             
@@ -127,7 +126,6 @@
      {% ifequal type 'Listagem' %}
       <th scope="col" width="10%" style="text-align: left;">
         <a href="{% url "listagem" 'type_equipment__name' type_equipment_  %}"  style="color: black;">Tipo</a>
-        </form>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
         <a href="{% url "listagem" 'tag' type_equipment_ %}"  style="color: black;" >Etiqueta</a>
@@ -181,60 +179,28 @@
       {% endifequal %}
       {% ifequal type 'NaoDevolvidos' %}
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}">
-        <button class="btn btn-link text-dark" >
-          Tipo
-        </button>
-        </form>
+        <a href="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}" style="color: black;">Tipo</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "nao_devolvidos" 'equipment__tag' type_equipment_ tag_ start_ %}">
-        <button class="btn btn-link text-dark" >
-          Etiqueta
-        </button>
-        </form>
+        <a href="{% url "nao_devolvidos" 'equipment__tag' type_equipment_ tag_ start_ %}" style="color: black;">Etiqueta</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "nao_devolvidos" 'equipment__description' type_equipment_ tag_ start_ %}">
-        <button class="btn btn-link text-dark" >
-         Descrição
-        </button>
-        </form>
+        <a href="{% url "nao_devolvidos" 'equipment__description' type_equipment_ tag_ start_ %}" style="color: black;">Descrição</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}">
-        <button class="btn btn-link text-dark" >
-         Solicitação
-        </button>
-        </form>
+        <a href="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}" style="color: black;">Solicitação</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}">
-        <button class="btn btn-link text-dark" >
-         Responsável
-        </button>
-        </form>
+        <a href="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}" style="color: black;>Responsável</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="">
-        <button class="btn btn-link text-dark" >
-         Devolução
-        </button>
-        </form>
+        <a href=""style="color: black;">Devolução</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <form action="">
-        <button class="btn btn-link text-dark" >
-         Responsável
-        </button>
-        </form>
+        <a href="" style="color: black;">Responsável</a>
       </th>
       <th scope="col" width="20%" style="text-align: left;">
-      <form action="{% url "nao_devolvidos" 'amount_of_loans' type_equipment_ tag_ start_ %}">
-      <button class="btn btn-link text-dark" >
-          Qtd. Emprestimo
-      </button>
-      </form>
+      <a href="{% url "nao_devolvidos" 'amount_of_loans' type_equipment_ tag_ start_ %}" style="color: black;">Qtd. Emprestimo</a>
       </th>
       {% endifequal %}
     </thead>
@@ -254,8 +220,9 @@
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
      {% empty %}
+     <p style="text-align: center;">
       Sem Resultados
-
+     </p>
     {% endfor %}
     {% endifequal %}
     {% ifequal type 'NaoDevolvidos' %}
@@ -272,7 +239,9 @@
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
     {% empty %}
+    <p style="text-align: center;">
       Sem Resultados
+    </p>
     {% endfor %}
     {% endifequal %}
 
@@ -289,7 +258,9 @@
       <td>{{ equipment_user.amount_of_loans }}</td>
       </tr>
      {% empty %}
+     <p style="text-align: center;">
      Sem Resultados
+     </p>
     {% endfor %}
    
     {% endifequal %}
