@@ -93,19 +93,66 @@
             Editar
           </button>
           </form>
-          <form class="form-inline" action="{% url "user_delete" user.id %}">
-          <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef;">
+          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#Modal" style="margin-left: 5px; background: #e9ecef;">
            {% ActiveOrInactiveUser user.id %}
           </button>
-          </form>
-           {% for type in type_user %}
+
+        <!-- Modal -->
+        <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Desativar Usúario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Você tem certeza que deseja Desativar?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                <button type="button" class="btn btn-primary">Confimar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+                   {% for type in type_user %}
           {% ifequal type.user_type 'Super' %}
-          <form class="form-inline"action="{% url "user_view" user.id %}">
-          <button class="btn border-0" style="background: #FFFFFF;">
+
+          <button type="button" class="btn border-0" data-toggle="modal" data-target="#Modal2" style="background: #FFFFFF;">
               <span>
                 <img src={% static "images/engrenagem.png" %} style="height: 25px; width: 25px">
               </span>
             </button>
+            <!-- Modal -->
+        <div class="modal fade" id="Modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tipo de Usuário</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+              <form>
+                <p>Selecione:</p>
+                <input type="radio" id="Comum" name="type" value="Comum" checked="">
+                <label for="Comum">Comum</label><br>
+                <input type="radio" id="Administrador" name="type" value="Administrador">
+                <label for="Administrador">Administrador</label><br>
+                <input type="radio" id="Super" name="type" value="Super">
+                <label for="Super">Super</label><br>
+              </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                <button type="submit" class="btn btn-primary">Confimar</button>
+              </div>
+            </div>
+          </div>
+        </div>
             {% endifequal %}
           {% endfor %}
         </div>
@@ -133,5 +180,8 @@
         </form>
       </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="{% static "users/js/bootstrap.min.js" %}"></script>
 </body>
 </html>
