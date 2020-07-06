@@ -199,65 +199,75 @@ def emprestar(request,pk):
         
         if request.method=='POST':
             username = main("Verification")
+            print("inicou verificação")
+            print(count)
+            print(username)
         #print(username)
-        if count >= 2:
-                count = 0
-                print("pq")
+            if count > 3:
+                    count = 0
+                    print("pq")
+                    data = {}
+                    data['pk'] = pk
+                    data['tipo'] = 'por_senha'
+                    data['list_equipment'] = EquipmentActiveAll()
+                    data['type_equipment']= EquipmentTypeAll()
+                    data['form_inactive'] = InactiveForm()
+                    data['type'] = 'Todos'
+                    messages.error(request, 'Muitas tentativas!')
+                    print("pq")
+                    return render(request, 'equipments/equipment_list.html',data)
+                    print("pq")
+            elif username != "Erro ao selecionar dispositivo.":
+                post = Client.objects.filter(usuario=username).values_list('id',flat=True)
+                if post:
+                    StringPost = ''.join(map(str, post))
+                    BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
+                    amout = Equipment.objects.filter(id = pk).values_list('amount_of_loans',flat=True)
+                    amout_of_equipments = ''.join(map(str, amout))
+                    if BusyEquipment:
+                        messages.error(request, 'Equipamento já emprestado!')
+                        return equipment_list(request)
+                        #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                    time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
+                    time = ''.join(map(str,time))
+                    Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
+                    Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
+                    return equipment_list(request)
+                else:
+                    messages.error(request, 'Usuario não encontrado!')
+                    count = count + 1
+                    print(count)
+                    data = {}
+                    data['chave'] = pk
+                    data['list_equipment'] = EquipmentActiveAll()
+                    data['type_equipment']= EquipmentTypeAll()
+                    data['form_inactive'] = InactiveForm()
+                    data['type'] = 'Todos'
+                    #messages.error(request, 'Dispositivo não conectado!')
+                    return render(request, 'equipments/equipment_list.html', data )
+                    #return equipment_list(request)
+                    #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                return equipment_list(request)
+                #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})           
+            else:
+                print('Aqui')
                 data = {}
-                data['chave'] = pk
+                data['pk'] = pk
                 data['tipo'] = 'por_senha'
                 data['list_equipment'] = EquipmentActiveAll()
                 data['type_equipment']= EquipmentTypeAll()
                 data['form_inactive'] = InactiveForm()
                 data['type'] = 'Todos'
-                messages.error(request, 'Muitas tentativas!')
-                return render(request, 'equipments/equipment_list.html', data )
-        elif username != "Erro ao selecionar dispositivo.":
-            post = Client.objects.filter(usuario=username).values_list('id',flat=True)
-            if post:
-                StringPost = ''.join(map(str, post))
-                BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
-                amout = Equipment.objects.filter(id = pk).values_list('amount_of_loans',flat=True)
-                amout_of_equipments = ''.join(map(str, amout))
-                if BusyEquipment:
-                    messages.error(request, 'Equipamento já emprestado!')
-                    return equipment_list(request)
-                    #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-                time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
-                time = ''.join(map(str,time))
-                Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
-                Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
-                return equipment_list(request)
-            else:
-                messages.error(request, 'Usuario não encontrado!')
-                count = count + 1
-                print(count)
-                data = {}
-                data['chave'] = pk
-                data['list_equipment'] = EquipmentActiveAll()
-                data['type_equipment']= EquipmentTypeAll()
-                data['form_inactive'] = InactiveForm()
-                data['type'] = 'Todos'
-                #messages.error(request, 'Dispositivo não conectado!')
-                return render(request, 'equipments/equipment_list.html', data )
-                #return equipment_list(request)
-                #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                messages.error(request, 'Dispositivo não conectado!')
+                return render(
+                    request,
+                    'equipments/equipment_list.html',
+                    data
+                    )
             return equipment_list(request)
-            #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-                    
-        else:
-            data = {}
-            data['chave'] = pk
-            data['tipo'] = 'por_senha'
-            data['list_equipment'] = EquipmentActiveAll()
-            data['type_equipment']= EquipmentTypeAll()
-            data['form_inactive'] = InactiveForm()
-            data['type'] = 'Todos'
-            messages.error(request, 'Dispositivo não conectado!')
-            return render(request, 'equipments/equipment_list.html', data )
-
-        #return render(request, 'equipments/emprestar.html', data )
-    return render(request, 'login.html')
+            #return render(request, 'equipments/emprestar.html', data )
+    else:
+        return render(request, 'login.html')
 
 def devolver(request,pk):
     global count

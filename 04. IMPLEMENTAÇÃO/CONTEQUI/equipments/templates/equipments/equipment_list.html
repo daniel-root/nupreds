@@ -16,7 +16,7 @@
           <img src={% static "images/equipamentos.png" %} style="height: 30px; width: 30px; ">
         </span>
         <p style="margin-left: 10px; font-size: 150%">Equipamentos </p>
-        
+        {{tipo}}
       </div>
       <h5>
         </h5>
@@ -172,14 +172,18 @@
                 {% endfor %}
                 <p style="margin-left: 20%;">Clique na imagem para ler a digital</p>
                   {% ifequal equipment.status 'Livre' %}
-                  <form method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
-                      <input type="submit"></input>                     
+                  <form method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}                   
                       <button type="submit" class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
                   <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
                 </button>
                   </form>
+                  <script>
+                  //qwindow.setTimeout(function () {
+                    //  location.href = "http://myurl.com";
+                  //}, 5000); // refresh/redirect after 5 seconds.
+                  </script>
                   <form method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
-                  <button type="submit" class="btn btn-primary">Confirmar</button>
+                  <button type="submit" class="btn btn-primary">Confirmar Merda</button>
                   </form>
                   {% endifequal %}
                   {% ifnotequal equipment.status 'Livre' %}
@@ -226,22 +230,25 @@
           Voltar
         </button>
         </form>
+        {{pk}}
       </div>
   </div>
 
 	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="{% static "users/js/bootstrap.min.js" %}"></script>
+    <script src={% static "users/js/bootstrap.min.js" %}></script>
     <script>
           $(document).ready(function() {
-            $('#daniel{{tipo}}{{chave}}').modal('show');
+            $('#daniel{{tipo}}{{pk}}').modal('show');
           });
     </script>
     <script>
           $(document).ready(function() {
             $('#Modal{{chave}}').modal('show');
           });
+          
     </script>
+    
 </body>
 {% endblock %}
 </html>
