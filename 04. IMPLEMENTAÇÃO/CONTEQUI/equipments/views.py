@@ -204,7 +204,7 @@ def emprestar(request,pk):
                 count = 0
                 print("pq")
                 data = {}
-                data['chave'] = EquipmentUnique(pk)
+                data['chave'] = pk
                 data['tipo'] = 'por_senha'
                 data['list_equipment'] = EquipmentActiveAll()
                 data['type_equipment']= EquipmentTypeAll()
@@ -232,14 +232,22 @@ def emprestar(request,pk):
                 messages.error(request, 'Usuario não encontrado!')
                 count = count + 1
                 print(count)
-                return equipment_list(request)
+                data = {}
+                data['chave'] = pk
+                data['list_equipment'] = EquipmentActiveAll()
+                data['type_equipment']= EquipmentTypeAll()
+                data['form_inactive'] = InactiveForm()
+                data['type'] = 'Todos'
+                #messages.error(request, 'Dispositivo não conectado!')
+                return render(request, 'equipments/equipment_list.html', data )
+                #return equipment_list(request)
                 #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
             return equipment_list(request)
             #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
                     
         else:
             data = {}
-            data['chave'] = EquipmentUnique(pk)
+            data['chave'] = pk
             data['tipo'] = 'por_senha'
             data['list_equipment'] = EquipmentActiveAll()
             data['type_equipment']= EquipmentTypeAll()

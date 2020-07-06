@@ -19,7 +19,6 @@
         
       </div>
       <h5>
-        {{ tipo }} Daniel
         </h5>
       <div class="row justify-content-center">
        <form action="{% url "equipment_list" %}">
@@ -91,7 +90,7 @@
           {% ActiveOrInactive equipment.id %}
           </button>
         <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
-          <button class="btn rounded-pill" style="margin-left: 5px; background:red;">
+          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #ff4d4d">
           {% LoanOrDevolution equipment.id %}
           </button>
         </form>
@@ -117,7 +116,7 @@
           </button>
           
          
-          <div class="modal fade" id="danielpor_senha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="danielpor_senha{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -150,6 +149,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                  {{equipment.id}}
                   <button type="button" class="btn btn-primary">Confirmar</button>
                 </div>
               </div>
@@ -234,7 +234,12 @@
     <script src="{% static "users/js/bootstrap.min.js" %}"></script>
     <script>
           $(document).ready(function() {
-            $('#daniel{{tipo}}').modal('show');
+            $('#daniel{{tipo}}{{chave}}').modal('show');
+          });
+    </script>
+    <script>
+          $(document).ready(function() {
+            $('#Modal{{chave}}').modal('show');
           });
     </script>
 </body>
