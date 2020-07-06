@@ -13,7 +13,7 @@ from users.views import main
  
 def home(request):
     if request.session.has_key('username'):
-        TelegramCadastro()
+        #TelegramCadastro()
         return render(request,'home.html')
     return render(request,'login.html')
 
@@ -196,16 +196,23 @@ def emprestar(request,pk):
     #print(count)
     if request.session.has_key('username'):
         username = None
-        if count >= 5:
-            count = 0
-            data = {}
-            data['chave'] = EquipmentUnique(pk)
-            data['tipo'] = 'por senha'
-            return render(request, 'equipments/emprestar.html', data )
+        
         if request.method=='POST':
             username = main("Verification")
         #print(username)
-        if username != "Erro ao selecionar dispositivo.":
+        if count >= 2:
+                count = 0
+                print("pq")
+                data = {}
+                data['chave'] = EquipmentUnique(pk)
+                data['tipo'] = 'por_senha'
+                data['list_equipment'] = EquipmentActiveAll()
+                data['type_equipment']= EquipmentTypeAll()
+                data['form_inactive'] = InactiveForm()
+                data['type'] = 'Todos'
+                messages.error(request, 'Muitas tentativas!')
+                return render(request, 'equipments/equipment_list.html', data )
+        elif username != "Erro ao selecionar dispositivo.":
             post = Client.objects.filter(usuario=username).values_list('id',flat=True)
             if post:
                 StringPost = ''.join(map(str, post))
@@ -214,7 +221,8 @@ def emprestar(request,pk):
                 amout_of_equipments = ''.join(map(str, amout))
                 if BusyEquipment:
                     messages.error(request, 'Equipamento já emprestado!')
-                    return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                    return equipment_list(request)
+                    #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
                 time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
                 time = ''.join(map(str,time))
                 Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
@@ -224,14 +232,21 @@ def emprestar(request,pk):
                 messages.error(request, 'Usuario não encontrado!')
                 count = count + 1
                 print(count)
-                return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-            return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                return equipment_list(request)
+                #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+            return equipment_list(request)
+            #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
                     
         else:
             data = {}
             data['chave'] = EquipmentUnique(pk)
-            data['tipo'] = 'por senha'
-            return render(request, 'equipments/emprestar.html', data )
+            data['tipo'] = 'por_senha'
+            data['list_equipment'] = EquipmentActiveAll()
+            data['type_equipment']= EquipmentTypeAll()
+            data['form_inactive'] = InactiveForm()
+            data['type'] = 'Todos'
+            messages.error(request, 'Dispositivo não conectado!')
+            return render(request, 'equipments/equipment_list.html', data )
 
         #return render(request, 'equipments/emprestar.html', data )
     return render(request, 'login.html')
@@ -263,18 +278,22 @@ def devolver(request,pk):
                     return equipment_list(request)
                 else:
                     messages.error(request, 'Equipamento sem emprestimo!')
-                    return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                    return equipment_list(request)
+                    #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
             else:
                 count = count + 1
                 print(count)
                 messages.error(request, 'Usuario não encontrado!')
-                return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                return equipment_list(request)
+                #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
             return render(request, 'equipments/devolver.html',data)
         else:
             data = {}
             data['chave'] = pk
-            #data['tipo'] = 'por senha'
-            return render(request, 'equipments/devolver.html', data )
+            data['tipo'] = 'por_senha'
+            messages.error(request, 'Leitor não encontrado!')
+            return equipment_list(request)
+            #return render(request, 'equipments/devolver.html', data )
 
         #print(username)
         post = Client.objects.filter(usuario=username).values_list('id',flat=True)
