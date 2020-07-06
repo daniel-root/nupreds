@@ -101,7 +101,6 @@ def ActiveOrInactiveUser(pk):
 
 #------------Sem Utilização------------#
 
-
 @register.simple_tag
 def Atraso(pk):
     '''
