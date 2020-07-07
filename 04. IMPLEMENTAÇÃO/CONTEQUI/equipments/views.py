@@ -203,7 +203,7 @@ def emprestar(request,pk):
             print(count)
             print(username)
         #print(username)
-            if count > 3:
+            if count >= 2 and username=='Erro dpfj_compare()':
                     count = 0
                     print("pq")
                     data = {}
@@ -220,6 +220,7 @@ def emprestar(request,pk):
             elif username != "Erro ao selecionar dispositivo.":
                 post = Client.objects.filter(usuario=username).values_list('id',flat=True)
                 if post:
+                    count = 0
                     StringPost = ''.join(map(str, post))
                     BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
                     amout = Equipment.objects.filter(id = pk).values_list('amount_of_loans',flat=True)
@@ -265,58 +266,88 @@ def emprestar(request,pk):
                     data
                     )
             return equipment_list(request)
+        return equipment_list(request)
             #return render(request, 'equipments/emprestar.html', data )
     else:
         return render(request, 'login.html')
 
 def devolver(request,pk):
     global count
-    #print(count)
+    print(count)
     if request.session.has_key('username'):
         username = None
-        if count >= 5:
-            count = 0
-            data = {}
-            data['chave'] = pk
-            #data['tipo'] = 'por senha'
-            return render(request, 'equipments/devolver.html', data )
-        username = None
+        
+        
+        
         if request.method=='POST':
             username = main("Verification")
         #print("usuario ",username)
-        if username != "Erro ao selecionar dispositivo.":
-            post = Client.objects.filter(usuario=username).values_list('id',flat=True)
-            #print(post)
-            if post:
-            #StringPost = ''.join(map(str, post))
-                BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
-                if BusyEquipment:
-                    Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).update(user_devolution=Client.objects.get(id = int(post[0])),devolution=timezone.now())
-                    Equipment.objects.filter(id = pk).update(status='Livre')
-                    return equipment_list(request)
-                else:
-                    messages.error(request, 'Equipamento sem emprestimo!')
-                    return equipment_list(request)
-                    #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-            else:
-                count = count + 1
-                print(count)
-                messages.error(request, 'Usuario não encontrado!')
-                return equipment_list(request)
-                #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-            return render(request, 'equipments/devolver.html',data)
-        else:
-            data = {}
-            data['chave'] = pk
-            data['tipo'] = 'por_senha'
-            messages.error(request, 'Leitor não encontrado!')
-            return equipment_list(request)
-            #return render(request, 'equipments/devolver.html', data )
+            print(count)
+            if count >= 2 and username=='Erro dpfj_compare()':
+                count = 0
+                print("pq")
+                data = {}
+                data['pk'] = pk
+                data['tipo'] = 'por_senha'
+                data['list_equipment'] = EquipmentActiveAll()
+                data['type_equipment']= EquipmentTypeAll()
+                data['form_inactive'] = InactiveForm()
+                data['type'] = 'Todos'
+                messages.error(request, 'Muitas tentativas!')
+                print("pq")
+                return render(request, 'equipments/equipment_list.html',data)
+                print("pq")
 
+            elif username != "Erro ao selecionar dispositivo.":
+                post = Client.objects.filter(usuario=username).values_list('id',flat=True)
+                #print(post)
+                if post:
+                    count = 0
+                #StringPost = ''.join(map(str, post))
+                    BusyEquipment = Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk))
+                    if BusyEquipment:
+                        Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).update(user_devolution=Client.objects.get(id = int(post[0])),devolution=timezone.now())
+                        Equipment.objects.filter(id = pk).update(status='Livre')
+                        return equipment_list(request)
+                    else:
+                        messages.error(request, 'Equipamento sem emprestimo!')
+                        return equipment_list(request)
+                        #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                else:
+                    messages.error(request, 'Usuario não encontrado!')
+                    count = count + 1
+                    print(count)
+                    data = {}
+                    data['chave'] = pk
+                    data['list_equipment'] = EquipmentActiveAll()
+                    data['type_equipment']= EquipmentTypeAll()
+                    data['form_inactive'] = InactiveForm()
+                    data['type'] = 'Todos'
+                    #messages.error(request, 'Dispositivo não conectado!')
+                    return render(request, 'equipments/equipment_list.html', data )
+                    
+                return equipment_list(request)
+            else:
+                print('Aqui')
+                data = {}
+                data['pk'] = pk
+                data['tipo'] = 'por_senha'
+                data['list_equipment'] = EquipmentActiveAll()
+                data['type_equipment']= EquipmentTypeAll()
+                data['form_inactive'] = InactiveForm()
+                data['type'] = 'Todos'
+                messages.error(request, 'Dispositivo não conectado!')
+                return render(
+                    request,
+                    'equipments/equipment_list.html',
+                    data
+                    )
+            return equipment_list(request)
+        return equipment_list(request)
         #print(username)
-        post = Client.objects.filter(usuario=username).values_list('id',flat=True)
-        
-    return render(request, 'login.html')
+        #post = Client.objects.filter(usuario=username).values_list('id',flat=True)
+    else:
+        return render(request, 'login.html')
 
 def emprestar_user(request,pk):
     if request.session.has_key('username'):
