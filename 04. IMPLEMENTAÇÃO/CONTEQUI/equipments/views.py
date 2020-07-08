@@ -113,7 +113,8 @@ def equipment_list_inactive(request,value,templete_name='equipments/equipment_li
         data['list_equipment'] = EquipmentAll()
         data['type_equipment']= EquipmentTypeAll()
         data['form_inactive'] = InactiveForm()
-        data['type'] = value
+        data['type'] = 'Inativos'
+        #data['type'] = value
 
         return render(request, templete_name, data)
     return render(request, 'login.html')
@@ -402,6 +403,21 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             elif pk == 'EmPosse':
                 filtro = 'tag'
             equipment = Equipment.objects.filter(inative=False).order_by('status',filtro)
+            data = {}
+            data['list_equipment'] = equipment
+            data['type_equipment']= EquipmentTypeAll()
+            data['form_inactive'] = InactiveForm()
+            data['type'] = value
+            return render(request, templete_name, data)
+
+        elif value == 'Inativos':
+            if pk == 'Etiqueta':
+                filtro = 'tag'
+            elif pk == 'Descricao':
+                filtro = 'description'
+            elif pk == 'EmPosse':
+                filtro = 'tag'
+            equipment = Equipment.objects.filter(inative=True).order_by('status',filtro)
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= EquipmentTypeAll()
@@ -744,6 +760,7 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
 
 import io
 from django.http import FileResponse
+from reportlab.lib.pagesizes import letter,landscape
 from reportlab.pdfgen import canvas
 
 def some_view(request):
@@ -751,8 +768,17 @@ def some_view(request):
     buffer = io.BytesIO()
 
     # Create the PDF object, using the buffer as its "file."
-    p = canvas.Canvas(buffer)
-
+    #p = canvas.Canvas(buffer)
+    
+    p = canvas.Canvas(buffer, landscape(letter))
+    #p.setLineWidth(.3)
+    p.setFont('Helvetica', 12)
+    
+    p.drawString(100,100,'COMUNICADO OFICIAL')
+    
+    p.showPage()
+    p.save()
+    '''
     # Draw things on the PDF. Here's where the PDF generation happens.
     # See the ReportLab documentation for the full list of functionality.
     p.drawString(100, 750, "Hello world.")
@@ -760,7 +786,7 @@ def some_view(request):
     # Close the PDF object cleanly, and we're done.
     p.showPage()
     p.save()
-
+    '''
     # FileResponse sets the Content-Disposition header so that browsers
     # present the option to save the file.
     buffer.seek(0)
