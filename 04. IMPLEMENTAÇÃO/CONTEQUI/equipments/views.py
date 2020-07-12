@@ -562,6 +562,8 @@ def get_rastreio(request,value):
             if type_equipment == 'Todos' and tag=='Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
                 data['list_equipment_user']= equipment_user
+                print("aqui...")
+                print(data['list_equipment_user'][0].loan)
                 data['type'] = value
             elif type_equipment != 'Todos' and tag == 'Todos':
                 EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
@@ -635,9 +637,11 @@ def get_rastreio(request,value):
         data['tag_'] = 'Todos'
         data['start_'] = 'Todos'
         data['end_'] = 'Todos'
+    
     return render(request, 'equipments/reports.html', data)
 
 def listagem(request,order_by,type_equipment_):
+    print("aqui!")
     data = {}
     tipo = Equipment_type.objects.all().values_list('name',flat=True)
     CHOICE = []
@@ -671,6 +675,7 @@ def listagem(request,order_by,type_equipment_):
     return render(request, 'equipments/reports.html', data)
 
 def rastreio(request,order_by,type_equipment_,tag,start,end):
+    print("aqui!")
     data = {}
     tipo = Equipment_type.objects.all().values_list('name',flat=True)
     CHOICE = []
@@ -695,6 +700,8 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim).order_by(order_by)
         data['list_equipment_user']= equipment_user
         data['type'] = 'Rastreio'
+        print("aqui!")
+        print(equipment_user)
     elif type_equipment != 'Todos' and tag == 'Todos':
         EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
         EquipmentType = ''.join(map(str, EquipmentType))
@@ -714,9 +721,13 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter)).order_by(order_by)
         data['list_equipment_user']= equipment_user
         data['type'] = 'Rastreio'
+    
+    #print("aqui!")
+    #print(data['list_equipment_user'])
     return render(request, 'equipments/reports.html', data)
 
 def nao_devolvidos(request,order_by,type_equipment_,tag,start):
+    print("aqui")
     data = {}
     tipo = Equipment_type.objects.all().values_list('name',flat=True)
     CHOICE = []

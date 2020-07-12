@@ -90,7 +90,7 @@
         <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment.id}}" style="margin-left: 5px;background: #e9ecef">
           {% ActiveOrInactive equipment.id %}
           </button>
-        
+
           <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #ff4d4d">
           {% LoanOrDevolution equipment.id %}
           </button>
@@ -112,9 +112,15 @@
           </button>
           {% include 'equipments/equipment_confirm_delete.html' with equipment=equipment %}
          
-          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
+          {% ifequal equipment.status 'Livre' %}
+          <form name="my" id="my" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}               
+          {% else %}
+          <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}               
+          {% endifequal %}
+          <button type="submit" class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
           {% LoanOrDevolution equipment.id %}
           </button>
+          </form>
          
       </div>
       </td>
@@ -174,35 +180,23 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                {% for message in messages %}
-                    <div class="alert alert-danger">
-                      <strong>Error!</strong> {{ message }}
-                    </div>
-                {% endfor %}
-                <p style="margin-left: 20%;">Clique na imagem para ler a digital</p>
-                  {% ifequal equipment.status 'Livre' %}
-                  <form method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}                   
-                      <button type="submit" class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
+                  {% for message in messages %}
+                      <div class="alert alert-danger">
+                        <strong>Error!</strong> {{ message }}
+                      </div>
+                  {% endfor %}
+                  <p style="margin-left: 20%;">Coloque o dedo leitor</p>
+                  
                   <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
-                </button>
+                  {% ifequal equipment.status 'Livre' %}
+                  <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
+                  {% else %}
+                  <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
+                  {% endifequal %}
+                  <button type="submit" class="btn btn-primary">Coloque o Dedo no leitor</button>
                   </form>
                   
-                  <form name="myFormTeste" id="myFormTeste" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
-                  <button type="submit" class="btn btn-primary">Confirmar Merda</button>
-                  </form>
-                  {% endifequal %}
-                  {% ifnotequal equipment.status 'Livre' %}
-                  <form method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
-                      <button type="submit" class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
-                  <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
-                  </button>
-                  </form>
-                  <form method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
-                  <button type="submit" class="btn btn-primary">Confirmar</button>
-                  </form>
-                  {% endifnotequal %}
-              
-                             
+                
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
@@ -246,6 +240,7 @@
     <script>
           $(document).ready(function() {
             $('#Modal{{chave}}').modal('show');
+            document.myForm{{chave}}.submit();
           });
     </script>
    
