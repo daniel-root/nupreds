@@ -32,10 +32,10 @@
               <input class="form-control  rounded-pill" value="{{equipment.description}}" type="cdescriçao" name="description" id="description" required name="cdescriçao"pattern="[a-zA-Z0-9]+" style=" background: #e9ecef">
              </div>
           </div>
-          <div class="form-group row" style="padding-top: 10px;">
-            <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" style="padding-right: 10px;" for="tipo">Tipo:</label>
-             <div class="col-lg-6 col-md-6 col-sm-12">
-              <select id="type_equipment"  value="{{equipment.type_equipment}}" name="type_equipment" class="form-control mr-2 form-control rounded-pill" style="background: #e9ecef;">
+          <div class="form-group row">
+        <label  for="txtTipo" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Tipo: </label>
+        <div class="col-lg-8 col-md-8 col-sm-12">
+          <select id="type_equipment"  value="{{equipment.type_equipment}}" name="type_equipment" class="form-control form-control rounded-pill" style="background: #e9ecef;">
               <option value="">---------</option>
               {% for t in types %}
               {% ifequal equipment.type_equipment t %}
@@ -45,38 +45,37 @@
               {% endifequal %}
                {% endfor %}
             </select>
-              <div class="col-lg-2 col-md-2 col-sm-12">
-              <a type="button" class="btn rounded-pill border" style="background: #e9ecef" href="/Tipo" target="_blank">
+        </div>
+
+        <div class="col-lg-1 col-md-1 col-sm-12">
+        <a type="button" class="btn rounded-pill border" style="background: #e9ecef" href="/Tipo" target="_blank">
                 <span>
                   <img src="{% static "images/plus.png" %}" style="height: 25px; width: 25px">
                 </span>
               </a>
-              </div>
-              
-             </div>
           </div>
-          <div class="form-group row" style="padding-top: 10px;">
-            <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" style="padding-right: 10px;" for="tipo">Tempo Máximo:</label>
+          <div class="col-lg-1 col-md-1 col-sm-12">
+        <a type="button" class="btn rounded-pill border" style="background: #e9ecef" href="/Tipo" target="_blank">
+                <span>
+                  <img src="{% static "images/engrenagem01.png" %}" style="height: 25px; width: 25px">
+                </span>
+              </a>
+          </div>
+      </div>
+          <div class="form-group row">
+            <label class="col-lg-2 col-md-2  col-form-label" for="tipo">Tempo Máximo:</label>
              <div class="col-lg-10 col-md-10 col-sm-12">
-              <input class="form-control mr-2 rounded-pill" value="{{equipment.maximum_time}}" type="ctempo" name="maximum_time" id="maximum_time" required pattern="[0-9]+$" style=" background: #e9ecef">
+              <input class="form-control rounded-pill" value="{{equipment.maximum_time}}" type="ctempo" name="maximum_time" id="maximum_time" required pattern="[0-9]+$" style=" background: #e9ecef">
              </div>
           </div>
           
-          <div class="row" style="padding-left: 85%; margin-top: 30%; margin-bottom: 15px;">
-            <form class="form-inline">
-              <button type="submit" class="btn rounded-pill" style="background: #e9ecef">
-                Salvar
-              </button>
-            </form>
-            <form action="{% url "equipment_list" %}" class="form-inline">  
-              <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef">
-                Voltar
-              </button>
-            </form>
-          </div>
+         <div class="col-lg-12 col-sm-12 text-right" style="padding: 90px 0px">
+        <button type="button" class="btn rounded-pill" style="background: #e9ecef">Voltar</button>            
+        <button type="submit" class="btn rounded-pill" style="background: #e9ecef">Salvar</button>
+      </div>
         </form>
       </div>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="{% static "users/js/bootstrap.min.js" %}"></script>
 
