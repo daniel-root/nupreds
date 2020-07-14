@@ -40,7 +40,7 @@ def user_list_inactive(request,templete_name='users/user_list.html'):
         data = {}
         data['object_list'] = UserInactive()
         data['type_user'] = type_privilegio
-        data['type'] = 'Todos'
+        data['type'] = 'Inativos'
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -248,10 +248,23 @@ def filter_list(request,pk,value,templete_name='users/user_list.html'):
                 filtro = 'cpf'
             user = Client.objects.filter(inative=False).order_by(filtro)
             data = {}
+            name = request.session['username']
+            type_privilegio = Client.objects.filter(usuario=name)
+            data['object_list'] = user
+            data['type_user'] = type_privilegio
+            data['type'] = value
+            return render(request, templete_name, data)
+        elif value == 'Inativos':
+            if pk == 'Id':
+                filtro = 'id'
+            elif pk == 'Nome':
+                filtro = 'usuario'
+            elif pk == 'CPF':
+                filtro = 'cpf'
+            user = Client.objects.filter(inative=True).order_by(filtro)
             data = {}
             name = request.session['username']
             type_privilegio = Client.objects.filter(usuario=name)
-            data = {}
             data['object_list'] = user
             data['type_user'] = type_privilegio
             data['type'] = value

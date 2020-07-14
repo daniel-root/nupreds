@@ -93,12 +93,12 @@
             Editar
           </button>
           </form>
-          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#Modal" style="margin-left: 5px; background: #e9ecef;">
+          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{ user.id }}" style="margin-left: 5px; background: #e9ecef;">
            {% ActiveOrInactiveUser user.id %}
           </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="Modal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -107,12 +107,15 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
+              {% load my_tag %}
               <div class="modal-body">
-                Você tem certeza que deseja Desativar?
+                Você tem certeza que deseja  {% ActiveOrInactiveUser user.id %} "{{ user.usuario }}"?
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
-                <button type="button" class="btn btn-primary">Confimar</button>
+                <form method="post" action="{% url "user_delete" user.id %}">{% csrf_token %}
+                <button type="submit" class="btn btn-primary">Confimar</button>
+                </form>
               </div>
             </div>
           </div>
@@ -120,13 +123,13 @@
                    {% for type in type_user %}
           {% ifequal type.user_type 'Super' %}
 
-          <button type="button" class="btn border-0" data-toggle="modal" data-target="#Modal2" style="background: #FFFFFF;">
+          <button type="button" class="btn border-0" data-toggle="modal" data-target="#Modal2{{ user.id }}" style="background: #FFFFFF;">
               <span>
                 <img src={% static "images/engrenagem.png" %} style="height: 25px; width: 25px">
               </span>
             </button>
             <!-- Modal -->
-        <div class="modal fade" id="Modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="Modal2{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -136,7 +139,7 @@
                 </button>
               </div>
               <div class="modal-body">
-              <form>
+              <form method="POST" action="{% url 'type_user' user.id %}">{% csrf_token %}
                 <p>Selecione:</p>
                 <input type="radio" id="Comum" name="type" value="Comum" checked="">
                 <label for="Comum">Comum</label><br>
@@ -144,12 +147,13 @@
                 <label for="Administrador">Administrador</label><br>
                 <input type="radio" id="Super" name="type" value="Super">
                 <label for="Super">Super</label><br>
-              </form>
+              
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
                 <button type="submit" class="btn btn-primary">Confimar</button>
               </div>
+              </form>
             </div>
           </div>
         </div>

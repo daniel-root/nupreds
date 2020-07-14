@@ -16,8 +16,10 @@
           <img src={% static "images/equipamentos.png" %} style="height: 30px; width: 30px; ">
         </span>
         <p style="margin-left: 10px; font-size: 150%">Equipamentos </p>
-        
+        {{tipo}}
       </div>
+      <h5>
+        </h5>
       <div class="row justify-content-center">
        <form action="{% url "equipment_list" %}">
       <button class="btn btn-link text-dark">
@@ -25,7 +27,7 @@
         </button>
         </form>
       {% for type in type_equipment %}
-         <form action="{% url "filter_type" type.name %}">
+         <form action="{% url "filter_type_equipment" type.name %}">
         <button class="btn btn-link text-dark ">
          {{ type.name }}  
         </button>
@@ -34,6 +36,7 @@
       <form action="{% url "equipment_list_inactive" type %}">
       <button class="btn btn-link text-dark">
           Ver Inativos
+          {{type}}
         </button>
         </form>
       </div>
@@ -56,13 +59,13 @@
   <thead>
     <tr>
       <th scope="col" width="25%" style="text-align: left;">
-        <a href="{% url "filter_list" 'Etiqueta' type %}" style="color: black;">Etiqueta</a>
+        <a href="{% url "filter_list_equipment" 'Etiqueta' type %}" style="color: black;">Etiqueta</a>
       </th>
       <th scope="col" width="25%" style="text-align: left;">
-        <a href="{% url "filter_list" 'Descricao' type %}" style="color: black;">Descrição</a>
+        <a href="{% url "filter_list_equipment" 'Descricao' type %}" style="color: black;">Descrição</a>
       </th>
       <th scope="col" width="20%" style="text-align: left;">
-        <a href="{% url "filter_list" 'EmPosse' type %}" style="color: black;">Em posse</a>
+        <a href="{% url "filter_list_equipment" 'EmPosse' type %}" style="color: black;">Em posse</a>
       </th>
       <th scope="col" width="30%" style="text-align: left;">
         <a href="" style="color: black;">Ações</a>
@@ -87,11 +90,11 @@
         <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment.id}}" style="margin-left: 5px;background: #e9ecef">
           {% ActiveOrInactive equipment.id %}
           </button>
-        <form class="form-inline" action="{% url "equipment_view" equipment.id %}">
-          <button class="btn rounded-pill" style="margin-left: 5px; background:red;">
+
+          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #ff4d4d">
           {% LoanOrDevolution equipment.id %}
           </button>
-        </form>
+        
       </div>
 
       </td>
@@ -108,10 +111,65 @@
           {% ActiveOrInactive equipment.id %}
           </button>
           {% include 'equipments/equipment_confirm_delete.html' with equipment=equipment %}
-    
-          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
+         
+          {% ifequal equipment.status 'Livre' %}
+          <form name="my" id="my" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}               
+          {% else %}
+          <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}               
+          {% endifequal %}
+          <button type="submit" class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
           {% LoanOrDevolution equipment.id %}
           </button>
+          </form>
+         
+      </div>
+      </td>
+      {% endif %}
+      <div class="modal fade" id="danielpor_senha{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Confirmar Empréstimo</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="container-fluid">
+                  <!-- <form class="form-padrao" autocomplete="off"> -->
+                    {% for message in messages %}
+                        <div class="alert alert-danger">
+                          <strong>Error!</strong> {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% ifequal equipment.status 'Livre' %}
+                    <form method="POST" id="add_form" action="{% url 'emprestar_user' equipment.id %}">{% csrf_token %}
+                    {% else %}
+                    <form method="POST" id="add_form" action="{% url 'devolver_user' equipment.id %}">{% csrf_token %}
+                    {% endifequal %}
+                    <div class="form-group row">
+                      <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="textNome">Login:</label>
+                      <div class="col-lg-9 col-md-9 col-sm-9">
+                        <input class="form-control rounded-pill" type="textNome" required name="username" pattern="[A-Za-z\s]+$" style=" background: #e9ecef">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="senha">Senha:</label>
+                      <div class="col-lg-9 col-md-9 col-sm-9">
+                        <input class="form-control mr-2 rounded-pill" type="ctempo" name="password" required pattern="[0-9]+$" style=" background: #e9ecef">
+                      </div>
+                    </div>
+              </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                  {{equipment.id}}
+                  <button type="submit" class="btn btn-primary">Confirmar</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
           <div class="modal fade" id="Modal{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -122,28 +180,23 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                <p style="margin-left: 20%;">Clique na imagem para ler a digital</p>
+                  {% for message in messages %}
+                      <div class="alert alert-danger">
+                        <strong>Error!</strong> {{ message }}
+                      </div>
+                  {% endfor %}
+                  <p style="margin-left: 20%;">Coloque o dedo leitor</p>
                   
+                  <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
                   {% ifequal equipment.status 'Livre' %}
-                  <form method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
-                      <button type="submit" onclick='insereTexto()' class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
-                  <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
-                </button>
-                  </form>
+                  <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
+                  {% else %}
+                  <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
                   {% endifequal %}
-                  {% ifnotequal equipment.status 'Livre' %}
-                  <form method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
-                      <button type="submit" onclick='insereTexto()' class="btn border-0" style=" background-color: #FFFFFF;margin-left: 40%">
-                  <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
-                  </button>
+                  <button type="submit" class="btn btn-primary">Coloque o Dedo no leitor</button>
                   </form>
-                  {% endifnotequal %}
                   
-                <script type="text/javascript">
-                function insereTexto()
-                {document.getElementById('divTeste').innerHTML = 'Coloque o dedo no leitor';}
-                </script>
-                <p style="margin-left: 20%;" id="divTeste"></p>                 
+                
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
@@ -152,10 +205,6 @@
               </div>
             </div>
           </div>
-      </div>
-      </td>
-      {% endif %}
-      
     </tr>
       {% empty %}
       <p style="text-align: center;">
@@ -176,14 +225,25 @@
           Voltar
         </button>
         </form>
+        {{pk}}
       </div>
   </div>
 
 	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="{% static "users/js/bootstrap.min.js" %}"></script>
-
-
+    <script src={% static "users/js/bootstrap.min.js" %}></script>
+    <script>
+          $(document).ready(function() {
+            $('#daniel{{tipo}}{{pk}}').modal('show');
+          });
+    </script>
+    <script>
+          $(document).ready(function() {
+            $('#Modal{{chave}}').modal('show');
+            document.myForm{{chave}}.submit();
+          });
+    </script>
+   
 </body>
 {% endblock %}
 </html>

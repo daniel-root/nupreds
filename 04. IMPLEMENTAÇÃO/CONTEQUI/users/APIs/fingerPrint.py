@@ -1,6 +1,7 @@
 from ctypes import *
 from users.APIs.dpfj import *
 from users.APIs.dpfpdd import *
+from users.models import Client
 
 so_file = "users/APIs/lib/windows/x64/dpfpdd"
 mydll = CDLL(so_file)
