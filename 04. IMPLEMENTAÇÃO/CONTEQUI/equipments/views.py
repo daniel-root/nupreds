@@ -787,8 +787,8 @@ def some_view(request):
     
     p.drawString(100,100,'COMUNICADO OFICIAL')
     
-    p.showPage()
-    p.save()
+    #p.showPage()
+    #p.save()
     '''
     # Draw things on the PDF. Here's where the PDF generation happens.
     # See the ReportLab documentation for the full list of functionality.
