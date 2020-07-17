@@ -53,7 +53,7 @@
         <div class="row">
           <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
-            <input type="text" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12" id="senha" name="senha" style=" background: #e9ecef"required>
+            <input type="text" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12" id="pw1" name="pwd1" style=" background: #e9ecef"required>
           </div>
         </div>
       </div>
@@ -109,6 +109,39 @@
       </div>
     </form>
   </div>
+
+  <!-- Script para verificar se a senha é forte e se senhas são diferentes -->
+  <script type="text/javascript">
+    var password = document.getElementById("pwd1")
+      , confirm_password = document.getElementById("pwd2")
+      , nome_usuario = document.getElementById("nomeUsuario");
+    var regex = /^[a-z\d]{8,12}$/i;
+
+    function validatePassword(){
+      if (!(regex.test(password.value))) {
+       password.setCustomValidity("Sua senha deve ter números, letras e entre 8 e 12 caracteres!");
+      } else {
+        if (password.value == nome_usuario.value) {
+          password.setCustomValidity("O nome do seu usuário e sua senha devem ser diferentes!");
+        } else {
+         password.setCustomValidity('');
+        }
+      }
+        
+      if(password.value != confirm_password.value) {
+       confirm_password.setCustomValidity("Senhas diferentes!");
+      } else {
+       confirm_password.setCustomValidity('');
+      }
+    }
+
+    //password.onchange = validatePassword;
+    //confirm_password.onkeyup = validatePassword;    
+
+    password.oninput = validatePassword;
+    confirm_password.onkeyup = validatePassword;    
+
+  </script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="{% static "users/js/bootstrap.min.js" %}"></script>          
