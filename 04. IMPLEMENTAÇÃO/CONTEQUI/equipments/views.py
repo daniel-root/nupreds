@@ -188,7 +188,7 @@ def equipment_delete(request, pk, template_name='equipments/equipment_confirm_de
                 Equipment.objects.filter(id = pk).update(inative='False')
             else:
                 Equipment.objects.filter(id = pk).update(inative='True')
-            return equipment_list(request)
+            return redirect('/Equipamentos')
         return render(request, template_name, {'object':EquipmentUnique(pk)})
     return render(request, 'login.html')
 count = 0
@@ -769,36 +769,141 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
         data['list_equipment_user']= equipment_user
     return render(request, 'equipments/reports.html', data)
 
-import io
-from django.http import FileResponse
-from reportlab.lib.pagesizes import letter,landscape
-from reportlab.pdfgen import canvas
+
+#from reportlab.lib.pagesizes import letter,landscape
+#from reportlab.pdfgen import canvas
 
 def some_view(request):
+
+    import io
+    from django.http import FileResponse
     # Create a file-like buffer to receive PDF data.
     buffer = io.BytesIO()
 
     # Create the PDF object, using the buffer as its "file."
     #p = canvas.Canvas(buffer)
     
-    p = canvas.Canvas(buffer, landscape(letter))
-    #p.setLineWidth(.3)
-    p.setFont('Helvetica', 12)
     
-    p.drawString(100,100,'COMUNICADO OFICIAL')
-    
-    #p.showPage()
-    #p.save()
-    '''
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 750, "Hello world.")
+    list_report = Equipment_user.objects.filter(equipment=2)
+    list_title = ["Tipo","Etiqueta","Descrição","Solicitação","Responsável","Devolução","Responsável","Qtd. Emprestimos"]
+    list_complete = []
+    list_complete.append(list_title)
 
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-    '''
-    # FileResponse sets the Content-Disposition header so that browsers
-    # present the option to save the file.
+    def type_equipment(id):
+        #print(id)
+        equipment = Equipment.objects.filter(id=id).values_list('type_equipment',flat=True)
+        #print(equipment)
+        name_equipment = Equipment_type.objects.filter(id=equipment[0]).values_list('name',flat=True)
+        #print(name_equipment[0])
+        return name_equipment[0]
+        
+    def tag_equipment(id):
+        name_equipment = Equipment.objects.filter(id=id).values_list('tag',flat=True)
+        return name_equipment[0]
+
+    def description_equipment(id):
+        name_equipment = Equipment.objects.filter(id=id).values_list('description',flat=True)
+        return name_equipment[0]
+
+
+
+    for equipment in list_report:
+        print(equipment.user_loan)
+        #print(equipment.loan.strftime("%m/%d/%Y, %H:%M:%S"))
+        list_temp = [type_equipment(equipment.equipment),tag_equipment(equipment.equipment),description_equipment(equipment.equipment),equipment.loan.strftime("%m/%d/%Y, %H:%M:%S"),str(equipment.user_loan),equipment.devolution.strftime("%m/%d/%Y, %H:%M:%S"),str(equipment.user_devolution),equipment.amount_of_loans]
+        list_complete.append(list_temp)
+
+    from datetime import datetime
+
+    tipo = 'listagem'
+    title = 'SISTEMA DE CONTROLE DE EQUIPAMENTO'
+    subtitle = 'Relatório de ' + tipo + ' de equipamento'
+    #date_now = date.today()
+    time_now = datetime.now()
+    #print(date_now)
+    date = str(time_now.day)+'/'+str(time_now.month)+'/'+str(time_now.year)
+    time = str(time_now.hour)+':'+str(time_now.minute)
+
+    #print(date)
+    #print(time)
+
+    picPath = 'equipments/static/images/download.png'
+    #numberPage = ''
+    file_name = 'pdfTable.pdf'
+
+    from reportlab.platypus import SimpleDocTemplate
+    from reportlab.lib.pagesizes import letter, landscape, A4
+
+    #p = canvas.Canvas(buffer, landscape(letter))
+    pdf = SimpleDocTemplate(buffer,pagesize=landscape(A4))
+
+    from reportlab.platypus import Table
+    from reportlab.platypus import Image
+    from reportlab.platypus import TableStyle
+    from reportlab.lib import colors
+
+    picture = Image(picPath)
+    picture.drawWidth = 150
+    picture.drawHeight = 50
+    picTable = Table([[picture]], 150, 50)
+
+    list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatóriode "+ tipo +" de equipamento"],[""]
+    list02 = ["Data: "+date],["Hora: "+time],["Página: 1 de n"]
+    list03 = ["Tipo: Chave","Etiqueta: 001"],["Descrição: Incubadora",""],["Inicial: 15/10/2020","Final: 15/03/2020"]
+
+    Tablelist01 = Table(list01)
+    Tablelist02 = Table(list02)
+    Tablelist03 = Table(list03)
+
+    style = TableStyle([
+        ('ALIGN',(0,0),(-1,-1),'CENTER'),
+    ])
+
+    Tablelist01.setStyle(style)
+
+    style2 = TableStyle([
+        ('RIGHTPADDING',(0,0),(-1,-1),150),
+    ])
+
+    Tablelist03.setStyle(style2)
+
+    refNoTable = Table([
+            [picTable,Tablelist01, Tablelist02]
+        ], [250, 350, 100])
+
+    tableAll = Table(list_complete)
+
+    style3 = TableStyle([
+        ('RIGHTPADDING',(0,0),(-1,-1),30),
+        #('BACKGROUND',(0,0),(8,0),colors.green),
+        ('FONTSIZE', (0,0), (-1,0), 11),
+        ('BOTTOMPADDING',(0,0),(-1,0),5),
+        ('LINEABOVE',(0,1),(-1,1),0.5,colors.black),
+    ])
+
+    tableAll.setStyle(style3)
+
+    rowNumb = len(list_complete)
+    for i in range(1,rowNumb):
+        if i % 2 == 0:
+            bc = colors.palegreen
+        else:
+            bc = colors.white
+        ts = TableStyle(
+            [('BACKGROUND',(0,i),(-1,i),bc)]
+        )
+        tableAll.setStyle(ts)
+
+
+    table = Table([
+            [refNoTable],
+            [Tablelist03],
+            [tableAll]
+        ])
+
+    elems = []
+    elems.append(table)
+
+    pdf.build(elems)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='reports.pdf')
