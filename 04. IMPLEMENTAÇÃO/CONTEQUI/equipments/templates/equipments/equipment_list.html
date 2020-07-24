@@ -79,27 +79,6 @@
       <td>{{ equipment.description }}</td>
       {% load my_tag %}
       <td>{% NameUser equipment.id %}</td>
-       {% ifequal 'Atrasado' equipment.status %}
-      <td>
-      <div class="row">
-        <form class="form-inline" action="{% url "equipment_edit" equipment.id %}">
-          <button class="btn rounded-pill" style="background: #e9ecef">
-              Editar
-          </button>
-        </form>
-        <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment.id}}" style="margin-left: 5px;background: #e9ecef">
-          {% ActiveOrInactive equipment.id %}
-          </button>
-
-          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: white;">
-          {% LoanOrDevolution equipment.id %}
-          </button>
-        
-      </div>
-
-      </td>
-      {% endifequal %}
-    {% if 'Atrasado' != equipment.status %}
       <td >
          <div class="row">
         <form class="form-inline" action="{% url "equipment_edit" equipment.id %}">
@@ -117,14 +96,16 @@
           {% else %}
           <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}               
           {% endifequal %}
+          {% ifequal 'Atrasado' equipment.status %}
+          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: white;">
+          {% else %}
           <button type="submit" class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
+          {% endifequal %}
           {% LoanOrDevolution equipment.id %}
           </button>
           </form>
-         
       </div>
       </td>
-      {% endif %}
       <div class="modal fade" id="danielpor_senha{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
