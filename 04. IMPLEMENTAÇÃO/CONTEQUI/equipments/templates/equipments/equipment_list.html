@@ -36,7 +36,7 @@
       <form action="{% url "equipment_list_inactive" type %}">
       <button class="btn btn-link text-dark">
           Ver Inativos
-          {{type}}
+         
         </button>
         </form>
       </div>
@@ -91,7 +91,7 @@
           {% ActiveOrInactive equipment.id %}
           </button>
 
-          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #ff4d4d">
+          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: white;">
           {% LoanOrDevolution equipment.id %}
           </button>
         
@@ -179,13 +179,13 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-center">
                   {% for message in messages %}
                       <div class="alert alert-danger">
                         <strong>Error!</strong> {{ message }}
                       </div>
                   {% endfor %}
-                  <p style="margin-left: 20%;">Coloque o dedo leitor</p>
+                  <p >Coloque o dedo leitor</p>
                   
                   <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
                   {% ifequal equipment.status 'Livre' %}
@@ -193,7 +193,7 @@
                   {% else %}
                   <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
                   {% endifequal %}
-                  <button type="submit" class="btn btn-primary">Coloque o Dedo no leitor</button>
+                  <button type="submit" class="btn border-0">Coloque o Dedo no leitor</button>
                   </form>
                   
                 

@@ -29,43 +29,58 @@
         </form>
       </div>
             
-      <table class="table table-sm ">
-  <thead>
-    <tr class="d-flex">
-      <th class="col-lg-8 col-md-8 col-sm-8">
-        <button class="btn btn-link text-dark" >
-          Nome
-        </button>
-      </th>
-      <th class="col-lg-6 col-md-6 col-sm-6">
-        <button class="btn btn-link text-dark" >
-         Ações
-        </button>
-      </th>
-    </tr>
-    </thead>
-  <tbody>
-    <tr>
-      <td></td>
-      <td>
-        <div class="row">
-        <form class="form-inline">
-          <button class="rounded-pill" style="margin-left: 10px;">
-            Editar
-          </button>
-        </form>
-        <form class="form-inline">
-          <button class="rounded-pill" style="margin-left: 10px;">
-            Inativar
-          </button>
-        </form>
-        
+      <div style="padding: 10px 0px 0px 0px">
+          <table class="table table-sm table-striped">
+
+            <!-- Cabeçalho tabela --> 
+            <thead>
+              <tr class="d-flex">
+                <th class="col-lg-5 col-md-5 col-sm-5">Nome</th>
+                <th class="col-lg-5 col-md-4 col-sm-5">Atuação</th>
+                <th class="col-lg-2 col-md-3 col-sm-2">Ações</th>
+              </tr>
+            </thead>
+
+            <!-- Corpo da tabela -->
+            <tbody>
+
+              <tr class="d-flex">
+                
+                <!-- Nome -->
+                <td class="col-lg-5 col-md-5 col-sm-5">José da Silva</td>
+                
+                <!-- Atuação -->
+                <td class="col-lg-5 col-md-4 col-sm-5">Administrador</td>
+                
+                <!-- Botões. Só aparece em desktop e tablet --> 
+                <td class="col-lg-2 col-md-3 d-none d-md-block">  
+                  <button type="submit" class="btn btn-sm" style="background-color: #379944; color: white;">Editar</button>
+                  <button type="submit" class="btn btn-sm" style="background-color: #379944; color: white;">Excluir</button>
+                </td>
+
+                <!-- Listbox. Só aparece smartphone -->
+                <td class="col-sm-2 d-md-none">                 
+                  <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ação...</button>
+                    <div class="dropdown-menu w-auto p-3" aria-labelledby="dropdownMenuButton">
+                      <button class="dropdown-item" type="button">Editar</button>
+                      <button class="dropdown-item" type="button">Excluir</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Navegação próximos 20 -->
+              <tr class="d-flex">
+                <td class="col col-12">
+                  <div class="justify-content-center align-items-center row">
+                    <button type="button" class="btn btn-outline-success">Próximos 20 membros</button>
+              </div>
+                </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
-      </td>
-    </tr>
-    
-  </tbody>
-</table>
 <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
     <form class="form-inline">
