@@ -1,36 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.forms import ModelForm
 from equipments.models import *
 from equipments.APIs import *
 from datetime import datetime, timedelta
 from users.models import *
 from django.db.models import Q
 from django.utils import timezone
-from django import forms
-from django.http import HttpResponseRedirect
 from django.contrib import messages
-from users.views import main
+from users.APIs.fingerPrint import *
  
 def home(request):
     if request.session.has_key('username'):
-        #TelegramCadastro()
+        TelegramCadastro()
         return render(request,'home.html')
     return render(request,'login.html')
-
-class TypeForm(ModelForm):
-    class Meta:
-        model = Equipment_type
-        fields = ['name','time_maximum']
-
-#-----------Inutil------------#
-class InactiveForm(forms.Form):
-    inactive = forms.BooleanField(widget=forms.CheckboxInput(attrs={'onclick':'this.form.submit();'}),required=False, label="Ver inativos")
-#-----------------------------#
-
-class EquipmentForm(ModelForm):
-    class Meta:
-        model = Equipment
-        fields = ['tag','description','type_equipment','maximum_time']
 
 def EquipmentTypeAll():
     equipment_type = Equipment_type.objects.all().values('name')
@@ -96,13 +78,12 @@ def EquipmentUnique(pk):
 
 def equipment_list(request,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
+        print("passei por equipment_list")
         data = {}
         data['list_equipment'] = EquipmentActiveAll()
         data['type_equipment']= EquipmentTypeAll()
-        data['form_inactive'] = InactiveForm()
         data['type'] = 'Todos'
-        for i in range(0,len(data['list_equipment'])):
-            Atraso(data['list_equipment'][i].id)
+        Atraso()
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -112,7 +93,6 @@ def equipment_list_inactive(request,value,templete_name='equipments/equipment_li
         
         data['list_equipment'] = EquipmentAll()
         data['type_equipment']= EquipmentTypeAll()
-        data['form_inactive'] = InactiveForm()
         data['type'] = 'Inativos'
         #data['type'] = value
 
@@ -126,28 +106,14 @@ def equipment_view(request, pk, template_name='equipments/equipment_detail.html'
 
 def equipment_create(request, template_name='equipments/equipment_form.html'):
     if request.session.has_key('username'):
-        #print("Daniel")
         data = {}
         tipo = Equipment_type.objects.all()
         CHOICE = []
         for QuerySet in tipo:
             CHOICE.append((QuerySet))
         data['types'] = CHOICE
-        
-        data['form'] = EquipmentForm(request.POST or None)
-        # print("Daniel")
         if request.method == 'POST':
             a = Equipment.objects.create(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
-            print(a)
-            #['tag','description','type_equipment','maximum_time']
-            #data['form'].tag = request.POST['tag']
-            #data['form'].description = request.POST['description']
-            #type_equipment = Equipment_type.objects.get(name = request.POST['type_equipment'])
-            #print(type_equipment)
-            #data['form'].type_equipment = type_equipment
-            #data['form'].maximum_time = request.POST['maximum_time']
-            #print(data['form'])
-            #data['form'].save()
             return redirect('equipment_list')
         return render(request, template_name, data)
     return render(request, 'login.html')
@@ -161,22 +127,10 @@ def equipment_update(request, pk, template_name='equipments/equipment_form.html'
             CHOICE.append((QuerySet))
         data['types'] = CHOICE
         equipment = get_object_or_404(Equipment, pk=pk)
-        form = EquipmentForm(request.POST or None, instance=EquipmentUnique(pk))
         data['equipment']= equipment
-        data['form'] = form
         if request.method == 'POST':
             equipment = Equipment.objects.filter(pk=pk)
-            print(equipment)
             equipment.update(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
-            #['tag','description','type_equipment','maximum_time']
-            #data['form'].tag = request.POST['tag']
-            #data['form'].description = request.POST['description']
-            #type_equipment = Equipment_type.objects.get(name = request.POST['type_equipment'])
-            #print(type_equipment)
-            #data['form'].type_equipment = type_equipment
-            #data['form'].maximum_time = request.POST['maximum_time']
-            #print(data['form'])
-            #data['form'].save()
             return equipment_list(request)
         return render(request, template_name, data)
     return render(request, 'login.html')
@@ -194,30 +148,21 @@ def equipment_delete(request, pk, template_name='equipments/equipment_confirm_de
 count = 0
 def emprestar(request,pk):
     global count
-    #print(count)
     if request.session.has_key('username'):
         username = None
         
         if request.method=='POST':
             username = main("Verification")
-            print("inicou verificação")
-            print(count)
-            print(username)
-        #print(username)
             if count >= 2 and username=='Erro dpfj_compare()':
                     count = 0
-                    print("pq")
                     data = {}
                     data['pk'] = pk
                     data['tipo'] = 'por_senha'
                     data['list_equipment'] = EquipmentActiveAll()
                     data['type_equipment']= EquipmentTypeAll()
-                    data['form_inactive'] = InactiveForm()
                     data['type'] = 'Todos'
                     messages.error(request, 'Muitas tentativas!')
-                    print("pq")
                     return render(request, 'equipments/equipment_list.html',data)
-                    print("pq")
             elif username != "Erro ao selecionar dispositivo.":
                 post = Client.objects.filter(usuario=username).values_list('id',flat=True)
                 if post:
@@ -236,14 +181,12 @@ def emprestar(request,pk):
                     Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
                     return equipment_list(request)
                 else:
-                    messages.error(request, 'Usuario não encontrado!')
+                    messages.error(request, 'Usuario não encontrado! Tentativa '+ str(count+2))
                     count = count + 1
-                    print(count)
                     data = {}
                     data['chave'] = pk
                     data['list_equipment'] = EquipmentActiveAll()
                     data['type_equipment']= EquipmentTypeAll()
-                    data['form_inactive'] = InactiveForm()
                     data['type'] = 'Todos'
                     #messages.error(request, 'Dispositivo não conectado!')
                     return render(request, 'equipments/equipment_list.html', data )
@@ -252,13 +195,11 @@ def emprestar(request,pk):
                 return equipment_list(request)
                 #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})           
             else:
-                print('Aqui')
                 data = {}
                 data['pk'] = pk
                 data['tipo'] = 'por_senha'
                 data['list_equipment'] = EquipmentActiveAll()
                 data['type_equipment']= EquipmentTypeAll()
-                data['form_inactive'] = InactiveForm()
                 data['type'] = 'Todos'
                 messages.error(request, 'Dispositivo não conectado!')
                 return render(
@@ -274,7 +215,6 @@ def emprestar(request,pk):
 
 def devolver(request,pk):
     global count
-    print(count)
     if request.session.has_key('username'):
         username = None
         
@@ -282,26 +222,19 @@ def devolver(request,pk):
         
         if request.method=='POST':
             username = main("Verification")
-        #print("usuario ",username)
-            print(count)
             if count >= 2 and username=='Erro dpfj_compare()':
                 count = 0
-                print("pq")
                 data = {}
                 data['pk'] = pk
                 data['tipo'] = 'por_senha'
                 data['list_equipment'] = EquipmentActiveAll()
                 data['type_equipment']= EquipmentTypeAll()
-                data['form_inactive'] = InactiveForm()
                 data['type'] = 'Todos'
                 messages.error(request, 'Muitas tentativas!')
-                print("pq")
                 return render(request, 'equipments/equipment_list.html',data)
-                print("pq")
 
             elif username != "Erro ao selecionar dispositivo.":
                 post = Client.objects.filter(usuario=username).values_list('id',flat=True)
-                #print(post)
                 if post:
                     count = 0
                 #StringPost = ''.join(map(str, post))
@@ -315,27 +248,23 @@ def devolver(request,pk):
                         return equipment_list(request)
                         #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
                 else:
-                    messages.error(request, 'Usuario não encontrado!')
+                    messages.error(request, 'Usuario não encontrado! Tentativa ' + str(count+2))
                     count = count + 1
-                    print(count)
                     data = {}
                     data['chave'] = pk
                     data['list_equipment'] = EquipmentActiveAll()
                     data['type_equipment']= EquipmentTypeAll()
-                    data['form_inactive'] = InactiveForm()
                     data['type'] = 'Todos'
                     #messages.error(request, 'Dispositivo não conectado!')
                     return render(request, 'equipments/equipment_list.html', data )
                     
                 return equipment_list(request)
             else:
-                print('Aqui')
                 data = {}
                 data['pk'] = pk
                 data['tipo'] = 'por_senha'
                 data['list_equipment'] = EquipmentActiveAll()
                 data['type_equipment']= EquipmentTypeAll()
-                data['form_inactive'] = InactiveForm()
                 data['type'] = 'Todos'
                 messages.error(request, 'Dispositivo não conectado!')
                 return render(
@@ -345,8 +274,6 @@ def devolver(request,pk):
                     )
             return equipment_list(request)
         return equipment_list(request)
-        #print(username)
-        #post = Client.objects.filter(usuario=username).values_list('id',flat=True)
     else:
         return render(request, 'login.html')
 
@@ -355,7 +282,6 @@ def emprestar_user(request,pk):
         if request.method == 'POST':
             
             username = request.POST['username']
-            #print(username)
             password =  request.POST['password']
             post = Client.objects.filter(usuario=username,senha=password).values_list('id',flat=True)
             if post:
@@ -406,7 +332,6 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= EquipmentTypeAll()
-            data['form_inactive'] = InactiveForm()
             data['type'] = value
             return render(request, templete_name, data)
 
@@ -421,7 +346,6 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= EquipmentTypeAll()
-            data['form_inactive'] = InactiveForm()
             data['type'] = value
             return render(request, templete_name, data)
         else:
@@ -435,7 +359,6 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= EquipmentTypeAll()
-            data['form_inactive'] = InactiveForm()
             data['type'] = value
             return render(request, templete_name, data)
     return render(request, 'login.html')
@@ -446,7 +369,6 @@ def filter_type(request,value,templete_name='equipments/equipment_list.html'):
         data = {}
         data['list_equipment'] = equipment
         data['type_equipment']= EquipmentTypeAll()
-        data['form_inactive'] = InactiveForm()
         data['type'] = value
         return render(request, templete_name, data)
     return render(request, 'login.html')
@@ -459,7 +381,6 @@ def search(request,value):
             data = {}
             data['list_equipment'] = equipment
             data['type_equipment']= EquipmentTypeAll()
-            data['form_inactive'] = InactiveForm()
             data['type'] = value
             return render(request, 'equipments/equipment_list.html', data)
     return render(request, 'login.html')
@@ -562,8 +483,6 @@ def get_rastreio(request,value):
             if type_equipment == 'Todos' and tag=='Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
                 data['list_equipment_user']= equipment_user
-                print("aqui...")
-                print(data['list_equipment_user'][0].loan)
                 data['type'] = value
             elif type_equipment != 'Todos' and tag == 'Todos':
                 EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
@@ -641,7 +560,6 @@ def get_rastreio(request,value):
     return render(request, 'equipments/reports.html', data)
 
 def listagem(request,order_by,type_equipment_):
-    print("aqui!")
     data = {}
     tipo = Equipment_type.objects.all().values_list('name',flat=True)
     CHOICE = []
@@ -675,7 +593,6 @@ def listagem(request,order_by,type_equipment_):
     return render(request, 'equipments/reports.html', data)
 
 def rastreio(request,order_by,type_equipment_,tag,start,end):
-    print("aqui!")
     data = {}
     tipo = Equipment_type.objects.all().values_list('name',flat=True)
     CHOICE = []
@@ -700,8 +617,6 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim).order_by(order_by)
         data['list_equipment_user']= equipment_user
         data['type'] = 'Rastreio'
-        print("aqui!")
-        print(equipment_user)
     elif type_equipment != 'Todos' and tag == 'Todos':
         EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
         EquipmentType = ''.join(map(str, EquipmentType))
@@ -721,13 +636,9 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter)).order_by(order_by)
         data['list_equipment_user']= equipment_user
         data['type'] = 'Rastreio'
-    
-    #print("aqui!")
-    #print(data['list_equipment_user'])
     return render(request, 'equipments/reports.html', data)
 
 def nao_devolvidos(request,order_by,type_equipment_,tag,start):
-    print("aqui")
     data = {}
     tipo = Equipment_type.objects.all().values_list('name',flat=True)
     CHOICE = []
@@ -790,11 +701,8 @@ def some_view(request):
     list_complete.append(list_title)
 
     def type_equipment(id):
-        #print(id)
         equipment = Equipment.objects.filter(id=id).values_list('type_equipment',flat=True)
-        #print(equipment)
         name_equipment = Equipment_type.objects.filter(id=equipment[0]).values_list('name',flat=True)
-        #print(name_equipment[0])
         return name_equipment[0]
         
     def tag_equipment(id):
@@ -808,8 +716,6 @@ def some_view(request):
 
 
     for equipment in list_report:
-        print(equipment.user_loan)
-        #print(equipment.loan.strftime("%m/%d/%Y, %H:%M:%S"))
         list_temp = [type_equipment(equipment.equipment),tag_equipment(equipment.equipment),description_equipment(equipment.equipment),equipment.loan.strftime("%m/%d/%Y, %H:%M:%S"),str(equipment.user_loan),equipment.devolution.strftime("%m/%d/%Y, %H:%M:%S"),str(equipment.user_devolution),equipment.amount_of_loans]
         list_complete.append(list_temp)
 

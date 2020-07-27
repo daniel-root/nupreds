@@ -1,6 +1,4 @@
 from django.urls import path
-from django.conf.urls.static import static
-from django.conf import settings
 from equipments import views
 
 urlpatterns = [
@@ -17,7 +15,6 @@ urlpatterns = [
     path('Filtro/<str:pk>/<str:value>', views.filter_list, name='filter_list_equipment'),
     path('Filtro/<str:value>', views.filter_type, name='filter_type_equipment'),
     path('Pesquisar/<str:value>', views.search, name='search'),
-    #path('Relatórios', views.reports_list, name='reports_list'),
     path('Relatórios/<str:value>', views.get_rastreio, name='get_rastreio'),
     path('Tipo', views.equipment_type_list, name='equipment_type_list'),
     path('Tipo/Ver/<int:pk>', views.equipment_type_view, name='equipment_type_view'),
@@ -31,5 +28,4 @@ urlpatterns = [
     path('NaoDevolvidos/<str:order_by>/<str:type_equipment_>/<str:tag>/<str:start>', views.nao_devolvidos, name='nao_devolvidos'),
     path('GerarPDF/', views.some_view, name='some_view'),
    
-] 
-#+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]

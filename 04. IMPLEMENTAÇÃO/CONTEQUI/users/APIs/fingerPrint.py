@@ -4,13 +4,9 @@ from users.APIs.dpfpdd import *
 from users.models import Client
 
 so_file = "users/APIs/lib/windows/x64/dpfpdd"
-mydll = CDLL(so_file)
+dpfpdd = CDLL(so_file)
 so_file = "users/APIs/lib/windows/x64/dpfj"
-my_dll = CDLL(so_file)
-
-#printf c++
-libc = cdll.msvcrt
-printf = libc.printf
+dpfj = CDLL(so_file)
 
 def CaptureFinger(szFingerName, hReader, nFtType, ppFt, pFtSize):
     result = c_int(0)
@@ -29,9 +25,9 @@ def CaptureFinger(szFingerName, hReader, nFtType, ppFt, pFtSize):
     
     nImageSize = c_uint(0)
     
-    mydll.dpfpdd_capture.arftypes = [DPFPDD_DEV,POINTER(DPFPDD_CAPTURE_PARAM),c_uint,POINTER(DPFPDD_CAPTURE_RESULT),POINTER(c_uint),POINTER(c_ubyte)]
-    mydll.dpfpdd_capture.restypes = c_int
-    mydll.dpfpdd_capture(hReader,byref(cparam),0,byref(cresult),byref(nImageSize),None)
+    dpfpdd.dpfpdd_capture.arftypes = [DPFPDD_DEV,POINTER(DPFPDD_CAPTURE_PARAM),c_uint,POINTER(DPFPDD_CAPTURE_RESULT),POINTER(c_uint),POINTER(c_ubyte)]
+    dpfpdd.dpfpdd_capture.restypes = c_int
+    dpfpdd.dpfpdd_capture(hReader,byref(cparam),0,byref(cresult),byref(nImageSize),None)
     
     pImage = (c_ubyte*139990)(*b'')
     
@@ -41,7 +37,7 @@ def CaptureFinger(szFingerName, hReader, nFtType, ppFt, pFtSize):
         while(1):
             ds = DPFPDD_DEV_STATUS()
             ds.size = sizeof(DPFPDD_DEV_STATUS)
-            result = mydll.dpfpdd_get_device_status(hReader, byref(ds))
+            result = dpfpdd.dpfpdd_get_device_status(hReader, byref(ds))
             if(DPFPDD_SUCCESS != result):
                 return "dpfpdd_get_device_status()"
                 break
@@ -53,7 +49,7 @@ def CaptureFinger(szFingerName, hReader, nFtType, ppFt, pFtSize):
             break
 
         #print("Put", szFingerName," on the reader, or press Ctrl-C to cancel...")
-        result = mydll.dpfpdd_capture(hReader, byref(cparam), -1, byref(cresult), byref(nImageSize), pImage)
+        result = dpfpdd.dpfpdd_capture(hReader, byref(cparam), -1, byref(cresult), byref(nImageSize), pImage)
         
         if(DPFPDD_SUCCESS != result):
             return "Erro dpfpdd_capture()"
@@ -64,9 +60,9 @@ def CaptureFinger(szFingerName, hReader, nFtType, ppFt, pFtSize):
                 
                 pFeatures = (c_ubyte*1562)(*b'')
 
-                my_dll.dpfj_create_fmd_from_fid.argtypes = [DPFJ_FID_FORMAT,POINTER(c_ubyte),c_uint,DPFJ_FMD_FORMAT,POINTER(c_ubyte),POINTER(c_uint)]
-                my_dll.dpfj_create_fmd_from_fid.restypes = c_int
-                result = my_dll.dpfj_create_fmd_from_fid(DPFJ_FID_ISO_19794_4_2005, pImage, nImageSize, nFtType, pFeatures, byref(nFeaturesSize))
+                dpfj.dpfj_create_fmd_from_fid.argtypes = [DPFJ_FID_FORMAT,POINTER(c_ubyte),c_uint,DPFJ_FMD_FORMAT,POINTER(c_ubyte),POINTER(c_uint)]
+                dpfj.dpfj_create_fmd_from_fid.restypes = c_int
+                result = dpfj.dpfj_create_fmd_from_fid(DPFJ_FID_ISO_19794_4_2005, pImage, nImageSize, nFtType, pFeatures, byref(nFeaturesSize))
                 if(DPFJ_SUCCESS == result):
                     ppFt = pFeatures
                     pFtSize = nFeaturesSize
@@ -91,32 +87,27 @@ def Verification(hReader):
         result, pFeatures1, nFeatures1Size = CaptureFinger("any finger", hReader, DPFJ_FMD_ISO_19794_2_2005, byref(pFeatures1), byref(nFeatures1Size))
         
         if result == 0:
-            user= Client.objects.all().values_list('fingerprint',flat=True)
-            #print(user)
+            users= Client.objects.all()
             result = 0
             if result == 0:
                 falsematch_rate = c_uint(0)
-                for i in user:
-                    #print(i)
-                    if i == None:
+                for user in users:
+                    if user.fingerprint == None:
                         continue
-                    
-                    a = Client.objects.filter(fingerprint=i).values_list('usuario',flat=True)
-                    #print(a[0])
                     res = [] 
-                    for ele in i:
+                    for ele in user.fingerprint:
                         res.extend(ord(num) for num in ele)
                     pFeatures2 = (c_ubyte * len(res))(*res)
                     nFeatures2Size = sizeof(pFeatures2)                    
-                    my_dll.dpfj_compare.argtypes = [DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,POINTER(c_uint)]
-                    my_dll.dpfj_compare.restype = c_int
-                    result = my_dll.dpfj_compare(DPFJ_FMD_ISO_19794_2_2005, pFeatures1, nFeatures1Size, 0, DPFJ_FMD_ISO_19794_2_2005, pFeatures2, nFeatures2Size, 0, byref(falsematch_rate))
+                    dpfj.dpfj_compare.argtypes = [DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,POINTER(c_uint)]
+                    dpfj.dpfj_compare.restype = c_int
+                    result = dpfj.dpfj_compare(DPFJ_FMD_ISO_19794_2_2005, pFeatures1, nFeatures1Size, 0, DPFJ_FMD_ISO_19794_2_2005, pFeatures2, nFeatures2Size, 0, byref(falsematch_rate))
                     if(DPFJ_SUCCESS == result):
                         #target_falsematch_rate = c_long(21474.83647)
                         #print(falsematch_rate)
                         if(falsematch_rate.value == 0):
                             #print("Fingerprints matched.")
-                            return a[0]
+                            return user.usuario
 
                         else:
                             continue
@@ -133,7 +124,7 @@ def Verification(hReader):
 # Defining main function 
 def main(tipo):
     #Inicializar
-    result = mydll.dpfpdd_init()
+    result = dpfpdd.dpfpdd_init()
     if(DPFPDD_SUCCESS == result): 
         #print("calling dpfpdd_init()")
         #print("----------------------")
@@ -142,9 +133,9 @@ def main(tipo):
         #Informações sobre o leitor
         dev_cnt = c_uint(2)
         dev_infos = DPFPDD_DEV_INFO()
-        mydll.dpfpdd_query_devices.argtypes = [POINTER(c_uint),POINTER(DPFPDD_DEV_INFO)]
-        mydll.dpfpdd_query_devices.restype = c_int
-        result = mydll.dpfpdd_query_devices(dev_cnt,byref(dev_infos))
+        dpfpdd.dpfpdd_query_devices.argtypes = [POINTER(c_uint),POINTER(DPFPDD_DEV_INFO)]
+        dpfpdd.dpfpdd_query_devices.restype = c_int
+        result = dpfpdd.dpfpdd_query_devices(dev_cnt,byref(dev_infos))
         #print(dev_cnt)
         #print(result)
         if(DPFPDD_SUCCESS == result):
@@ -152,15 +143,13 @@ def main(tipo):
             #print("----------------------")
             #printf(b"Nome do dispositivo conectado: %s\n", dev_infos.name)
             #print("----------------------")
-
-
             #Inicia o leitor
             pdev = DPFPDD_DEV()
             dev_name = dev_infos.name
-            mydll.dpfpdd_open.argtypes = [POINTER(c_char),POINTER(DPFPDD_DEV)]
-            mydll.dpfpdd_open.restype = c_int
-            result = mydll.dpfpdd_open(dev_name,byref(pdev))
-            #result = mydll.dpfpdd_open_ext(dev_name, DPFPDD_PRIORITY_EXCLUSIVE, byref(pdev))
+            dpfpdd.dpfpdd_open.argtypes = [POINTER(c_char),POINTER(DPFPDD_DEV)]
+            dpfpdd.dpfpdd_open.restype = c_int
+            result = dpfpdd.dpfpdd_open(dev_name,byref(pdev))
+            #result = dpfpdd.dpfpdd_open_ext(dev_name, DPFPDD_PRIORITY_EXCLUSIVE, byref(pdev))
             #print(dev_name)
             #print(result)
             if(DPFPDD_SUCCESS == result):
@@ -169,9 +158,9 @@ def main(tipo):
 
                 #funcionalidades do leitor
                 dev_caps = DPFPDD_DEV_CAPS(60)
-                mydll.dpfpdd_get_device_capabilities.argtypes = [DPFPDD_DEV,POINTER(DPFPDD_DEV_CAPS)]
-                mydll.dpfpdd_get_device_capabilities.restype = c_int
-                if DPFPDD_SUCCESS == mydll.dpfpdd_get_device_capabilities(pdev,dev_caps):
+                dpfpdd.dpfpdd_get_device_capabilities.argtypes = [DPFPDD_DEV,POINTER(DPFPDD_DEV_CAPS)]
+                dpfpdd.dpfpdd_get_device_capabilities.restype = c_int
+                if DPFPDD_SUCCESS == dpfpdd.dpfpdd_get_device_capabilities(pdev,dev_caps):
                     #print("Funcionalidades adquiridas")
                     #print("dpi do leitor: ",dev_caps.resolutions[0])
                     #print("----------------------")
@@ -183,9 +172,10 @@ def main(tipo):
                         nFeatures1Size = c_uint(0) 
                         result, pFeatures1, nFeatures1Size = CaptureFinger("any finger", pdev, DPFJ_FMD_ISO_19794_2_2005, byref(pFeatures1), byref(nFeatures1Size))
                         if(DPFPDD_SUCCESS == result):
+                            #converte
                             result = ''.join(chr(i) for i in pFeatures1)
                         else:
-                            result = "Erro ao adquirir impresão"
+                            result = "Erro ao adquirir impressão"
                         
                     
 
@@ -196,10 +186,10 @@ def main(tipo):
                 return "Erro ao selecionar dispositivo."
             
             #Fecha o despositivo
-            mydll.dpfpdd_close.argtypes = [DPFPDD_DEV]
+            dpfpdd.dpfpdd_close.argtypes = [DPFPDD_DEV]
             #print("fechou")
-            mydll.dpfpdd_close.restype = c_int
-            if DPFPDD_SUCCESS != mydll.dpfpdd_close(pdev):
+            dpfpdd.dpfpdd_close.restype = c_int
+            if DPFPDD_SUCCESS != dpfpdd.dpfpdd_close(pdev):
                return "Erro ao encerrar"
                 #print("----------------------")
 
@@ -209,7 +199,7 @@ def main(tipo):
             #print("----------------------")
         
         #Finalizar
-        mydll.dpfpdd_exit()
+        dpfpdd.dpfpdd_exit()
         return result
 
     else: return "Erro when calling dpfpdd_init()" 
