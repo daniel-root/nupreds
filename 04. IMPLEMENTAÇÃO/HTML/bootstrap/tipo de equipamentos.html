@@ -29,14 +29,13 @@
         </form>
       </div>
             
-      <div style="padding: 10px 0px 0px 0px">
-          <table class="table table-sm table-striped">
+      <
+          <table class="table table-sm" style="width: 900px;  margin:auto; margin-top: 10px;">
 
             <!-- Cabeçalho tabela --> 
             <thead>
               <tr class="d-flex">
-                <th class="col-lg-5 col-md-5 col-sm-5">Nome</th>
-                <th class="col-lg-5 col-md-4 col-sm-5">Atuação</th>
+                <th class="col-lg-8 col-md-8 col-sm-8">Nome</th>
                 <th class="col-lg-2 col-md-3 col-sm-2">Ações</th>
               </tr>
             </thead>
@@ -47,10 +46,7 @@
               <tr class="d-flex">
                 
                 <!-- Nome -->
-                <td class="col-lg-5 col-md-5 col-sm-5">José da Silva</td>
-                
-                <!-- Atuação -->
-                <td class="col-lg-5 col-md-4 col-sm-5">Administrador</td>
+                <td class="col-lg-8 col-md-8 col-sm-8">José da Silva</td>
                 
                 <!-- Botões. Só aparece em desktop e tablet --> 
                 <td class="col-lg-2 col-md-3 d-none d-md-block">  
@@ -69,19 +65,10 @@
                   </div>
                 </td>
               </tr>
-
-              <!-- Navegação próximos 20 -->
-              <tr class="d-flex">
-                <td class="col col-12">
-                  <div class="justify-content-center align-items-center row">
-                    <button type="button" class="btn btn-outline-success">Próximos 20 membros</button>
-              </div>
-                </td>
-            </tr>
             </tbody>
           </table>
         </div>
-<hr width="1000px" style="margin-top: -1px;">
+<hr width="700px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
     <form class="form-inline">
       <button class="rounded-pill">
@@ -95,5 +82,54 @@
       </div>
     </form>
   </div>
+  <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+  <thead>
+    <tr>
+      <th scope="col" width="60%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Etiquetas
+        </button>
+      </th>
+      <th scope="col" width="40%" style="text-align: center;">
+        <button class="btn btn-link text-dark" >
+          Ações
+        </button>
+      </th>
+    </tr>
+    </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      
+      <td style="text-align: center;">
+        <button class="rounded-pill">
+            Editar
+          </button>
+          <button class="rounded-pill" style="margin-left: 5px;">
+            Inativar
+          </button>
+          <button class="rounded-pill" style="margin-left: 5px;">
+            Emprestar
+          </button>
+      </td>
+    </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td style="text-align: center;">
+        <button class="rounded-pill" style="box-shadow: none;">
+            Editar
+          </button>
+          <button class="rounded-pill" style="margin-left: 5px;">
+            Inativar
+          </button>
+          <button class="rounded-pill" style="margin-left: 5px;">
+            Emprestar
+          </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 </body>
 </html>
