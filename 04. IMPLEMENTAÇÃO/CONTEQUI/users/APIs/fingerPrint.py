@@ -87,17 +87,20 @@ def Verification(hReader):
         result, pFeatures1, nFeatures1Size = CaptureFinger("any finger", hReader, DPFJ_FMD_ISO_19794_2_2005, byref(pFeatures1), byref(nFeatures1Size))
         
         if result == 0:
-            users= Client.objects.all()
+            users= Client.objects.filter(fingerprint__contains='FMR')
+            print(users)
             result = 0
             if result == 0:
                 falsematch_rate = c_uint(0)
                 for user in users:
+                    print(user.usuario)
                     if user.fingerprint == None:
                         continue
                     res = [] 
                     for ele in user.fingerprint:
                         res.extend(ord(num) for num in ele)
                     pFeatures2 = (c_ubyte * len(res))(*res)
+                    print(pFeatures2)
                     nFeatures2Size = sizeof(pFeatures2)                    
                     dpfj.dpfj_compare.argtypes = [DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,POINTER(c_uint)]
                     dpfj.dpfj_compare.restype = c_int
@@ -107,11 +110,12 @@ def Verification(hReader):
                         #print(falsematch_rate)
                         if(falsematch_rate.value == 0):
                             #print("Fingerprints matched.")
+                            print(user.usuario)
                             return user.usuario
 
                         else:
+                            print("Fingerprints did not match.")
                             continue
-                            #print("Fingerprints did not match.")
                     else:
                         return "Erro dpfj_compare()"
             else: 
@@ -175,7 +179,7 @@ def main(tipo):
                             #converte
                             result = ''.join(chr(i) for i in pFeatures1)
                         else:
-                            result = "Erro ao adquirir impressão"
+                            result = "Erro ao adquirir impress ão"
                         
                     
 
