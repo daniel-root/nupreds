@@ -1,2 +1,3 @@
 # nupreds
-A proposta de implantação do NUPREDS visa qualificar e estimular os alunos dos cursos de Ciência da Computação e Técnico em Informática, inserindo-os em um núcleo com ambiente de trabalhocapaz de criar soluções de TI para a sociedade. 
+Nucleus of Professional Practices in Software Engineering and Development (NUPREDS)
+The purpose for implementing NUPREDS aims to qualify and encourage studants in Computer Science and Computer Technician Course, inserting them in the nucleus with work environment, creating IT solutions for society.
