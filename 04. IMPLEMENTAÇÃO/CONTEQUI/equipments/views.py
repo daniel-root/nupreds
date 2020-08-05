@@ -689,10 +689,10 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
     return render(request, 'equipments/reports.html', data)
 
 
-def page(list_complete,inicio,fim):
-    tipo = 'listagem'
-    title = 'SISTEMA DE CONTROLE DE EQUIPAMENTO'
-    subtitle = 'Relatório de ' + tipo + ' de equipamento'
+def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
+    #tipo = 'listagem'
+    #title = 'SISTEMA DE CONTROLE DE EQUIPAMENTO'
+    #subtitle = 'Relatório de ' + tipo + ' de equipamento'
     #date_now = date.today()
     time_now = datetime.now()
     #print(date_now)
@@ -706,10 +706,17 @@ def page(list_complete,inicio,fim):
     picture.drawWidth = 150
     picture.drawHeight = 50
     picTable = Table([[picture]], 150, 50)
+    description = 'Todos'
+    if tag != 'Todos':
+        #print('Aqui')
+        description = Equipment.objects.filter(tag=tag)
+        type_equipment = str(description[0].type_equipment)
+        description = str(description[0].description)
+        
 
-    list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatóriode "+ tipo +" de equipamento"],[""]
+    list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatório de "+ report +" de equipamento"],[""]
     list02 = ["Data: "+date],["Hora: "+time],["Página: " + str(inicio+1)  +" de " + str(fim)]
-    list03 = ["Tipo: Todos","Etiqueta: Todos"],["Descrição: Todos",""],["Inicial: Todos","Final: Todos"]
+    list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start,"Final: "+end]
 
     Tablelist01 = Table(list01)
     Tablelist02 = Table(list02)
@@ -766,6 +773,7 @@ def page(list_complete,inicio,fim):
 
 
 def some_view(request,report,type_equipment,tag,start,end,order_by):
+    print(report,type_equipment,tag,start,end)
 
     def call_type_equipment(id):
         equipment = Equipment.objects.filter(id=id).values_list('type_equipment',flat=True)
@@ -785,13 +793,17 @@ def some_view(request,report,type_equipment,tag,start,end,order_by):
         return name_equipment[0]
 
     if report == 'Listagem':
-        if type_equipment == 'Todos' and order_by == 'Nenhum':
-            print('aqui')
-            list_report = Equipment.objects.all().order_by('type_equipment','tag')
-        elif type_equipment == 'Todos' and order_by != 'Nenhum':
-            list_report = Equipment.objects.all().order_by(order_by)
+        if order_by == 'Nenhum':
+            if type_equipment == 'Todos':
+                list_report = Equipment.objects.all().order_by('type_equipment','tag')
+            else:
+                list_report = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name=type_equipment))
         else:
-            list_report = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name=type_equipment)).order_by(order_by)
+            if type_equipment == 'Todos':
+                list_report = Equipment.objects.all().order_by(order_by)
+            else:
+                list_report = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name=type_equipment)).order_by(order_by)
+
         list_complete = []
         for equipment in list_report:
             list_temp = [equipment.type_equipment.name,equipment.tag,equipment.description,'','','','',equipment.amount_of_loans]
@@ -817,6 +829,7 @@ def some_view(request,report,type_equipment,tag,start,end,order_by):
                 EquipmentFilter = ' '.join(map(str, EquipmentFilter))
                 list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment =  int(EquipmentFilter))
         else:
+            report = 'Não Devolvidos'
             if type_equipment == 'Todos' and tag=='Todos':
                 list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end).order_by(order_by)
             elif type_equipment != 'Todos' and tag == 'Todos':
@@ -899,7 +912,7 @@ def some_view(request,report,type_equipment,tag,start,end,order_by):
             list_ = []
             list_.append(list_title)
             list_ = list_ + list_complete[i*20:(i+1)*20]
-            table = page(list_,i,numberPage)
+            table = page(list_,i,numberPage,report,type_equipment,tag,start,end)
             elems.append(table)
     else:
         table = page(list_complete)
