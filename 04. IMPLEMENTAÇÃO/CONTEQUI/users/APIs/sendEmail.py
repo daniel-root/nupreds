@@ -68,5 +68,6 @@ def email_cadastro(name,codigo,msgFrom):
 			msg.attach(part2)
 			smtpObj.sendmail(msgTo,msgFrom,'Subject: Bem-vindo!\n{}'.format( msg.as_string()))
 			smtpObj.quit()
+			return True
 	except:
-			pass
+			return False
