@@ -7,10 +7,19 @@ from django.db.models import Q
 from django.utils import timezone
 from django.contrib import messages
 from users.APIs.fingerPrint import *
+import io
+from django.http import FileResponse
+from reportlab.platypus import SimpleDocTemplate
+from reportlab.lib.pagesizes import letter, landscape, A4
+from reportlab.platypus import Table
+from reportlab.platypus import Image
+from reportlab.platypus import TableStyle
+from reportlab.lib import colors
  
 def home(request):
     if request.session.has_key('username'):
         TelegramCadastro()
+        EmailsNotSend()
         return render(request,'home.html')
     return render(request,'login.html')
 
@@ -90,7 +99,6 @@ def equipment_list(request,templete_name='equipments/equipment_list.html'):
 def equipment_list_inactive(request,value,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
         data = {}
-        
         data['list_equipment'] = EquipmentAll()
         data['type_equipment']= EquipmentTypeAll()
         data['type'] = 'Inativos'
@@ -108,10 +116,7 @@ def equipment_create(request, template_name='equipments/equipment_form.html'):
     if request.session.has_key('username'):
         data = {}
         tipo = Equipment_type.objects.all()
-        CHOICE = []
-        for QuerySet in tipo:
-            CHOICE.append((QuerySet))
-        data['types'] = CHOICE
+        data['types'] = tipo
         if request.method == 'POST':
             a = Equipment.objects.create(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
             return redirect('equipment_list')
@@ -122,10 +127,7 @@ def equipment_update(request, pk, template_name='equipments/equipment_form.html'
     if request.session.has_key('username'):
         data = {}
         tipo = Equipment_type.objects.all()
-        CHOICE = []
-        for QuerySet in tipo:
-            CHOICE.append((QuerySet))
-        data['types'] = CHOICE
+        data['types'] = tipo
         equipment = get_object_or_404(Equipment, pk=pk)
         data['equipment']= equipment
         if request.method == 'POST':
@@ -217,9 +219,6 @@ def devolver(request,pk):
     global count
     if request.session.has_key('username'):
         username = None
-        
-        
-        
         if request.method=='POST':
             username = main("Verification")
             if count >= 2 and username=='Erro dpfj_compare()':
@@ -450,6 +449,7 @@ def get_rastreio(request,value):
             CHOICE_EQUIPMENT.append((QuerySet[0]+"-"+QuerySet[1]))
         data['types'] = CHOICE
         data['equipments'] = CHOICE_EQUIPMENT
+        data['order_by'] = 'Nenhum'
 
         if value == 'Listagem':
             type_equipment = request.POST['type_equipment']
@@ -457,6 +457,7 @@ def get_rastreio(request,value):
             data['tag_'] = 'Todos'
             data['start_'] = 'Todos'
             data['end_'] = 'Todos'
+            data['order_by'] = 'Nenhum'
             if type_equipment == 'Todos':
                 equipment_user = Equipment.objects.all().order_by('type_equipment','tag')
                 data['list_equipment_user']= equipment_user
@@ -480,6 +481,7 @@ def get_rastreio(request,value):
             data['tag_'] = tag_
             data['start_'] = inicio
             data['end_'] = fim
+            data['order_by'] = 'Nenhum'
             if type_equipment == 'Todos' and tag=='Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
                 data['list_equipment_user']= equipment_user
@@ -513,6 +515,8 @@ def get_rastreio(request,value):
             data['type_equipment_'] = type_equipment
             data['tag_'] = tag_
             data['start_'] = inicio
+            data['end_'] = 'Vazio'
+            data['order_by'] = 'Nenhum'
             if type_equipment == 'Todos' and tag=='Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None)
                 data['list_equipment_user']= equipment_user
@@ -556,6 +560,7 @@ def get_rastreio(request,value):
         data['tag_'] = 'Todos'
         data['start_'] = 'Todos'
         data['end_'] = 'Todos'
+        data['order_by'] = 'Nenhum'
     
     return render(request, 'equipments/reports.html', data)
 
@@ -578,6 +583,7 @@ def listagem(request,order_by,type_equipment_):
     data['tag_'] = 'Todos'
     data['start_'] = 'Todos'
     data['end_'] = 'Todos'
+    data['order_by'] = order_by
     if type_equipment_ == 'Todos':
         equipment_user = Equipment.objects.all().order_by(order_by)
         data['list_equipment_user']= equipment_user
@@ -609,6 +615,7 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
     data['tag_'] = tag
     data['start_'] = start
     data['end_'] = end
+    data['order_by'] = order_by
     type_equipment = type_equipment_
     inicio = start
     fim = end
@@ -655,6 +662,7 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
     data['tag_'] = tag
     data['start_'] = start
     data['end_'] = 'Todos'
+    data['order_by'] = order_by
     type_equipment = type_equipment_
     inicio = start
     tag_ = tag
@@ -681,46 +689,7 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
     return render(request, 'equipments/reports.html', data)
 
 
-#from reportlab.lib.pagesizes import letter,landscape
-#from reportlab.pdfgen import canvas
-
-def some_view(request):
-
-    import io
-    from django.http import FileResponse
-    # Create a file-like buffer to receive PDF data.
-    buffer = io.BytesIO()
-
-    # Create the PDF object, using the buffer as its "file."
-    #p = canvas.Canvas(buffer)
-    
-    
-    list_report = Equipment_user.objects.filter(equipment=2)
-    list_title = ["Tipo","Etiqueta","Descrição","Solicitação","Responsável","Devolução","Responsável","Qtd. Emprestimos"]
-    list_complete = []
-    list_complete.append(list_title)
-
-    def type_equipment(id):
-        equipment = Equipment.objects.filter(id=id).values_list('type_equipment',flat=True)
-        name_equipment = Equipment_type.objects.filter(id=equipment[0]).values_list('name',flat=True)
-        return name_equipment[0]
-        
-    def tag_equipment(id):
-        name_equipment = Equipment.objects.filter(id=id).values_list('tag',flat=True)
-        return name_equipment[0]
-
-    def description_equipment(id):
-        name_equipment = Equipment.objects.filter(id=id).values_list('description',flat=True)
-        return name_equipment[0]
-
-
-
-    for equipment in list_report:
-        list_temp = [type_equipment(equipment.equipment),tag_equipment(equipment.equipment),description_equipment(equipment.equipment),equipment.loan.strftime("%m/%d/%Y, %H:%M:%S"),str(equipment.user_loan),equipment.devolution.strftime("%m/%d/%Y, %H:%M:%S"),str(equipment.user_devolution),equipment.amount_of_loans]
-        list_complete.append(list_temp)
-
-    from datetime import datetime
-
+def page(list_complete,inicio,fim):
     tipo = 'listagem'
     title = 'SISTEMA DE CONTROLE DE EQUIPAMENTO'
     subtitle = 'Relatório de ' + tipo + ' de equipamento'
@@ -730,32 +699,17 @@ def some_view(request):
     date = str(time_now.day)+'/'+str(time_now.month)+'/'+str(time_now.year)
     time = str(time_now.hour)+':'+str(time_now.minute)
 
-    #print(date)
-    #print(time)
 
     picPath = 'equipments/static/images/download.png'
-    #numberPage = ''
-    file_name = 'pdfTable.pdf'
-
-    from reportlab.platypus import SimpleDocTemplate
-    from reportlab.lib.pagesizes import letter, landscape, A4
-
-    #p = canvas.Canvas(buffer, landscape(letter))
-    pdf = SimpleDocTemplate(buffer,pagesize=landscape(A4))
-
-    from reportlab.platypus import Table
-    from reportlab.platypus import Image
-    from reportlab.platypus import TableStyle
-    from reportlab.lib import colors
-
+    
     picture = Image(picPath)
     picture.drawWidth = 150
     picture.drawHeight = 50
     picTable = Table([[picture]], 150, 50)
 
     list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatóriode "+ tipo +" de equipamento"],[""]
-    list02 = ["Data: "+date],["Hora: "+time],["Página: 1 de n"]
-    list03 = ["Tipo: Chave","Etiqueta: 001"],["Descrição: Incubadora",""],["Inicial: 15/10/2020","Final: 15/03/2020"]
+    list02 = ["Data: "+date],["Hora: "+time],["Página: " + str(inicio+1)  +" de " + str(fim)]
+    list03 = ["Tipo: Todos","Etiqueta: Todos"],["Descrição: Todos",""],["Inicial: Todos","Final: Todos"]
 
     Tablelist01 = Table(list01)
     Tablelist02 = Table(list02)
@@ -780,7 +734,7 @@ def some_view(request):
     tableAll = Table(list_complete)
 
     style3 = TableStyle([
-        ('RIGHTPADDING',(0,0),(-1,-1),30),
+        ('RIGHTPADDING',(0,0),(-1,-1),25),
         #('BACKGROUND',(0,0),(8,0),colors.green),
         ('FONTSIZE', (0,0), (-1,0), 11),
         ('BOTTOMPADDING',(0,0),(-1,0),5),
@@ -806,10 +760,151 @@ def some_view(request):
             [Tablelist03],
             [tableAll]
         ])
+    
+    return table
 
+
+
+def some_view(request,report,type_equipment,tag,start,end,order_by):
+
+    def call_type_equipment(id):
+        equipment = Equipment.objects.filter(id=id).values_list('type_equipment',flat=True)
+        name_equipment = Equipment_type.objects.filter(id=equipment[0]).values_list('name',flat=True)
+        return name_equipment[0]
+            
+    def call_tag_equipment(id):
+        name_equipment = Equipment.objects.filter(id=id).values_list('tag',flat=True)
+        return name_equipment[0]
+
+    #from textwrap import wrap
+
+    def call_description_equipment(id):
+        name_equipment = Equipment.objects.filter(id=id).values_list('description',flat=True)
+        #wraped_text = "-\n".join(wrap(name_equipment[0], 10))
+        #print(wraped_text)
+        return name_equipment[0]
+
+    if report == 'Listagem':
+        if type_equipment == 'Todos' and order_by == 'Nenhum':
+            print('aqui')
+            list_report = Equipment.objects.all().order_by('type_equipment','tag')
+        elif type_equipment == 'Todos' and order_by != 'Nenhum':
+            list_report = Equipment.objects.all().order_by(order_by)
+        else:
+            list_report = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name=type_equipment)).order_by(order_by)
+        list_complete = []
+        for equipment in list_report:
+            list_temp = [equipment.type_equipment.name,equipment.tag,equipment.description,'','','','',equipment.amount_of_loans]
+            list_complete.append(list_temp)
+
+    elif report == 'Rastreio':
+        if order_by == 'Nenhum':
+            if type_equipment == 'Todos' and tag =='Todos':
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end)
+            elif type_equipment != 'Todos' and tag == 'Todos':
+                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+                EquipmentType = ''.join(map(str, EquipmentType))
+                EquipmentType = int(EquipmentType)
+                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                EquipmentFilter = EquipmentFilter.split()
+                number = []
+                for i in EquipmentFilter:
+                    number.append(int(i))
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment__in =  number)
+            elif tag != 'Todos':
+                EquipmentFilter = Equipment.objects.filter(tag = tag).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment =  int(EquipmentFilter))
+        else:
+            if type_equipment == 'Todos' and tag=='Todos':
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end).order_by(order_by)
+            elif type_equipment != 'Todos' and tag == 'Todos':
+                print('cheguei')
+                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+                EquipmentType = ''.join(map(str, EquipmentType))
+                EquipmentType = int(EquipmentType)
+                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                EquipmentFilter = EquipmentFilter.split()
+                number = []
+                for i in EquipmentFilter:
+                    number.append(int(i))
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment__in =  number).order_by(order_by)
+            elif tag != 'Todos':
+                EquipmentFilter = Equipment.objects.filter(tag = tag).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment =  int(EquipmentFilter)).order_by(order_by)
+
+        list_complete = []
+        for equipment in list_report:
+            list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),equipment.devolution.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_devolution),equipment.amount_of_loans]
+            list_complete.append(list_temp)
+    else:
+        if order_by == 'Nenhum':
+            if type_equipment == 'Todos' and tag=='Todos':
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None)
+            elif type_equipment != 'Todos' and tag == 'Todos':
+                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+                EquipmentType = ''.join(map(str, EquipmentType))
+                EquipmentType = int(EquipmentType)
+                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                EquipmentFilter = EquipmentFilter.split()
+                number = []
+                for i in EquipmentFilter:
+                    number.append(int(i))
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment__in =  number)
+            elif tag != 'Todos':
+                EquipmentFilter = Equipment.objects.filter(tag = tag).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment =  int(EquipmentFilter))
+        else:
+            if type_equipment == 'Todos' and tag=='Todos':
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None).order_by(order_by)
+            elif type_equipment != 'Todos' and tag == 'Todos':
+                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+                EquipmentType = ''.join(map(str, EquipmentType))
+                EquipmentType = int(EquipmentType)
+                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                EquipmentFilter = EquipmentFilter.split()
+                number = []
+                for i in EquipmentFilter:
+                    number.append(int(i))
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment__in =  number).order_by(order_by)
+            elif tag != 'Todos':
+                EquipmentFilter = Equipment.objects.filter(tag = tag).values_list('id',flat=True)
+                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment =  int(EquipmentFilter)).order_by(order_by)
+
+        list_complete = []
+        for equipment in list_report:
+            list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),equipment.devolution.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_devolution),equipment.amount_of_loans]
+            list_complete.append(list_temp)
+
+
+
+    #list_report = Equipment_user.objects.all()
+    list_title = ["Tipo","Etiqueta","Descrição","Solicitação","Responsável","Devolução","Responsável","Qtd. Empr."]
+    
+    buffer = io.BytesIO()
+    pdf = SimpleDocTemplate(buffer,pagesize=landscape(A4),rightMargin=30,leftMargin=30, topMargin=30,bottomMargin=18)
     elems = []
-    elems.append(table)
 
+    numberPage = int(len(list_complete)/20)
+    numberPage = numberPage  + 1
+    if numberPage >= 1:    
+        for i in range(0,numberPage):
+            list_ = []
+            list_.append(list_title)
+            list_ = list_ + list_complete[i*20:(i+1)*20]
+            table = page(list_,i,numberPage)
+            elems.append(table)
+    else:
+        table = page(list_complete)
+        elems.append(table)
+   
     pdf.build(elems)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename='reports.pdf')

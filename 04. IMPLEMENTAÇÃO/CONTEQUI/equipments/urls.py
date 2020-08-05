@@ -26,6 +26,6 @@ urlpatterns = [
     path('Listagem/<str:order_by>/<str:type_equipment_>', views.listagem, name='listagem'),
     path('Rastreio/<str:order_by>/<str:type_equipment_>/<str:tag>/<str:start>/<str:end>', views.rastreio, name='rastreio'),
     path('NaoDevolvidos/<str:order_by>/<str:type_equipment_>/<str:tag>/<str:start>', views.nao_devolvidos, name='nao_devolvidos'),
-    path('GerarPDF/', views.some_view, name='some_view'),
+    path('GerarPDF/<str:report>/<str:type_equipment>/<str:tag>/<str:start>/<str:end>/<str:order_by>', views.some_view, name='some_view'),
    
 ]

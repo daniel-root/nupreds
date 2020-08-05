@@ -57,6 +57,7 @@
           </button>
           </form>
        </div>
+
       <div style="margin-top: 10px;" class="container-fluid">
         <form class="form-padrao" autocomplete="off" action="{% url "get_rastreio" type %}" method="post">
           {% csrf_token %}
@@ -270,7 +271,7 @@
 </table>
 <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
-    <form action="{% url "some_view"  %}" class="form-inline">
+    <form action="{% url "some_view" type type_equipment_ tag_ start_ end_ order_by %}" class="form-inline">
       <button class="btn rounded-pill" style="background: #e9ecef">
         Salvar
       </button>

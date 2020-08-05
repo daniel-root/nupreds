@@ -58,17 +58,19 @@ def user_create(request, template_name='users/user_form.html'):
         data['form']= form
         data['user']= user
         if request.method == 'POST':
-            data['form'].usuario = request.POST['usuario']
-            data['form'].email = request.POST['email']
-            data['form'].telefone = request.POST['telefone']
-            data['form'].cpf = request.POST['cpf']
-            data['form'].senha = request.POST['senha']
-            new = request.POST['usuario']
-            data['form'].save()
-            new = Client.objects.filter(usuario=new)
+            a = Client.objects.create(
+                usuario = request.POST['usuario'],
+                email = request.POST['email'],
+                telefone = request.POST['telefone'],
+                cpf = request.POST['cpf'],
+                senha = request.POST['pwd1']
+            )
+            print(a)
+            new = Client.objects.filter(usuario=request.POST['usuario'])
             number = aleatorio()
-            new.update(cod_telegram=number)
-            email_cadastro(new[0].usuario,number,new[0].email)
+            internet = email_cadastro(new[0].usuario,number,new[0].email)
+            if internet:
+                new.update(cod_telegram=number)
             #print(new[0].id)
             return user_update(request, new[0].id)
         return render(request, template_name, data)
