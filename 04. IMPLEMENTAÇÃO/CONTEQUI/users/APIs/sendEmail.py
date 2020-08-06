@@ -2,53 +2,39 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 def email_atraso(name, equipment, tag, description,msgFrom):
-    try:
-        msgFrom = str(msgFrom)
-        smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
-        smtpObj.ehlo()
-        smtpObj.starttls()
-        msgTo = 'nupreds@gmail.com'
-        toPass = 'hYV83BBDA2ebx8r'
-        smtpObj.login(msgTo, toPass)
-        #msg = '''
-        #Daniel, seu cadastro foi realizado com sucesso!
-        #'''
-        msg = MIMEMultipart('alternative')
-
-        #msg['Subject'] = "Link"
-        #msg['From'] = "my@email.com"
-        #msg['To'] = "your@email.com"
-        
-        #name = 'Daniel'
-        #equipment = 'Chave'
-        #tag = '069'
-        #description = 'Incubadora'
-
-        text ="""
-        Olá, """ + str(name) + """, tudo bem? 
-        Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento."""
-        html = """\
-        <html>
-        <head></head>
-        <body>
-                <p>Olá, """ + str(name) + """, tudo bem?</p>
-        <p>Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.</p>
-        </body>
-        </html>
-        """
-
-        part1 = MIMEText(text, 'plain')
-        part2 = MIMEText(html, 'html')
-
-        msg.attach(part1) # text must be the first one
-        msg.attach(part2) # html must be the last one
-
-        smtpObj.sendmail(msgTo,msgFrom,'Subject: Atraso!\n{}'.format( msg.as_string()))
-        #smtpObj.sendmail(msgTo,msgFrom,message)
-        smtpObj.quit()
-        print("Email enviado com sucesso!")
-    except:
-            print("Erro ao enviar e-mail")
+	try:
+		print("mandando email!")
+		msgFrom = str(msgFrom)
+		smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+		print(smtpObj)
+		smtpObj.ehlo()
+		smtpObj.starttls()
+		msgTo = 'nupreds@gmail.com'
+		toPass = 'hYV83BBDA2ebx8r'
+		smtpObj.login(msgTo, toPass)
+		msg = MIMEMultipart('alternative')
+		text ="""
+		Olá, """ + str(name) + """, tudo bem? 
+		Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento."""
+		html = """\
+		<html>
+		<head></head>
+		<body>
+				<p>Olá, """ + str(name) + """, tudo bem?</p>
+		<p>Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.</p>
+		</body>
+		</html>
+		"""
+		part1 = MIMEText(text, 'plain')
+		part2 = MIMEText(html, 'html')
+		msg.attach(part1)
+		msg.attach(part2)
+		smtpObj.sendmail(msgTo,msgFrom,'Subject: Atraso!\n{}'.format( msg.as_string()))
+		smtpObj.quit()
+		
+		return True
+	except:
+		return False
 
 def email_cadastro(name,codigo,msgFrom):
 	try:
@@ -59,18 +45,9 @@ def email_cadastro(name,codigo,msgFrom):
 			msgTo = 'nupreds@gmail.com'
 			toPass = 'hYV83BBDA2ebx8r'
 			smtpObj.login(msgTo, toPass)
-			#msg = '''
-			#Daniel, seu cadastro foi realizado com sucesso!
-			#'''
 			msg = MIMEMultipart('alternative')
-
-			#msg['Subject'] = "Link"
-			#msg['From'] = "my@email.com"
-			#msg['To'] = "your@email.com"
-			
 			number = str(codigo)
 			name = str(name)
-
 			text = name + """
 					, seu cadastro foi realizado com sucesso no sistema Conequi, controle de equipamentos do IFCE, campus Tianguá.
 					Por meio deste canal mandaremos informes, especialmente, sobre atrasos na devolução. Assim, mandaremos lembretes para você.
@@ -85,16 +62,11 @@ def email_cadastro(name,codigo,msgFrom):
 			</body>
 			</html>
 			"""
-
 			part1 = MIMEText(text, 'plain')
 			part2 = MIMEText(html, 'html')
-
-			msg.attach(part1) # text must be the first one
-			msg.attach(part2) # html must be the last one
-
+			msg.attach(part1)
+			msg.attach(part2)
 			smtpObj.sendmail(msgTo,msgFrom,'Subject: Bem-vindo!\n{}'.format( msg.as_string()))
-			#smtpObj.sendmail(msgTo,msgFrom,message)
 			smtpObj.quit()
-			print("Email enviado com sucesso!")
 	except:
-			print("Erro ao enviar e-mail")
+			pass

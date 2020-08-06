@@ -29,71 +29,17 @@
         </form>
       </div>
             
-      <
-          <table class="table table-sm" style="width: 900px;  margin:auto; margin-top: 10px;">
 
-            <!-- Cabeçalho tabela --> 
-            <thead>
-              <tr class="d-flex">
-                <th class="col-lg-8 col-md-8 col-sm-8">Nome</th>
-                <th class="col-lg-2 col-md-3 col-sm-2">Ações</th>
-              </tr>
-            </thead>
-
-            <!-- Corpo da tabela -->
-            <tbody>
-
-              <tr class="d-flex">
-                
-                <!-- Nome -->
-                <td class="col-lg-8 col-md-8 col-sm-8">José da Silva</td>
-                
-                <!-- Botões. Só aparece em desktop e tablet --> 
-                <td class="col-lg-2 col-md-3 d-none d-md-block">  
-                  <button type="submit" class="btn btn-sm" style="background-color: #379944; color: white;">Editar</button>
-                  <button type="submit" class="btn btn-sm" style="background-color: #379944; color: white;">Excluir</button>
-                </td>
-
-                <!-- Listbox. Só aparece smartphone -->
-                <td class="col-sm-2 d-md-none">                 
-                  <div class="dropdown">
-                    <button class="btn dropdown-toggle" type="button" id="dropdownOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ação...</button>
-                    <div class="dropdown-menu w-auto p-3" aria-labelledby="dropdownMenuButton">
-                      <button class="dropdown-item" type="button">Editar</button>
-                      <button class="dropdown-item" type="button">Excluir</button>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-<hr width="700px" style="margin-top: -1px;">
-  <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
-    <form class="form-inline">
-      <button class="rounded-pill">
-        Novo
-      </button>
-    </form>
-    <form class="form-inline">  
-      <button class="rounded-pill" style="margin-left: 5px;">
-          Voltar
-        </button>
       </div>
-    </form>
-  </div>
+
   <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
   <thead>
     <tr>
-      <th scope="col" width="60%" style="text-align: center;">
-        <button class="btn btn-link text-dark" >
-          Etiquetas
-        </button>
+      <th scope="col" width="60%" style="text-align: left;">
+        <a href="" style="color: black;">Nome</a>
       </th>
-      <th scope="col" width="40%" style="text-align: center;">
-        <button class="btn btn-link text-dark" >
-          Ações
-        </button>
+      <th scope="col" width="40%" style="text-align: left;">
+        <a href="" style="color: black;">Ações</a>
       </th>
     </tr>
     </thead>
@@ -101,35 +47,32 @@
     <tr>
       <td></td>
       
-      <td style="text-align: center;">
-        <button class="rounded-pill">
+      <td >
+        <button class=" btn rounded-pill" style="background: #e9ecef">
             Editar
           </button>
-          <button class="rounded-pill" style="margin-left: 5px;">
-            Inativar
-          </button>
-          <button class="rounded-pill" style="margin-left: 5px;">
-            Emprestar
+          
+          <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef">
+            Desativar
           </button>
       </td>
     </tr>
-     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td style="text-align: center;">
-        <button class="rounded-pill" style="box-shadow: none;">
-            Editar
-          </button>
-          <button class="rounded-pill" style="margin-left: 5px;">
-            Inativar
-          </button>
-          <button class="rounded-pill" style="margin-left: 5px;">
-            Emprestar
-          </button>
-      </td>
-    </tr>
+     
   </tbody>
 </table>
+ <hr width="1000px" style="margin-top: -1px;">
+  <div class="row" style="padding-left: 80%; margin-top: 10px; margin-bottom: 15px;">
+        <form class="form-inline">
+        <button class="btn rounded-pill" style="background: #e9ecef">
+          Novo
+        </button>
+        </form>
+        <form class="form-inline">
+        <button class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef">
+          Voltar
+        </button>
+        </form>
+  </div>
+ </div>
 </body>
 </html>
