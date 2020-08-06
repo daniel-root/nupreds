@@ -87,7 +87,7 @@ def EquipmentUnique(pk):
 
 def equipment_list(request,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
-        print("passei por equipment_list")
+        #print("passei por equipment_list")
         data = {}
         data['list_equipment'] = EquipmentActiveAll()
         data['type_equipment']= EquipmentTypeAll()
@@ -560,7 +560,7 @@ def get_rastreio(request,value):
         data['tag_'] = 'Todos'
         data['start_'] = 'Todos'
         data['end_'] = 'Todos'
-        data['order_by'] = 'Nenhum'
+        data['order_by'] = 'Vazio'
     
     return render(request, 'equipments/reports.html', data)
 
@@ -773,8 +773,6 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
 
 
 def some_view(request,report,type_equipment,tag,start,end,order_by):
-    print(report,type_equipment,tag,start,end)
-
     def call_type_equipment(id):
         equipment = Equipment.objects.filter(id=id).values_list('type_equipment',flat=True)
         name_equipment = Equipment_type.objects.filter(id=equipment[0]).values_list('name',flat=True)
@@ -833,7 +831,7 @@ def some_view(request,report,type_equipment,tag,start,end,order_by):
             if type_equipment == 'Todos' and tag=='Todos':
                 list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end).order_by(order_by)
             elif type_equipment != 'Todos' and tag == 'Todos':
-                print('cheguei')
+                #print('cheguei')
                 EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
                 EquipmentType = ''.join(map(str, EquipmentType))
                 EquipmentType = int(EquipmentType)

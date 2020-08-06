@@ -271,11 +271,15 @@
 </table>
 <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
+    {% if order_by != 'Vazio' %}
+    
+    
     <form action="{% url "some_view" type type_equipment_ tag_ start_ end_ order_by %}" class="form-inline">
       <button class="btn rounded-pill" style="background: #e9ecef">
         Salvar
       </button>
     </form>
+    {% endif %}
     <form action="{% url "home" %}" class="form-inline">  
       <button class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef;">
           Voltar
