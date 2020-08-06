@@ -1,8 +1,8 @@
 from equipments.models import *
 from users.models import *
 from django.utils import timezone
-from users.APIs.sendEmail import email_atraso
-from users.APIs.sendTelegram import autenticar, enviar
+from users.APIs.sendEmail import email_atraso, email_cadastro
+from users.APIs.sendTelegram import autenticar, enviar, aleatorio
 
 def Atraso():
     TimeEquipment = Equipment_user.objects.filter(devolution=None)
@@ -23,9 +23,23 @@ def Atraso():
 def TelegramCadastro():
     cod_telegram = Client.objects.filter(cod_telegram__contains='D')
     if cod_telegram:
-        for i in range(0,len(cod_telegram)):
-            atualiza_cod_telegrma = autenticar(str(cod_telegram[i].cod_telegram))
+        for cod in cod_telegram:
+            atualiza_cod_telegrma = autenticar(str(cod.cod_telegram))
             if atualiza_cod_telegrma != 'Vazia' and atualiza_cod_telegrma != False:
-                Client.objects.filter(id=cod_telegram[i].id).update(cod_telegram=atualiza_cod_telegrma)
+                Client.objects.filter(id=cod.id).update(cod_telegram=atualiza_cod_telegrma)
             elif atualiza_cod_telegrma == 'Vazia':
                 break
+    else:
+        pass
+
+def EmailsNotSend():
+    users = Client.objects.filter(cod_telegram=None)
+    print(users)
+    if users:
+        print("passei")
+        for user in users:
+            print(user.usuario)
+            number = aleatorio()
+            internet = email_cadastro(user.usuario,number,user.email)
+            if internet:
+                Client.objects.filter(id=user.id).update(cod_telegram=number)

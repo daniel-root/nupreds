@@ -20,7 +20,7 @@ def autenticar(n):
                         return number_id
                 return False
     except:
-            pass
+            return 'Vazia'
 
 def enviar(name, equipment, tag, description,number):
     try:

@@ -51,12 +51,13 @@
             Rastreio
           </button>
           </form>
-          <form action="{% url "get_rastreio" 'NaoDevolvidos' %}">
+          <form action="{% url "get_rastreio" 'Não Devolvidos' %}">
           <button class="btn btn-link text-dark" style="margin-left: 45px;">
             Não devolvidos
           </button>
           </form>
        </div>
+
       <div style="margin-top: 10px;" class="container-fluid">
         <form class="form-padrao" autocomplete="off" action="{% url "get_rastreio" type %}" method="post">
           {% csrf_token %}
@@ -95,7 +96,7 @@
           </div>
           </div>
           {% endifequal %}
-           {% ifequal type 'NaoDevolvidos' %}
+           {% ifequal type 'Não Devolvidos' %}
           <div class=" form-inline row" style="padding-top: 10px;">
             <label class="col-sm-2 col-form-label" style="padding-right: 10px;" for="etiqueta/descrição">Etiqueta/Descrição:</label>
             <div class="col-sm-10">
@@ -178,7 +179,7 @@
         <a href="{% url "rastreio" 'amount_of_loans' type_equipment_ tag_ start_ end_ %}" style="color: black;">Qtd. Emprestimo</a>
       </th>
       {% endifequal %}
-      {% ifequal type 'NaoDevolvidos' %}
+      {% ifequal type 'Não Devolvidos' %}
       <th scope="col" width="10%" style="text-align: left;">
         <a href="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}" style="color: black;">Tipo</a>
       </th>
@@ -226,7 +227,7 @@
      </p>
     {% endfor %}
     {% endifequal %}
-    {% ifequal type 'NaoDevolvidos' %}
+    {% ifequal type 'Não Devolvidos' %}
     {% load my_tag %}
     {% for equipment_user in list_equipment_user %}
     <tr>
@@ -270,7 +271,7 @@
 </table>
 <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
-    <form action="{% url "some_view"  %}" class="form-inline">
+    <form action="{% url "some_view" type type_equipment_ tag_ start_ end_ order_by %}" class="form-inline">
       <button class="btn rounded-pill" style="background: #e9ecef">
         Salvar
       </button>
