@@ -43,12 +43,12 @@
 </div>
         <div class="text-center">
           <div class=" btn-group-vertical">
-              <a href="{% url "equipment_list"%}"  type="submit" class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px; margin-top: 20px; ">
+              <button href="{% url "equipment_list"%}"  type="submit" class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px; margin-top: 20px; ">
                   <span>
                       <img src={% static "images/equipamentos.png" %} style="height: 30px; width: 30px">
                   </span>
                   Equipamentos
-              </a>
+              </button>
             <form action="{% url "user_list" %}">
               <button class="btn btn-lg rounded" style=" background-color: #C0C0C0; height: 80px; width: 250px; margin-top: 20px;">
                  <span>
@@ -57,12 +57,12 @@
                   Usuários
               </button>
               </form>  
-              <a href="{% url "get_rastreio" 'Listagem' %}"  class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px;  margin-top: 20px;">
+              <button href="{% url "get_rastreio" 'Listagem' %}"  class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px;  margin-top: 20px;">
                   <span>
                     <img src={% static "images/relatorio.png" %} style="height: 30px; width: 30px">
                  </span>
                   Relatórios
-              </a>
+              </button>
           </div>
         </div>
         <div></div>
