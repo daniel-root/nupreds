@@ -8,13 +8,13 @@ def Atraso():
     TimeEquipment = Equipment_user.objects.filter(devolution=None)
     for time in TimeEquipment:
         if timezone.now() >= time.limit_time:
-            print(time.equipment)
+            #print(time.equipment)
             equipment = Equipment.objects.filter(id = time.equipment)
             if equipment[0].status != 'Atrasado':
                 
                 user = Client.objects.filter(usuario=time.user_loan)
                 cod_telegram = user[0].cod_telegram
-                print("vou enviar!")
+                #print("vou enviar!")
                 internet = email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
                 if internet:
                     equipment.update(status='Atrasado')
@@ -34,11 +34,11 @@ def TelegramCadastro():
 
 def EmailsNotSend():
     users = Client.objects.filter(cod_telegram=None)
-    print(users)
+    #print(users)
     if users:
-        print("passei")
+        #print("passei")
         for user in users:
-            print(user.usuario)
+            #print(user.usuario)
             number = aleatorio()
             internet = email_cadastro(user.usuario,number,user.email)
             if internet:

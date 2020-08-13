@@ -183,7 +183,7 @@ def emprestar(request,pk):
                     Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
                     return equipment_list(request)
                 else:
-                    messages.error(request, 'Usuario não encontrado! Tentativa '+ str(count+2))
+                    messages.error(request, 'Usuário não encontrado, tente novamente! Tentativa ' + str(count+2) + '/3')
                     count = count + 1
                     data = {}
                     data['chave'] = pk
@@ -247,7 +247,7 @@ def devolver(request,pk):
                         return equipment_list(request)
                         #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
                 else:
-                    messages.error(request, 'Usuario não encontrado! Tentativa ' + str(count+2))
+                    messages.error(request, 'Usuário não encontrado, tente novamente! Tentativa ' + str(count+2) + '/3')
                     count = count + 1
                     data = {}
                     data['chave'] = pk
@@ -383,6 +383,16 @@ def search(request,value):
             data['type'] = value
             return render(request, 'equipments/equipment_list.html', data)
     return render(request, 'login.html')
+
+def search_type(request):
+    if request.session.has_key('username'):
+        if request.method == 'POST':
+            name = request.POST['cemquipamento']
+            data = {}
+            data['object_list'] = Equipment_type.objects.filter(name__contains=name)
+            return render(request, 'equipments/equipment_type_list.html', data)
+    return render(request, 'login.html')
+
 '''
 class RastreioForm(forms.Form):
     data = {}
@@ -505,7 +515,7 @@ def get_rastreio(request,value):
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter))
                 data['list_equipment_user']= equipment_user
                 data['type'] = value
-        elif value == 'NaoDevolvidos':
+        elif value == 'Não Devolvidos':
             type_equipment = request.POST['type_equipment']
             tag = request.POST['tag']
             inicio = request.POST['start']
