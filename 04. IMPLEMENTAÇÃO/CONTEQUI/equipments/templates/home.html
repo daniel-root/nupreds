@@ -43,26 +43,25 @@
 </div>
         <div class="text-center">
           <div class=" btn-group-vertical">
-              <button href="{% url "equipment_list"%}"  type="submit" class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px; margin-top: 20px; ">
+              <a href="{% url "equipment_list" %}"  type="submit" class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px; margin-top: 20px; ">
                   <span>
                       <img src={% static "images/equipamentos.png" %} style="height: 30px; width: 30px">
                   </span>
                   Equipamentos
-              </button>
-            <form action="{% url "user_list" %}">
-              <button class="btn btn-lg rounded" style=" background-color: #C0C0C0; height: 80px; width: 250px; margin-top: 20px;">
+              </a>
+      
+              <a href="{% url "user_list" %}" class="btn btn-lg rounded" style=" background-color: #C0C0C0; height: 80px; width: 250px; margin-top: 20px;">
                  <span>
                     <img src={% static "images/usuario.png" %}  style="height: 30px; width: 30px">
                  </span>
                   Usuários
-              </button>
-              </form>  
-              <button href="{% url "get_rastreio" 'Listagem' %}"  class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px;  margin-top: 20px;">
+              </a> 
+              <a href="{% url "get_rastreio" 'Listagem' %}"  class="btn btn-lg rounded" style=" background-color: #C0C0C0;height: 80px; width: 250px;  margin-top: 20px;">
                   <span>
                     <img src={% static "images/relatorio.png" %} style="height: 30px; width: 30px">
                  </span>
                   Relatórios
-              </button>
+              </a>
           </div>
         </div>
         <div></div>

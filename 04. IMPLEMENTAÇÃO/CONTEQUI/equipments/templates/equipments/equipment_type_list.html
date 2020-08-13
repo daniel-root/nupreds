@@ -1,30 +1,86 @@
-<h1>Equipments Type</h1>
-<form method="POST" action="">{% csrf_token %}
-    <input type="text" placeholder="Search.." name="search" required="required">
-    <div class="submit">
-        <button type="submit"><i class="fa fa-search"></i>PESQUISAR</button>
-    </div>
-</form>
-<table border="1">
-<thead>
-    <tr>
-    <th><a href="{% url "equipment_type_order_by" 'name' %}">Nome</a></th>
-    <th>View</th>
-    <th>Edit</th>
-    <th>Inativar</th>
-    </tr>
-</thead>
-<tbody>
-    {% load my_tag %}
-    {% for equipment_type in object_list  %}
-    <tr>
-    <td>{{ equipment_type.name }}</td>
-    <td><a href="{% url "equipment_type_view" equipment_type.id %}">view</a></td>
-    <td><a href="{% url "equipment_type_edit" equipment_type.id %}">edit</a></td>
-    <td><a href="{% url "equipment_type_delete" equipment_type.id %}">{% ActiveOrInactiveType equipment_type.id %}</a></td>
-    </tr>
-    {% endfor %}
-</tbody>
-</table>
+  <!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+    <title>Tipo de Equipamentos</title>
+    {% load static %}
+  <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
+  <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}" >
+{% block content %}
+  </head>
+  <body style="margin-top: 3%;">
+    <div class="container">
+      <div class="row " style="padding-left: 5%;">
+          <span>
+            <img src={% static "images/equipamentos.png" %} style="height: 30px; width: 30px; ">
+          </span>
+          <p style="margin-left: 10px; font-size: 150%">Tipos de equipamentos</p>
+        </div>
+        
+    <div style="margin-top: 10px;" class="row justify-content-center">
+        <form class="form-inline" method="POST" action="{% url 'search_type' %}">{% csrf_token %}
+          <div class="input-group">
+            <input class="form-control mr-2 rounded-pill" type="cemquipamento" name="cemquipamento" style="width: 900px; background: #e9ecef">
+            <button class="border-0" style="background: #FFFFFF;">
+              <span>
+                <img src={% static "images/lupa.png" %} style="height: 30px; width: 30px">
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+            
 
-<a href="{% url "equipment_type_new" %}">New</a>
+      </div>
+
+  <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+  <thead>
+    <tr>
+      <th scope="col" width="60%" style="text-align: left;">
+        <a href="" style="color: black;">Nome</a>
+      </th>
+      <th scope="col" width="40%" style="text-align: left;">
+        <a href="{% url "equipment_type_order_by" 'name' %}" style="color: black;">Ações</a>
+      </th>
+    </tr>
+    </thead>
+  <tbody>
+   {% load my_tag %}
+   {% for equipment_type in object_list  %}
+    <tr>
+    
+      <td>{{ equipment_type.name }}</td>
+      
+      <td >
+        <a href="{% url "equipment_type_edit" equipment_type.id %}" class=" btn rounded-pill" style="background: #e9ecef">
+            Editar
+          </a>
+          
+          <a href="{% url "equipment_type_delete" equipment_type.id %}" class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef">
+            {% ActiveOrInactiveType equipment_type.id %}
+          </a>
+      </td>
+    </tr>
+     {% endfor %}
+  </tbody>
+</table>
+ <hr width="1000px" style="margin-top: -1px;">
+  <div class="row" style="padding-left: 80%; margin-top: 10px; margin-bottom: 15px;">
+        
+        <a href="{% url "equipment_type_new" %}" class="btn rounded-pill" style="background: #e9ecef">
+          Novo
+        </a>
+       
+       
+        <a href="{% url "equipment_list" %}" class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef">
+          Voltar
+        </a>
+  </div>
+ </div>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src={% static "users/js/bootstrap.min.js" %}></script>
+</body>
+{% endblock %}
+</html>

@@ -15,6 +15,7 @@ urlpatterns = [
     path('Filtro/<str:pk>/<str:value>', views.filter_list, name='filter_list_equipment'),
     path('Filtro/<str:value>', views.filter_type, name='filter_type_equipment'),
     path('Pesquisar/<str:value>', views.search, name='search'),
+    path('Tipo/Pesquisar', views.search_type, name='search_type'),
     path('Relatórios/<str:value>', views.get_rastreio, name='get_rastreio'),
     path('Tipo', views.equipment_type_list, name='equipment_type_list'),
     path('Tipo/Ver/<int:pk>', views.equipment_type_view, name='equipment_type_view'),

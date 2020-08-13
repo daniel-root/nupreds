@@ -108,11 +108,13 @@ def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
     return render(request, 'login.html')
 
 def user_fingerprint(request, pk, template_name='users/user_fingerprint.html'):
+    print("cheguei aqui!")
     if request.session.has_key('username'):
         data = {}
         data['object'] = get_object_or_404(Client, pk=pk)
-        data['frase'] = 'Click em inicar!'
+        #data['frase'] = 'Click em inicar!'
         if request.method=='POST':
+            print("cheguei até aqui!")
             #result, pFeatures1, nFeatures1Size = CaptureFinger("any finger", hReader, DPFJ_FMD_ISO_19794_2_2005, byref(pFeatures1), byref(nFeatures1Size))
             #string = ''.join(chr(i) for i in nFeatures1Size)
             #print(string)
@@ -126,7 +128,7 @@ def user_fingerprint(request, pk, template_name='users/user_fingerprint.html'):
             else:
                 Client.objects.filter(id = data['object'].id).update(fingerprint=result)
                 data['frase'] = 'Registro Completo!'
-            return render(request, template_name, data)
+            return redirect('/Usuario')
             #return user_fingerprint_registration(request,data['frase'],pk )
         
         return render(request, template_name, data)
