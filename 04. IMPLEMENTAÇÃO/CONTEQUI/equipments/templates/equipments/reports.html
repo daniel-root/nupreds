@@ -117,11 +117,10 @@
           {% endifequal %}
           
           <div class="col-lg-12 col-sm-12 text-right" style="padding: 30px 0px">
-        <button type="submit" class="btn rounded-pill"style="background-color: #e9ecef; color: black;">Realizar Pesquisa</button>            
+        <button type="submit" onclick="myFunction()" class="btn rounded-pill"style="background-color: #e9ecef; color: black;">Realizar Pesquisa</button>            
       </div>
         </form>
       </div>
-            
       <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
   <thead>
     <tr>
@@ -193,7 +192,7 @@
         <a href="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}" style="color: black;">Solicitação</a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
-        <a href="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}" style="color: black;>Responsável</a>
+        <a href="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}" style="color: black; "> Responsável </a>
       </th>
       <th scope="col" width="10%" style="text-align: left;">
         <a href=""style="color: black;">Devolução</a>
@@ -269,6 +268,7 @@
 
        </tbody>
 </table>
+
 <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 90%; margin-top: 10px; margin-bottom: 15px;">
     {% if order_by != 'Vazio' %}
@@ -290,6 +290,11 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
    <script src={% static "users/js/bootstrap.min.js" %}></script>
+   <script>
+    function myFunction() {
+      alert("Aguarde, enquanto realizamos a busca! Pode demorar alguns segundos.");
+    }
+    </script>
 </body>
 {% endblock %}
 </html>
