@@ -11,9 +11,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <!-- Validação de CPF -->
-  <script src="js/valida_cpf_cnpj.js"></script>
-
     <title>Cadastro de Usuário</title>
     {% load static %}
     <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}">
@@ -42,9 +39,7 @@
         <label  for="txtCPF" class="col-lg-2 col-md-2 col-sm-12 col-form-label">CPF: </label>
         <div class="col-lg-10 col-md-10 col-sm-12">
           <!-- Se cpfJaCadastrado = 1, mostra mensagem de erro dizendo que CPF já está cadastrado -->
-          <input  type="text" value="{{user.cpf}}" class="form-control rounded-pill" placeholder="000.000.000-00" onkeypress="
-$('.cpf').mask('000.000.000-00', {reverse: true})" id="cpf" name="cpf" style=" background: #e9ecef" required>
-
+          <input  type="text" value="{{user.cpf}}" class="form-control rounded-pill" placeholder="000.000.000-00" onkeypress="$(this).mask('000.000.000-00');" id="cpf" name="cpf" style=" background: #e9ecef" required>
         </div>
       </div>
       
@@ -124,30 +119,6 @@ $('.cpf').mask('000.000.000-00', {reverse: true})" id="cpf" name="cpf" style=" b
       </div>
     </form>
   </div>
-
-  <!-- Script para verificar se o CPF é válido -->
-  <script type="text/javascript">
-
-    document.getElementById("CPF").oninput = function() {validateCPF()};
-
-    var cpf = document.getElementById("CPF");
-    var cpfJaCadastrado = document.getElementById("cpfJaCadastrado");
-
-    function validateCPF(){
-      //Verifica se CPF é bem formado (regra de formação) 
-      if(valida_cpf_cnpj(cpf.value)) {
-        //Verifica se CPF já está cadastrado no banco 
-        if (cpfJaCadastrado.value.toString() == "1") {
-          cpf.setCustomValidity("CPF já cadastrado");
-        }
-        else {
-          cpf.setCustomValidity('');
-        }
-      } else {
-        cpf.setCustomValidity("CPF inválido");
-      }
-    }
-  </script>
 
   <!-- Script para verificar se a senha é forte e se senhas são diferentes -->
   <script type="text/javascript">
