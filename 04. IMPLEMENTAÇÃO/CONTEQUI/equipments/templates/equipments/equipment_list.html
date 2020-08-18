@@ -172,7 +172,7 @@
                   {% else %}
                   <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
                   {% endifequal %}
-                  <button type="submit" class="btn border-0">Coloque o Dedo no leitor</button>
+                  <button type="submit" class="btn border-0">Posicione o dedo indicador sobre o leitor</button>
                   </form>
                   
                 
