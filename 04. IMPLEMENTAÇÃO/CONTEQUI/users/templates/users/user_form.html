@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
 
     <!-- JQuery -->
-  <script src="js/jquery.js"></script>
+    <script src="js/jquery.js"></script>
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -29,7 +29,7 @@
         </div>
        <div class="container-fluid">
 
-    <form method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
+    <form id="user_form" name="user_form" method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
   
       <div class="form-group row">
         <label  for="txtNome" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Nome: </label>
@@ -83,17 +83,7 @@ $('.cpf').mask('000.000.000-00', {reverse: true})" id="cpf" name="cpf" style=" b
         <div class="row">
           <label  for="txtDigital" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Impressão Digital:</label>
           <div class="col-lg-10 col-md-10 col-sm-12">
-          {% if user.id != 'None' %}
-          <form name="my" id="my" method="post" action="{% url 'user_fingerprint' user.id %}">{% csrf_token %}
-            <button type="submit"form="my" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef">
-              
-            </button>
-          </form>
-          <form method="post" action="{% url 'user_fingerprint' user.id %}">{% csrf_token %}
           
-            <input type="submit" value="Cadastrar Digital" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef" />
-        </form>
-            {% endif %}
             <!-- Modal -->
             <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -116,13 +106,18 @@ $('.cpf').mask('000.000.000-00', {reverse: true})" id="cpf" name="cpf" style=" b
           </div>
         </div>
       </div>
-
+     
       <div class="col-lg-12 col-sm-12 text-right" style="padding: 50px 0px">
         <a href="{% url "user_list" %}">voltar</a>
         <button type="button" class="btn rounded-pill" style="background: #e9ecef">Cancelar</button>            
-        <button type="submit" class="btn rounded-pill" style="background: #e9ecef">Cadastrar</button>
+        <button type="submit" class="btn rounded-pill" style="background: #e9ecef">Salvar</button>
       </div>
     </form>
+     {% if user.id != 'None' %}
+          <form id="fingerprint" name="fingerprint" method="post" action="{% url 'user_fingerprint' user.id %}">{% csrf_token %}
+            <input type="submit" form="fingerprint" value="Cadastrar Digital" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef" />
+          </form>
+    {% endif %}
   </div>
 
   <!-- Script para verificar se o CPF é válido -->

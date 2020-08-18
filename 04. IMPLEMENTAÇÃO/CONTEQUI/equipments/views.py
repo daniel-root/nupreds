@@ -49,18 +49,21 @@ def equipment_type_view(request, pk, template_name='equipments/equipment_type_de
     return render(request, template_name, {'object':EquipmentTypeUnique(pk)})
 
 def equipment_type_create(request, template_name='equipments/equipment_type_form.html'):
-    form = TypeForm(request.POST or None)
-    if form.is_valid():
-        form.save()
+    if request.method=='POST':
+        new_equipment_type = Equipment_type.objects.create(
+            name=request.POST['name_type'],
+            time_maximum=request.POST['ctempo'])
         return redirect('equipment_list')
-    return render(request, template_name, {'form':form})
+    return render(request, template_name)
 
 def equipment_type_update(request, pk, template_name='equipments/equipment_type_form.html'):
-    form = TypeForm(request.POST or None, instance=EquipmentTypeUnique(pk))
-    if form.is_valid():
-        form.save()
+    equipment_type = Equipment_type.objects.filter(pk=pk)
+    if request.method=='POST':
+        equipment_type.update(
+            name=request.POST['name_type'],
+            time_maximum=request.POST['ctempo'])
         return redirect('equipment_list')
-    return render(request, template_name, {'form':form})
+    return render(request, template_name, {'equipment_type':equipment_type})
 
 def equipment_type_delete(request, pk, template_name='equipments/equipment_type_confirm_delete.html'):
     if request.session.has_key('username'):
@@ -118,8 +121,18 @@ def equipment_create(request, template_name='equipments/equipment_form.html'):
         tipo = Equipment_type.objects.all()
         data['types'] = tipo
         if request.method == 'POST':
-            a = Equipment.objects.create(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
-            return redirect('equipment_list')
+            equipment = Equipment.objects.filter( Q(tag=name) | Q(description=name) ,type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))
+            if not equipment:
+                new_equipment = Equipment.objects.create(
+                    tag=request.POST['tag'],
+                    description=request.POST['description'],
+                    type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),
+                    maximum_time=request.POST['maximum_time'])
+                return redirect('equipment_list')
+            else:
+                messages.error(request, 'Equipamento já existe!')
+                data['equipment'] = {'tag':request.POST['tag'],'description':request.POST['description'],'type_equipment':Equipment_type.objects.get(name = request.POST['type_equipment']),'maximum_time':request.POST['maximum_time']}
+                return render(request, template_name, data)
         return render(request, template_name, data)
     return render(request, 'login.html')
 
@@ -163,7 +176,7 @@ def emprestar(request,pk):
                     data['list_equipment'] = EquipmentActiveAll()
                     data['type_equipment']= EquipmentTypeAll()
                     data['type'] = 'Todos'
-                    messages.error(request, 'Muitas tentativas!')
+                    messages.error(request, 'Não foi Possível capturar digital! Tente com login e senha.')
                     return render(request, 'equipments/equipment_list.html',data)
             elif username != "Erro ao selecionar dispositivo.":
                 post = Client.objects.filter(usuario=username).values_list('id',flat=True)
