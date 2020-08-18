@@ -50,10 +50,16 @@ def equipment_type_view(request, pk, template_name='equipments/equipment_type_de
 
 def equipment_type_create(request, template_name='equipments/equipment_type_form.html'):
     if request.method=='POST':
-        new_equipment_type = Equipment_type.objects.create(
-            name=request.POST['name_type'],
-            time_maximum=request.POST['ctempo'])
-        return redirect('equipment_list')
+        equipment_type = Equipment_type.objects.filter(name = request.POST['name_type'])
+        if not equipment_type:
+            new_equipment_type = Equipment_type.objects.create(
+                name=request.POST['name_type'],
+                time_maximum=request.POST['ctempo'])
+            return redirect('equipment_list')
+        else:
+            messages.error(request, 'Tipo de equipamento já existe!')
+            data['equipment_type'] = {'name':request.POST['name_type'],'time_maximum':request.POST['ctempo']}
+            return render(request, template_name, data)
     return render(request, template_name)
 
 def equipment_type_update(request, pk, template_name='equipments/equipment_type_form.html'):
@@ -121,7 +127,7 @@ def equipment_create(request, template_name='equipments/equipment_form.html'):
         tipo = Equipment_type.objects.all()
         data['types'] = tipo
         if request.method == 'POST':
-            equipment = Equipment.objects.filter( Q(tag=name) | Q(description=name) ,type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))
+            equipment = Equipment.objects.filter( Q(tag=request.POST['tag']) | Q(description=request.POST['description']) ,type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))
             if not equipment:
                 new_equipment = Equipment.objects.create(
                     tag=request.POST['tag'],

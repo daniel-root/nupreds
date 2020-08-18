@@ -40,6 +40,19 @@
         </div>
         </div>
       </div>
+      <div class="modal fade" id="modalExemplo2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Carregando...</h5>
+                
+            </div>
+        <div class="modal-body">
+          <div class="spinner-border text-primary"></div>
+        </div>
+        </div>
+        </div>
+      </div>
         <div class="row justify-content-center">
           <form action="{% url "get_rastreio" 'Listagem' %}">
           <button class="btn btn-link text-dark ">
@@ -57,7 +70,6 @@
           </button>
           </form>
        </div>
-{{ type }}
       <div style="margin-top: 10px;" class="container-fluid">
         <form class="form-padrao" autocomplete="off" action="{% url "get_rastreio" type %}" method="post">
           {% csrf_token %}
@@ -117,7 +129,7 @@
           {% endifequal %}
           
           <div class="col-lg-12 col-sm-12 text-right" style="padding: 30px 0px">
-        <button type="submit" onclick="myFunction()" class="btn rounded-pill"style="background-color: #e9ecef; color: black;">Realizar Pesquisa</button>            
+        <button type="submit" data-toggle="modal" data-target="#modalExemplo2" class="btn rounded-pill"style="background-color: #e9ecef; color: black;">Realizar Pesquisa</button>            
       </div>
         </form>
       </div>
@@ -287,13 +299,42 @@
       </div>
     </form>
   </div>
+  <form method="post" id="form1" action="">
+    <label for='gols1'>Time1</label>
+    <input type="text" name="gols1" id="gols1">
+    <label for='gols2'>Time2</label>
+    <input type="text" name="gols2" id="gols2">
+    <label for='gols3'>Select</label>
+    <select name="gols3" id="gols3">
+      <option>Todos</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>  
+    </select>
+    <label for='gols4'>Data</label>
+    <input type="date" name="gols4" id="gols4">
+  </form>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
    <script src={% static "users/js/bootstrap.min.js" %}></script>
    <script>
-    function myFunction() {
-      alert("Aguarde, enquanto realizamos a busca! Pode demorar alguns segundos.");
+    
+    (function() {
+
+    var $gols1 = document.getElementById('gols1'),
+      $gols2 = document.getElementById('gols2'),
+      $gols3 = document.getElementById('gols3'),
+      $gols4 = document.getElementById('gols4');
+    function handleSubmit(){
+      if ($gols1.value && $gols2.value && $gols3.value && $gols4.value)
+      alert('Formulário enviado.');
     }
+
+    $gols1.addEventListener('blur', handleSubmit);
+    $gols2.addEventListener('blur', handleSubmit);
+    $gols3.addEventListener('blur', handleSubmit);
+    $gols4.addEventListener('blur', handleSubmit);
+    })();
     </script>
 </body>
 {% endblock %}

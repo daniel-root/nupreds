@@ -58,21 +58,31 @@ def user_create(request, template_name='users/user_form.html'):
         data['form']= form
         data['user']= user
         if request.method == 'POST':
-            new_user = Client.objects.create(
-                usuario = request.POST['usuario'],
-                email = request.POST['email'],
-                telefone = request.POST['telefone'],
-                cpf = request.POST['cpf'],
-                senha = request.POST['pwd1']
-            )
-            #print(a)
-            new = Client.objects.filter(usuario=request.POST['usuario'])
-            number = aleatorio()
-            internet = email_cadastro(new[0].usuario,number,new[0].email)
-            if internet:
-                new.update(cod_telegram=number)
-            #print(new[0].id)
-            return user_update(request, new[0].id)
+            user = Client.objects.filter(cpf=request.POST['cpf'])
+            if not user:    
+                new_user = Client.objects.create(
+                    usuario = request.POST['usuario'],
+                    email = request.POST['email'],
+                    telefone = request.POST['telefone'],
+                    cpf = request.POST['cpf'],
+                    senha = request.POST['pwd1']
+                )
+                new = Client.objects.filter(usuario=request.POST['usuario'])
+                number = aleatorio()
+                internet = email_cadastro(new[0].usuario,number,new[0].email)
+                if internet:
+                    new.update(cod_telegram=number)
+                #print(new[0].id)
+                return user_update(request, new[0].id)
+            else:
+                messages.error(request, 'Usuário já existe!')
+                data['mensagem'] = 'Te acorda menino!'
+                data['user'] = {'usuario':request.POST['usuario'],
+                    'email':request.POST['email'],
+                    'telefone':request.POST['telefone'],
+                    'cpf':request.POST['cpf'],
+                    'senha':request.POST['pwd1']
+                }
         return render(request, template_name, data)
     return render(request, 'login.html')
 
@@ -91,7 +101,7 @@ def user_update(request, pk, template_name='users/user_form.html'):
             email = request.POST['email'],
             telefone = request.POST['telefone'],
             cpf = request.POST['cpf'],
-            senha = request.POST['senha']
+            senha = request.POST['pwd1']
             )
             return render(request, template_name, data)
         return render(request, template_name, data)

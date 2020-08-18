@@ -27,7 +27,17 @@
        <div class="container-fluid">
 
     <form id="user_form" name="user_form" method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
-  
+  {% for message in messages %}
+            <div class="alert alert-danger">
+              <strong>Error!</strong> {{ message }}
+            </div>
+          {% endfor %}
+           {% if mensagem %}
+          <div class="alert alert-danger">
+              {{mensagem}}
+          </div>
+          {% endif %}
+         
       <div class="form-group row">
         <label  for="txtNome" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Nome: </label>
         <div class="col-lg-10 col-md-10 col-sm-12">
@@ -108,13 +118,8 @@
         <button type="submit" class="btn rounded-pill" style="background: #e9ecef">Salvar</button>
       </div>
     </form>
-     {% if user.id != 'None' %}
-          <form id="fingerprint" name="fingerprint" method="post" action="{% url 'user_fingerprint' user.id %}">{% csrf_token %}
-            <input type="submit" form="fingerprint" value="Cadastrar Digital" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef" />
-          </form>
-    {% endif %}
-  </div>
 
+  </div>
   <!-- Script para verificar se a senha é forte e se senhas são diferentes -->
   <script type="text/javascript">
     var password = document.getElementById("pwd1")
