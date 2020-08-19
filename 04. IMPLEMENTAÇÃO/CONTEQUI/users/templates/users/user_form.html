@@ -31,7 +31,8 @@
       <div class="form-group row">
         <label  for="txtNome" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Nome: </label>
         <div class="col-lg-10 col-md-10 col-sm-12">
-          <input class="form-control rounded-pill" type="texto" required="required" name="usuario" value="{{user.usuario}}"  style=" background: #e9ecef">
+          <input type="hidden" id="nomeUsuarioJaCadastrado" name="nomeUsuarioJaCadastrado" value="0">
+          <input class="form-control rounded-pill" type="texto" name="nomeUsuario" id="nomeUsuario" value="{{user.usuario}}"  style=" background: #e9ecef">
         </div>
       </div> 
 
@@ -61,7 +62,7 @@
         <div class="row">
           <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
-            <input type="password" value="{{user.senha}}" class="form-control rounded-pill" maxlength="8" id="pw1" name="pwd1" style=" background: #e9ecef"required>
+            <input type="password" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12" id="pwd1" name="pwd1" style=" background: #e9ecef" required>
           </div>
         </div>
       </div>
@@ -70,7 +71,7 @@
         <div class="row">
           <label  for="txtSenha2" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Repetir Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
-            <input type="password" class="form-control rounded-pill"  maxlength="8" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
+            <input type="password" class="form-control rounded-pill"  mINlength="8" maxlength="12" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
           </div>
         </div>
       </div>
@@ -125,25 +126,21 @@
     var password = document.getElementById("pwd1")
       , confirm_password = document.getElementById("pwd2")
       , nome_usuario = document.getElementById("nomeUsuario");
-    var regex = /^[a-z\d]{8,12}$/i;
+    var regex = /^[0-9]+${8}$/i;
 
     function validatePassword(){
       if (!(regex.test(password.value))) {
        password.setCustomValidity("Sua senha deve ter números, letras e entre 8 e 12 caracteres!");
       } else {
-        if (password.value == nome_usuario.value) {
-          password.setCustomValidity("O nome do seu usuário e sua senha devem ser diferentes!");
-        } else {
-         password.setCustomValidity('');
-        }
-      }
-        
-      if(password.value != confirm_password.value) {
+        if(password.value != confirm_password.value) {
        confirm_password.setCustomValidity("Senhas diferentes!");
       } else {
        confirm_password.setCustomValidity('');
       }
     }
+      
+        
+      
 
     //password.onchange = validatePassword;
     //confirm_password.onkeyup = validatePassword;    
