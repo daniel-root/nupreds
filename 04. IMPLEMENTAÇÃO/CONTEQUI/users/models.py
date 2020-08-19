@@ -1,6 +1,6 @@
 from django.db import models
 class Client(models.Model):
-    usuario = models.CharField(max_length=255, null=False,unique=True)
+    usuario = models.CharField(max_length=255, null=False)
     email = models.EmailField()
     telefone = models.CharField(max_length=20, null=True)
     cpf = models.CharField(max_length=255, null=False,unique=True)

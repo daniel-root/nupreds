@@ -1,5 +1,6 @@
 <h1>Equipments Type Edit</h1>
 <form method="post">{% csrf_token %}
-    {{ form.as_p }}
+   <input type="text" id="name" name="name" value="" />
+   <input type="text" id="time" name="time" value="" />
     <input type="submit" value="Submit" />
 </form>

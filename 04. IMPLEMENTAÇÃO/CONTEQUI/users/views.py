@@ -58,21 +58,31 @@ def user_create(request, template_name='users/user_form.html'):
         data['form']= form
         data['user']= user
         if request.method == 'POST':
-            a = Client.objects.create(
-                usuario = request.POST['usuario'],
-                email = request.POST['email'],
-                telefone = request.POST['telefone'],
-                cpf = request.POST['cpf'],
-                senha = request.POST['pwd1']
-            )
-            print(a)
-            new = Client.objects.filter(usuario=request.POST['usuario'])
-            number = aleatorio()
-            internet = email_cadastro(new[0].usuario,number,new[0].email)
-            if internet:
-                new.update(cod_telegram=number)
-            #print(new[0].id)
-            return user_update(request, new[0].id)
+            user = Client.objects.filter(cpf=request.POST['cpf'])
+            if not user:    
+                new_user = Client.objects.create(
+                    usuario = request.POST['usuario'],
+                    email = request.POST['email'],
+                    telefone = request.POST['telefone'],
+                    cpf = request.POST['cpf'],
+                    senha = request.POST['pwd1']
+                )
+                new = Client.objects.filter(usuario=request.POST['usuario'])
+                number = aleatorio()
+                internet = email_cadastro(new[0].usuario,number,new[0].email)
+                if internet:
+                    new.update(cod_telegram=number)
+                #print(new[0].id)
+                return user_update(request, new[0].id)
+            else:
+                messages.error(request, 'Usuário já existe!')
+                data['mensagem'] = 'Te acorda menino!'
+                data['user'] = {'usuario':request.POST['usuario'],
+                    'email':request.POST['email'],
+                    'telefone':request.POST['telefone'],
+                    'cpf':request.POST['cpf'],
+                    'senha':request.POST['pwd1']
+                }
         return render(request, template_name, data)
     return render(request, 'login.html')
 
@@ -82,15 +92,17 @@ def user_update(request, pk, template_name='users/user_form.html'):
         data = {}
         user= get_object_or_404(Client, pk=pk)
         form = ClientForm(request.POST or None, instance=user)
-        data['form']= form
+        #data['form']= form
         data['user']= user
         if request.method == 'POST':
-            data['form'].usuario = request.POST['usuario']
-            data['form'].email = request.POST['email']
-            data['form'].telefone = request.POST['telefone']
-            data['form'].cpf = request.POST['cpf']
-            data['form'].senha = request.POST['senha']
-            data['form'].save()
+            update_user = Client.objects.filter(pk=pk)
+            update_user.update(
+            usuario = request.POST['usuario'],
+            email = request.POST['email'],
+            telefone = request.POST['telefone'],
+            cpf = request.POST['cpf'],
+            senha = request.POST['pwd1']
+            )
             return render(request, template_name, data)
         return render(request, template_name, data)
     return render(request, 'login.html')
@@ -108,29 +120,18 @@ def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
     return render(request, 'login.html')
 
 def user_fingerprint(request, pk, template_name='users/user_fingerprint.html'):
-    print("cheguei aqui!")
     if request.session.has_key('username'):
         data = {}
         data['object'] = get_object_or_404(Client, pk=pk)
-        #data['frase'] = 'Click em inicar!'
-        if request.method=='POST':
-            print("cheguei até aqui!")
-            #result, pFeatures1, nFeatures1Size = CaptureFinger("any finger", hReader, DPFJ_FMD_ISO_19794_2_2005, byref(pFeatures1), byref(nFeatures1Size))
-            #string = ''.join(chr(i) for i in nFeatures1Size)
-            #print(string)
-            #return string
-            #data['frase'] = 'Coloque o dedo no leitor!'
-            #print("Aqui")
+        if request.method=='POST':           
             result = main("Registro")
             if result[0] != 'F':
                 data['frase'] = result
-            #print(result,len(result))
             else:
                 Client.objects.filter(id = data['object'].id).update(fingerprint=result)
                 data['frase'] = 'Registro Completo!'
             return redirect('/Usuario')
             #return user_fingerprint_registration(request,data['frase'],pk )
-        
         return render(request, template_name, data)
     return render(request, 'login.html')
 
