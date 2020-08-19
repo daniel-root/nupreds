@@ -58,31 +58,49 @@ def user_create(request, template_name='users/user_form.html'):
         data['form']= form
         data['user']= user
         if request.method == 'POST':
-            user = Client.objects.filter(cpf=request.POST['cpf'])
-            if not user:    
-                new_user = Client.objects.create(
-                    usuario = request.POST['usuario'],
-                    email = request.POST['email'],
-                    telefone = request.POST['telefone'],
-                    cpf = request.POST['cpf'],
-                    senha = request.POST['pwd1']
-                )
-                new = Client.objects.filter(usuario=request.POST['usuario'])
-                number = aleatorio()
-                internet = email_cadastro(new[0].usuario,number,new[0].email)
-                if internet:
-                    new.update(cod_telegram=number)
-                #print(new[0].id)
-                return user_update(request, new[0].id)
-            else:
-                messages.error(request, 'Usuário já existe!')
+            result = main("Registro")
+            #result="Digital não reconhecida!"
+            if result[0] != 'F':
+                messages.error(request, result)
                 data['mensagem'] = 'Te acorda menino!'
                 data['user'] = {'usuario':request.POST['usuario'],
                     'email':request.POST['email'],
                     'telefone':request.POST['telefone'],
                     'cpf':request.POST['cpf'],
-                    'senha':request.POST['pwd1']
+                    'senha':request.POST['pwd1'],
+                    'id':'None'
                 }
+                return render(request, template_name, data)
+            else:
+                #Client.objects.filter(id = data['object'].id).update(fingerprint=result)
+                #data['frase'] = 'Registro Completo!'
+                user = Client.objects.filter(cpf=request.POST['cpf'])
+                if not user:    
+                    new_user = Client.objects.create(
+                        usuario = request.POST['usuario'],
+                        email = request.POST['email'],
+                        telefone = request.POST['telefone'],
+                        cpf = request.POST['cpf'],
+                        senha = request.POST['pwd1'],
+                        fingerprint=result
+                    )
+                    new = Client.objects.filter(usuario=request.POST['usuario'])
+                    number = aleatorio()
+                    internet = email_cadastro(new[0].usuario,number,new[0].email)
+                    if internet:
+                        new.update(cod_telegram=number)
+                    #print(new[0].id)
+                    return redirect('/Usuario')
+                else:
+                    messages.error(request, 'Usuário já existe!')
+                    data['mensagem'] = 'Te acorda menino!'
+                    data['user'] = {'usuario':request.POST['usuario'],
+                        'email':request.POST['email'],
+                        'telefone':request.POST['telefone'],
+                        'cpf':request.POST['cpf'],
+                        'senha':request.POST['pwd1'],
+                        'id':'None'
+                    }
         return render(request, template_name, data)
     return render(request, 'login.html')
 
@@ -103,7 +121,7 @@ def user_update(request, pk, template_name='users/user_form.html'):
             cpf = request.POST['cpf'],
             senha = request.POST['pwd1']
             )
-            return render(request, template_name, data)
+            return redirect('/Usuario')
         return render(request, template_name, data)
     return render(request, 'login.html')
     
@@ -157,20 +175,26 @@ def user_fingerprint_registration(request, frase,pk, template_name='users/user_f
         return render(request, template_name, data)
     return render(request, 'login.html')
 
-
+from django.core.paginator import Paginator
 def user_teste(request, template_name='users/user_teste.html'):
     if request.session.has_key('username'):
         #user= Client.objects.all()
         data = {}
         data['nome']= None
+        contact_list = Client.objects.all()
+        paginator = Paginator(contact_list, 3) # Show 25 contacts per page.
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        data['page_obj'] = page_obj
         if request.method=='POST':
             result = main("Verification")
             if result:
                 data['nome']= ('Bem Vindx, ' + result)
             else: data['nome'] = 'Digital não reconhecida no banco de dados! Tente novamente'
-            return render(request, template_name,data )
+            return render(request, template_name,data)
             return redirect('user_list')
-        return render(request, template_name)
+        return render(request, template_name,data)
     return render(request, 'login.html')
     '''
     if request.session.has_key('username'):
@@ -275,6 +299,7 @@ def filter_list(request,pk,value,templete_name='users/user_list.html'):
             data['type'] = value
             return render(request, templete_name, data)
         else:
+            filtro = 'id'
             if pk == 'Id':
                 filtro = 'id'
             elif pk == 'Nome':

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}" >
     <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
     {% block content %}
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   </head>
   <body style="margin-top: 3%;">
     <div class="container">
@@ -71,7 +72,7 @@
           </form>
        </div>
       <div style="margin-top: 10px;" class="container-fluid">
-        <form class="form-padrao" autocomplete="off" action="{% url "get_rastreio" type %}" method="post">
+        <form id="submit-button" class="form-padrao" autocomplete="off" action="{% url "get_rastreio" type %}" method="post">
           {% csrf_token %}
           <div class=" form-group row" >
             <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="tipo">Tipo:</label>
@@ -129,7 +130,7 @@
           {% endifequal %}
           
           <div class="col-lg-12 col-sm-12 text-right" style="padding: 30px 0px">
-        <button type="submit" data-toggle="modal" data-target="#modalExemplo2" class="btn rounded-pill"style="background-color: #e9ecef; color: black;">Realizar Pesquisa</button>            
+        <button type="submit" class="btn rounded-pill"style="background-color: #e9ecef; color: black;">Realizar Pesquisa</button>            
       </div>
         </form>
       </div>
@@ -220,7 +221,7 @@
     {% load my_tag %}
   <tbody>
     {% ifequal type 'Rastreio' %}
-    
+    {{ list_equipment_user }}
     {% for equipment_user in list_equipment_user %}
     <tr>
     <td>{% TypeName equipment_user.equipment %}</td>
@@ -237,6 +238,24 @@
       Sem Resultados
      </p>
     {% endfor %}
+    {{ list_equipment_user }}
+      <div class="pagination">
+    <span class="step-links">
+        {% if list_equipment_user.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ list_equipment_user.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ list_equipment_user.number }} of {{ list_equipment_user.paginator.num_pages }}.
+        </span>
+
+        {% if list_equipment_user.has_next %}
+            <a href="?page={{ list_equipment_user.next_page_number }}">next</a>
+            <a href="?page={{ list_equipment_user.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
     {% endifequal %}
     {% ifequal type 'Não Devolvidos' %}
     {% load my_tag %}
@@ -275,17 +294,17 @@
      Sem Resultados
      </p>
     {% endfor %}
-   
-    {% endifequal %}
 
+    {% endifequal %}
+  
        </tbody>
 </table>
 
 <hr width="1000px" style="margin-top: -1px;">
+<div style='position:fixed;bottom:0;left:0;    
+            background:lightgray;width:100%;'>
   <div class="row" style="padding-left: 85%; margin-top: 10px; margin-bottom: 15px;">
-    {% if order_by != 'Vazio' %}
-    
-    
+    {% if order_by != 'Vazio' %}    
     <form action="{% url "some_view" type type_equipment_ tag_ start_ end_ order_by %}" class="form-inline">
       <button class="btn rounded-pill" style="background: #e9ecef">
         Gerar PDF
@@ -298,44 +317,20 @@
         </button>
       </div>
     </form>
+    </div>
   </div>
-  <form method="post" id="form1" action="">
-    <label for='gols1'>Time1</label>
-    <input type="text" name="gols1" id="gols1">
-    <label for='gols2'>Time2</label>
-    <input type="text" name="gols2" id="gols2">
-    <label for='gols3'>Select</label>
-    <select name="gols3" id="gols3">
-      <option>Todos</option>
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>  
-    </select>
-    <label for='gols4'>Data</label>
-    <input type="date" name="gols4" id="gols4">
-  </form>
+  
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
    <script src={% static "users/js/bootstrap.min.js" %}></script>
-   <script>
-    
-    (function() {
+      <script>
+$("#submit-button").submit(function(e){
+    $('#modalExemplo2').modal('show');
+    $("#submit-button").submit();
+    return false;
+});
+  </script>
 
-    var $gols1 = document.getElementById('gols1'),
-      $gols2 = document.getElementById('gols2'),
-      $gols3 = document.getElementById('gols3'),
-      $gols4 = document.getElementById('gols4');
-    function handleSubmit(){
-      if ($gols1.value && $gols2.value && $gols3.value && $gols4.value)
-      alert('Formulário enviado.');
-    }
-
-    $gols1.addEventListener('blur', handleSubmit);
-    $gols2.addEventListener('blur', handleSubmit);
-    $gols3.addEventListener('blur', handleSubmit);
-    $gols4.addEventListener('blur', handleSubmit);
-    })();
-    </script>
 </body>
 {% endblock %}
 </html>

@@ -10,6 +10,7 @@
   {% block content %}
 </head>
 <body style="margin-top: 3%;">
+
   <div class="container">
     <div class="row " style="padding-left: 5%;">
         <span>
@@ -55,6 +56,7 @@
       </div>
       
       <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+       
   <thead>
     <tr>
       <th scope="col" width="25%" style="text-align: left;">
@@ -71,8 +73,11 @@
       </th>
       </tr>
     </thead>
+
   <tbody>
-  {% for equipment in list_equipment %}
+ {% for equipment in list_equipment %}
+  
+
     <tr>
       <td>{{ equipment.tag }}</td>
       <td>{{ equipment.description }}</td>
@@ -177,6 +182,7 @@
                   
                 
                 </div>
+
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
                   
@@ -185,14 +191,38 @@
             </div>
           </div>
     </tr>
-      {% empty %}
+    
+     {% empty %}
       <p style="text-align: center;">
       Sem Resultados
       </p>
      {% endfor %}
+    <div class="pagination">
+      <span class="step-links">
+          {% if list_equipment.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ list_equipment.previous_page_number }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+              Page {{ list_equipment.number }} of {{ list_equipment.paginator.num_pages }}.
+          </span>
+
+          {% if list_equipment.has_next %}
+              <a href="?page={{ list_equipment.next_page_number }}">next</a>
+              <a href="?page={{ list_equipment.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+      </span>
+  </div>
   </tbody>
+ 
 </table>
+
 <hr width="1000px" style="margin-top: -1px;">
+  <div style='position:fixed;bottom:0;left:0;    
+            background:lightgray;width:100%;'>
+   
+
   <div class="row" style="padding-left: 85%; margin-top: 10px; margin-bottom: 15px;">
         <form class="form-inline" action="{% url "equipment_new" %}">
         <button class="btn rounded-pill" style="background: #e9ecef">
@@ -204,6 +234,7 @@
           Voltar
         </button>
         </form>
+  </div>
   </div>
   </div>
 
