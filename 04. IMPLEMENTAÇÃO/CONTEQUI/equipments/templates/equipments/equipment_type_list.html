@@ -89,11 +89,12 @@
       <td>{{ equipment_type.name }}</td>
       
       <td >
+
         {% include 'equipments/equipment_type_form.html' with equipment_type=equipment_type %}
           <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalEdit{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
             Editar
           </button>
-          
+
         {% include 'equipments/equipment_type_confirm_delete.html' with equipment_type=equipment_type %}
           <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
             {% ActiveOrInactiveType equipment_type.id %}
