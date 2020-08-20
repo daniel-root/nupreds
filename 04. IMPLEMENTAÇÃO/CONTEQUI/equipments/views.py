@@ -94,11 +94,21 @@ def EquipmentUnique(pk):
     equipment = get_object_or_404(Equipment, pk=pk)
     return equipment
 
+from django.core.paginator import Paginator
+def get_page(request,objects):
+    objetcs = objects
+    paginator = Paginator(objetcs,5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj
+
+
 def equipment_list(request,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
         #print("passei por equipment_list")
         data = {}
-        data['list_equipment'] = EquipmentActiveAll()
+        equipment_list = EquipmentActiveAll()
+        data['list_equipment'] = get_page(request,equipment_list)
         data['type_equipment']= EquipmentTypeAll()
         data['type'] = 'Todos'
         Atraso()
@@ -108,7 +118,7 @@ def equipment_list(request,templete_name='equipments/equipment_list.html'):
 def equipment_list_inactive(request,value,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
         data = {}
-        data['list_equipment'] = EquipmentAll()
+        data['list_equipment'] = get_page(request,EquipmentAll())
         data['type_equipment']= EquipmentTypeAll()
         data['type'] = 'Inativos'
         #data['type'] = value
@@ -179,7 +189,7 @@ def emprestar(request,pk):
                     data = {}
                     data['pk'] = pk
                     data['tipo'] = 'por_senha'
-                    data['list_equipment'] = EquipmentActiveAll()
+                    data['list_equipment'] = get_page(request,EquipmentActiveAll())
                     data['type_equipment']= EquipmentTypeAll()
                     data['type'] = 'Todos'
                     messages.error(request, 'Não foi Possível capturar digital! Tente com login e senha.')
@@ -206,7 +216,7 @@ def emprestar(request,pk):
                     count = count + 1
                     data = {}
                     data['chave'] = pk
-                    data['list_equipment'] = EquipmentActiveAll()
+                    data['list_equipment'] = get_page(request,EquipmentActiveAll())
                     data['type_equipment']= EquipmentTypeAll()
                     data['type'] = 'Todos'
                     #messages.error(request, 'Dispositivo não conectado!')
@@ -219,7 +229,7 @@ def emprestar(request,pk):
                 data = {}
                 data['pk'] = pk
                 data['tipo'] = 'por_senha'
-                data['list_equipment'] = EquipmentActiveAll()
+                data['list_equipment'] = get_page(request,EquipmentActiveAll())
                 data['type_equipment']= EquipmentTypeAll()
                 data['type'] = 'Todos'
                 messages.error(request, 'Dispositivo não conectado!')
@@ -245,7 +255,7 @@ def devolver(request,pk):
                 data = {}
                 data['pk'] = pk
                 data['tipo'] = 'por_senha'
-                data['list_equipment'] = EquipmentActiveAll()
+                data['list_equipment'] = get_page(request,EquipmentActiveAll())
                 data['type_equipment']= EquipmentTypeAll()
                 data['type'] = 'Todos'
                 messages.error(request, 'Muitas tentativas!')
@@ -270,7 +280,7 @@ def devolver(request,pk):
                     count = count + 1
                     data = {}
                     data['chave'] = pk
-                    data['list_equipment'] = EquipmentActiveAll()
+                    data['list_equipment'] = get_page(request,EquipmentActiveAll())
                     data['type_equipment']= EquipmentTypeAll()
                     data['type'] = 'Todos'
                     #messages.error(request, 'Dispositivo não conectado!')
@@ -281,7 +291,7 @@ def devolver(request,pk):
                 data = {}
                 data['pk'] = pk
                 data['tipo'] = 'por_senha'
-                data['list_equipment'] = EquipmentActiveAll()
+                data['list_equipment'] = get_page(request,EquipmentActiveAll())
                 data['type_equipment']= EquipmentTypeAll()
                 data['type'] = 'Todos'
                 messages.error(request, 'Dispositivo não conectado!')
@@ -348,7 +358,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
                 filtro = 'tag'
             equipment = Equipment.objects.filter(inative=False).order_by('status',filtro)
             data = {}
-            data['list_equipment'] = equipment
+            data['list_equipment'] = get_page(request,equipment)
             data['type_equipment']= EquipmentTypeAll()
             data['type'] = value
             return render(request, templete_name, data)
@@ -362,7 +372,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
                 filtro = 'tag'
             equipment = Equipment.objects.filter(inative=True).order_by('status',filtro)
             data = {}
-            data['list_equipment'] = equipment
+            data['list_equipment'] = get_page(request,equipment)
             data['type_equipment']= EquipmentTypeAll()
             data['type'] = value
             return render(request, templete_name, data)
@@ -375,7 +385,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
                 filtro = 'tag'
             equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value),inative=False).order_by('status',filtro)
             data = {}
-            data['list_equipment'] = equipment
+            data['list_equipment'] = get_page(request,equipment)
             data['type_equipment']= EquipmentTypeAll()
             data['type'] = value
             return render(request, templete_name, data)
@@ -385,7 +395,7 @@ def filter_type(request,value,templete_name='equipments/equipment_list.html'):
     if request.session.has_key('username'):
         equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value),inative=False).order_by('status','tag')
         data = {}
-        data['list_equipment'] = equipment
+        data['list_equipment'] = get_page(request,equipment)
         data['type_equipment']= EquipmentTypeAll()
         data['type'] = value
         return render(request, templete_name, data)
@@ -397,7 +407,7 @@ def search(request,value):
             name = request.POST['search']
             equipment = Equipment.objects.filter(Q(tag__contains=name) | Q(description__contains=name))
             data = {}
-            data['list_equipment'] = equipment
+            data['list_equipment'] = get_page(request,equipment)
             data['type_equipment']= EquipmentTypeAll()
             data['type'] = value
             return render(request, 'equipments/equipment_list.html', data)
@@ -465,8 +475,21 @@ def reports_list(request,templete_name='equipments/reports.html'):
     return render(request, 'login.html')
 '''
 
+
 def get_rastreio(request,value):
-    if request.method == 'POST':
+    if True:
+        data = {}
+        tipo = Equipment_type.objects.all().values_list('name',flat=True)
+        CHOICE = []
+        for QuerySet in tipo:
+            CHOICE.append((QuerySet))
+        equipment = Equipment.objects.all().values_list('tag','description')
+        CHOICE_EQUIPMENT = []
+        for QuerySet in equipment:
+            CHOICE_EQUIPMENT.append((QuerySet[0]+"-"+QuerySet[1]))
+        
+        equipment = Equipment.objects.all()
+        equipment_user = Equipment_user.objects.all()
         data = {}
         tipo = Equipment_type.objects.all().values_list('name',flat=True)
         CHOICE = []
@@ -478,9 +501,14 @@ def get_rastreio(request,value):
             CHOICE_EQUIPMENT.append((QuerySet[0]+"-"+QuerySet[1]))
         data['types'] = CHOICE
         data['equipments'] = CHOICE_EQUIPMENT
-        data['order_by'] = 'Nenhum'
-
-        if value == 'Listagem':
+        data['type'] = value
+        data['type_equipment_'] = 'Todos'
+        #data['list_equipment_user']= get_page(request,Equipment_user.objects.all())
+        data['tag_'] = 'Todos'
+        data['start_'] = 'Todos'
+        data['end_'] = 'Todos'
+        data['order_by'] = 'Vazio'
+        if value == 'Listagem' and request.method == 'POST':
             type_equipment = request.POST['type_equipment']
             data['type_equipment_'] = type_equipment
             data['tag_'] = 'Todos'
@@ -489,16 +517,16 @@ def get_rastreio(request,value):
             data['order_by'] = 'Nenhum'
             if type_equipment == 'Todos':
                 equipment_user = Equipment.objects.all().order_by('type_equipment','tag')
-                data['list_equipment_user']= equipment_user
+                data['list_equipment_user']= get_page(request,equipment_user)
                 data['type'] = value
             else:
                 EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
                 EquipmentType = ''.join(map(str, EquipmentType))
                 EquipmentType = int(EquipmentType)
                 equipment_user = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType))
-                data['list_equipment_user']= equipment_user
+                data['list_equipment_user']= get_page(request,equipment_user)
                 data['type'] = value
-        elif value == 'Rastreio':
+        if value == 'Rastreio' and request.method == 'POST':
             type_equipment = request.POST['type_equipment']
             tag = request.POST['tag']
             inicio = request.POST['start']
@@ -506,6 +534,7 @@ def get_rastreio(request,value):
             tag_ = tag.split('-')
             tag_ = tag_[0] 
             data = {}
+            data['list_equipment_user']= get_page(request,Equipment_user.objects.all())
             data['type_equipment_'] = type_equipment
             data['tag_'] = tag_
             data['start_'] = inicio
@@ -513,7 +542,7 @@ def get_rastreio(request,value):
             data['order_by'] = 'Nenhum'
             if type_equipment == 'Todos' and tag=='Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim)
-                data['list_equipment_user']= equipment_user
+                data['list_equipment_user']= get_page(request,equipment_user)
                 data['type'] = value
             elif type_equipment != 'Todos' and tag == 'Todos':
                 EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
@@ -526,15 +555,15 @@ def get_rastreio(request,value):
                 for i in EquipmentFilter:
                     number.append(int(i))
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment__in =  number)
-                data['list_equipment_user']= equipment_user
+                data['list_equipment_user']= get_page(request,equipment_user)
                 data['type'] = value
             elif tag != 'Todos':
                 EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
                 EquipmentFilter = ' '.join(map(str, EquipmentFilter))
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter))
-                data['list_equipment_user']= equipment_user
+                data['list_equipment_user']= get_page(request,equipment_user)
                 data['type'] = value
-        elif value == 'Não Devolvidos':
+        if value == 'Não Devolvidos'  and request.method == 'POST':
             type_equipment = request.POST['type_equipment']
             tag = request.POST['tag']
             inicio = request.POST['start']
@@ -548,9 +577,9 @@ def get_rastreio(request,value):
             data['order_by'] = 'Nenhum'
             if type_equipment == 'Todos' and tag=='Todos':
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None)
-                data['list_equipment_user']= equipment_user
+                data['list_equipment_user']= get_page(request,equipment_user)
                 data['type'] = value
-            elif type_equipment != 'Todos' and tag == 'Todos':
+            if type_equipment != 'Todos' and tag == 'Todos':
                 EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
                 EquipmentType = ''.join(map(str, EquipmentType))
                 EquipmentType = int(EquipmentType)
@@ -561,15 +590,16 @@ def get_rastreio(request,value):
                 for i in EquipmentFilter:
                     number.append(int(i))
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment__in =  number)
-                data['list_equipment_user']= equipment_user
+                data['list_equipment_user']= get_page(request,equipment_user)
                 data['type'] = value
-            elif tag != 'Todos':
+            if tag != 'Todos':
                 EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
                 EquipmentFilter = ' '.join(map(str, EquipmentFilter))
                 equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment =  int(EquipmentFilter))
-                data['list_equipment_user']= equipment_user
+                data['list_equipment_user']= get_page(request,equipment_user)
                 data['type'] = value
         return render(request, 'equipments/reports.html', data)
+    '''
     else:
         equipment = Equipment.objects.all()
         equipment_user = Equipment_user.objects.all()
@@ -586,11 +616,12 @@ def get_rastreio(request,value):
         data['equipments'] = CHOICE_EQUIPMENT
         data['type'] = value
         data['type_equipment_'] = 'Todos'
+        data['list_equipment_user']= get_page(request,Equipment_user.objects.all())
         data['tag_'] = 'Todos'
         data['start_'] = 'Todos'
         data['end_'] = 'Todos'
         data['order_by'] = 'Vazio'
-    
+    '''    
     return render(request, 'equipments/reports.html', data)
 
 def listagem(request,order_by,type_equipment_):
@@ -615,20 +646,21 @@ def listagem(request,order_by,type_equipment_):
     data['order_by'] = order_by
     if type_equipment_ == 'Todos':
         equipment_user = Equipment.objects.all().order_by(order_by)
-        data['list_equipment_user']= equipment_user
+        data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Listagem'
     else:
         EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
         EquipmentType = ''.join(map(str, EquipmentType))
         EquipmentType = int(EquipmentType)
         equipment_user = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).order_by(order_by)
-        data['list_equipment_user']= equipment_user
+        data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Listagem'
 
     return render(request, 'equipments/reports.html', data)
 
 def rastreio(request,order_by,type_equipment_,tag,start,end):
     data = {}
+    print("aqui")
     tipo = Equipment_type.objects.all().values_list('name',flat=True)
     CHOICE = []
     for QuerySet in tipo:
@@ -640,6 +672,7 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
     data['types'] = CHOICE
     data['equipments'] = CHOICE_EQUIPMENT
     data['type'] = 'Rastreio'
+    data['list_equipment_user']= get_page(request,Equipment_user.objects.all())
     data['type_equipment_'] = type_equipment_
     data['tag_'] = tag
     data['start_'] = start
@@ -651,7 +684,7 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
     tag_ = tag
     if type_equipment == 'Todos' and tag=='Todos':
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim).order_by(order_by)
-        data['list_equipment_user']= equipment_user
+        data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Rastreio'
     elif type_equipment != 'Todos' and tag == 'Todos':
         EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
@@ -664,13 +697,13 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
         for i in EquipmentFilter:
             number.append(int(i))
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment__in =  number).order_by(order_by)
-        data['list_equipment_user']= equipment_user
+        data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Rastreio'
     elif tag != 'Todos':
         EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
         EquipmentFilter = ' '.join(map(str, EquipmentFilter))
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter)).order_by(order_by)
-        data['list_equipment_user']= equipment_user
+        data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Rastreio'
     return render(request, 'equipments/reports.html', data)
 
@@ -697,7 +730,7 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
     tag_ = tag
     if type_equipment_ == 'Todos' and tag=='Todos':
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None).order_by(order_by)
-        data['list_equipment_user']= equipment_user
+        data['list_equipment_user']= get_page(request,equipment_user)
     elif type_equipment_ != 'Todos' and tag == 'Todos':
         EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
         EquipmentType = ''.join(map(str, EquipmentType))
@@ -709,12 +742,12 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
         for i in EquipmentFilter:
             number.append(int(i))
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment__in =  number).order_by(order_by)
-        data['list_equipment_user']= equipment_user
+        data['list_equipment_user']= get_page(request,equipment_user)
     elif tag != 'Todos':
         EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
         EquipmentFilter = ' '.join(map(str, EquipmentFilter))
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment =  int(EquipmentFilter)).order_by(order_by)
-        data['list_equipment_user']= equipment_user
+        data['list_equipment_user']= get_page(request,equipment_user)
     return render(request, 'equipments/reports.html', data)
 
 

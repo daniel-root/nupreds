@@ -2,12 +2,13 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Inativar Equipamento</h5>
+      {% load my_tag %}
+        <h5 class="modal-title" id="exampleModalLabel">{% ActiveOrInactive equipment.id %} Equipamento</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      {% load my_tag %}
+      
       <div class="modal-body">
         Você tem certeza que deseja {% ActiveOrInactive equipment.id %} o equipamento "{{equipment.tag}}-{{equipment.description}}"?
       </div>

@@ -16,6 +16,27 @@
     <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}">
     <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
   </head>
+  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Cadastrar Digital</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                      
+                    
+                  </div>
+                  <div class="modal-body">
+                    
+                      <span><img src="{% static "images/digital.png" %}" style="height: 80px; width: 80px;" ></span>
+                    
+                    <p style="margin-left: 10%;">Coloque o dedo indicador para cadastro de impressão de digital</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
   <body style="margin-top: 3%;">
     <div class="container">
       <div class="row " style="padding-left: 5%;">
@@ -26,7 +47,7 @@
         </div>
        <div class="container-fluid">
 
-    <form id="user_form" name="user_form" method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
+    <form id="submit-button" name="user_form" method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
   {% for message in messages %}
             <div class="alert alert-danger">
               <strong>Error!</strong> {{ message }}
@@ -85,44 +106,39 @@
           </div>
         </div>
       </div>
-      <div class="form-group">
-        <div class="row">
-          <label  for="txtDigital" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Impressão Digital:</label>
-          <div class="col-lg-10 col-md-10 col-sm-12">
-          
-            <!-- Modal -->
-            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Cadastrar Digital</h5>
-                    
-                      <span aria-hidden="true">&times;</span>
-                    
-                  </div>
-                  <div class="modal-body">
-                    
-                      <span><img src="{% static "images/digital.png" %}" style="height: 80px; width: 80px;" ></span>
-                    
-                    <p style="margin-left: 10%;">Coloque o dedo indicador para cadastro de impressão de digital</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      
      
       <div class="col-lg-12 col-sm-12 text-right" style="padding: 50px 0px">
-        <a href="{% url "user_list" %}">voltar</a>
-        <button type="button" class="btn rounded-pill" style="background: #e9ecef">Cancelar</button>            
+        
+        <a  href="{% url "user_list" %}" class="btn rounded-pill" style="background: #e9ecef">Voltar</a>
+        {% if user.id != 'None' %}
+          <form method="post" action="">{% csrf_token %}
+            <input type="submit" value="Recadastrar Digital" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef" />
+          </form>
+    {% endif %}           
+        {% if user.id != 'None' %}
         <button type="submit" class="btn rounded-pill" style="background: #e9ecef">Salvar</button>
+        {% else %}
+        <input type="submit" value="Continue" class="btn rounded-pill" style="background: #e9ecef"/>
+        {% endif %}
       </div>
-    </form>
-
+  <script>
+  $("#submit-button").submit(function(e){
+    $('#staticBackdrop').modal('show');
+    $("#submit-button").submit();
+    return false;
+    });
+  </script>
+  
+  
   </div>
+</form>
+
+
   <!-- Script para verificar se a senha é forte e se senhas são diferentes -->
   <script type="text/javascript">
+
+  
     var password = document.getElementById("pwd1")
       , confirm_password = document.getElementById("pwd2")
       , nome_usuario = document.getElementById("nomeUsuario");
@@ -150,6 +166,7 @@
 
   </script>
     <script src="{% static "users/js/bootstrap.min.js" %}"></script>          
-     
+
 </body>
+
 </html>

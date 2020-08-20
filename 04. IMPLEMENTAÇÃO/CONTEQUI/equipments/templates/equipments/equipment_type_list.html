@@ -10,6 +10,42 @@
 {% block content %}
   </head>
   <body style="margin-top: 3%;">
+
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Novo Tipo de Equipamento </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'equipment_type_new' %}">{% csrf_token %}
+          <div class="form-group row">
+            <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="nome">Nome:</label>
+             <div class="col-lg-8 col-md-8 col-sm-12">
+              <input class="form-control rounded-pill" type="name_type" value="" required name="tag" id="name_type" pattern="[0-9]+$" style=" background: #e9ecef">
+             </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="tipo">Tempo Máximo:</label>
+             <div class="col-lg-8 col-md-8 col-sm-12">
+              <input class="form-control rounded-pill" value="" type="ctempo" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef">
+             </div>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <div class="container">
       <div class="row " style="padding-left: 5%;">
           <span>
@@ -53,45 +89,16 @@
       <td>{{ equipment_type.name }}</td>
       
       <td >
-        <a type="button" data-toggle="modal" data-target="#Modal"href="{% url "equipment_type_edit" equipment_type.id %}" class=" btn rounded-pill" style="background: #e9ecef">
+
+        {% include 'equipments/equipment_type_form.html' with equipment_type=equipment_type %}
+          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalEdit{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
             Editar
-        </a>
-        <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="form-group row">
-                      <label for="nome" class="col-sm-4 col-form-label">Nome</label>
-                      <div class="col-sm-8">
-                        <input type="text" class="form-control rounded-pill" id="nome" style="background: #e9ecef"">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="tempo" class="col-sm-4 col-form-label">Tempo Máximo</label>
-                      <div class="col-sm-8">
-                        <input type="text" class="form-control rounded-pill" id="tempoMaximo" style="background: #e9ecef"">
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
-                  <button type="button" class="btn btn-primary">Salvar</button>
-                </div>
-            </div>
-          </div>
-        </div>
-          
-          <a href="{% url "equipment_type_delete" equipment_type.id %}" class="btn rounded-pill" style="margin-left: 5px; background: #e9ecef">
+          </button>
+
+        {% include 'equipments/equipment_type_confirm_delete.html' with equipment_type=equipment_type %}
+          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
             {% ActiveOrInactiveType equipment_type.id %}
-          </a>
+          </button>
       </td>
     </tr>
      {% endfor %}
@@ -100,9 +107,9 @@
  <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 80%; margin-top: 10px; margin-bottom: 15px;">
         
-        <a href="{% url "equipment_type_new" %}" class="btn rounded-pill" style="background: #e9ecef">
+        <button data-toggle="modal" data-target="#Modal" class="btn rounded-pill" style="background: #e9ecef">
           Novo
-        </a>
+        </button>
        
        
         <a href="{% url "equipment_list" %}" class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef">
