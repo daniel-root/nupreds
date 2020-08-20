@@ -179,7 +179,7 @@ def main(tipo):
                             #converte
                             result = ''.join(chr(i) for i in pFeatures1)
                         else:
-                            result = "Erro ao adquirir impress ão"
+                            result = "Erro ao adquirir impressão"
                         
                     
 
