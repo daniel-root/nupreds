@@ -9,7 +9,7 @@
     <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
   {% block content %}
   </head>
-  <body style="margin-top: 3%;">
+  <body style="margin-top: 1%;">
     <div class="container">
       <div class="row " style="padding-left: 5%;">
           <span>
@@ -154,27 +154,27 @@
     </tr>
     {% endfor %}
   </tbody>
-</table>
-<div class="pagination">
-      <span class="step-links">
+</table> <hr width="1000px" style="margin-top: -1px;">
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
           {% if object_list.has_previous %}
-              <a href="?page=1">&laquo; first</a>
-              <a href="?page={{ object_list.previous_page_number }}">previous</a>
+              <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ object_list.previous_page_number }}">previous</a></li>
           {% endif %}
 
-          <span class="current">
+          <li class="page-item"><a class="page-link">
               Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
-          </span>
+          </a></li>
 
           {% if object_list.has_next %}
-              <a href="?page={{ object_list.next_page_number }}">next</a>
-              <a href="?page={{ object_list.paginator.num_pages }}">last &raquo;</a>
+              <li class="page-item"><a class="page-link" href="?page={{ object_list.next_page_number }}">next</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ object_list.paginator.num_pages }}">last &raquo;</a></li>
           {% endif %}
-      </span>
-  </div>
-<hr width="1000px" style="margin-top: -1px;">
+  </ul>
+</nav>
 
-  <div class="row" style="padding-left: 85%; margin-top: 10px;"  >
+
+  <div class="row" style="padding-left: 85%; margin-bottom: 5px;"  >
         <form class="form-inline" action="{% url "user_new" %}">
         <button class="btn rounded-pill" style="background: #e9ecef">
           Novo

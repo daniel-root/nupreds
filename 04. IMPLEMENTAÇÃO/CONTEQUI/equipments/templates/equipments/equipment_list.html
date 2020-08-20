@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}" >
   {% block content %}
 </head>
-<body style="margin-top: 3%;">
+<body style="margin-top: 1%;">
 
   <div class="container">
     <div class="row " style="padding-left: 5%;">
@@ -201,29 +201,25 @@
   </tbody>
  
 </table>
-
-<div class="pagination">
-      <span class="step-links">
+<hr width="1000px" style="margin-top: -1px;">
+<nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
           {% if list_equipment.has_previous %}
-              <a href="?page=1">&laquo; first</a>
-              <a href="?page={{ list_equipment.previous_page_number }}">previous</a>
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ list_equipment.previous_page_number }}">previous</a></li>
           {% endif %}
 
-          <span class="current">
-              Page {{ list_equipment.number }} of {{ list_equipment.paginator.num_pages }}.
-          </span>
+          <li class="page-item"> <a class="page-link">Page {{ list_equipment.number }} of {{ list_equipment.paginator.num_pages }}.</a></li>
 
           {% if list_equipment.has_next %}
-              <a href="?page={{ list_equipment.next_page_number }}">next</a>
-              <a href="?page={{ list_equipment.paginator.num_pages }}">last &raquo;</a>
+              <li class="page-item"><a class="page-link"  href="?page={{ list_equipment.next_page_number }}">next</a></li>
+              <li class="page-item"><a class="page-link"  href="?page={{ list_equipment.paginator.num_pages }}">last &raquo;</a></li>
           {% endif %}
-      </span>
-  </div>
-        
-<hr width="1000px" style="margin-top: -1px;">
-  
 
-  <div class="row" style="padding-left: 85%; margin-top: 10px; margin-bottom: 15px;">
+      </ul>
+</nav>
+
+  <div class="row" style="padding-left: 85%;  margin-bottom: 5px;">
         <form class="form-inline" action="{% url "equipment_new" %}">
         <button class="btn rounded-pill" style="background: #e9ecef">
           Novo
