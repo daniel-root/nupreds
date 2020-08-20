@@ -162,7 +162,7 @@ def user_fingerprint(request, pk, template_name='users/user_fingerprint.html'):
         return render(request, template_name, data)
     return render(request, 'login.html')
 
-
+'''
 def user_fingerprint_registration(request, frase,pk, template_name='users/user_fingerprint.html'):
     if request.session.has_key('username'):
         data = {}
@@ -183,7 +183,8 @@ def user_fingerprint_registration(request, frase,pk, template_name='users/user_f
         data['frase'] = 'Cadastro completo!'
         return render(request, template_name, data)
     return render(request, 'login.html')
-
+'''
+'''
 from django.core.paginator import Paginator
 def user_teste(request, template_name='users/user_teste.html'):
     if request.session.has_key('username'):
@@ -206,15 +207,6 @@ def user_teste(request, template_name='users/user_teste.html'):
         return render(request, template_name,data)
     return render(request, 'login.html')
     '''
-    if request.session.has_key('username'):
-        user= get_object_or_404(Client, pk=pk)    
-        if request.method=='POST':
-            user.delete()
-            return redirect('user_list')
-        return render(request, template_name, {'object':user})
-    return render(request, 'login.html')
-    '''
-
 def loginpage(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -258,9 +250,9 @@ def type_user(request,pk):
         return render(request, 'users/user_detail.html', {'object':user})
     return render(request, 'login.html')
 
-def filter_type_list(request,value,templete_name='users/user_list.html'):
+def filter_type(request,value,templete_name='users/user_list.html'):
+    
     if request.session.has_key('username'):
-        print("aqui")
         user = Client.objects.filter(user_type = value)
         data = {}
         name = request.session['username']
@@ -268,10 +260,6 @@ def filter_type_list(request,value,templete_name='users/user_list.html'):
         data = {}
         data['object_list'] = get_page(request,user)
         data['type_user'] = type_privilegio
-
-        #data['list_equipment'] = equipment
-        #data['type_equipment']= User
-        #data['form_inactive'] = InactiveForm()
         data['type'] = value
         return render(request, templete_name, data)
     return render(request, 'login.html')

@@ -40,10 +40,11 @@
         </button>
         </form>
       </div>
+      {{ search }}
       <div style="margin-top: 10px;" class="row justify-content-center">
-        <form class="form-inline" method="POST" action="{% url 'search' type %}">{% csrf_token %}
+        <form class="form-inline" method="POST" action="{% url 'search' type search %}">{% csrf_token %}
           <div class="input-group">
-            <input class="form-control mr-2 rounded-pill"  type="text" placeholder="Search.." name="search" required="required" style="width: 900px; background: #e9ecef">
+            <input class="form-control mr-2 rounded-pill" type="text" placeholder="Search.." name="search" required="required" style="width: 900px; background: #e9ecef">
             <div class="submit">
             <button class="border-0" type="submit" style="background: #FFFFFF;">
               <span>
@@ -201,8 +202,14 @@
   </tbody>
  
 </table>
+<<<<<<< HEAD
 <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
+=======
+
+<div class="pagination">
+      <span class="step-links">
+>>>>>>> 8d326cf7b5f11a89b16a8cb239836a052a93f917
           {% if list_equipment.has_previous %}
             <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
               <li class="page-item"><a class="page-link" href="?page={{ list_equipment.previous_page_number }}">previous</a></li>
@@ -214,8 +221,14 @@
               <li class="page-item"><a class="page-link"  href="?page={{ list_equipment.next_page_number }}">next</a></li>
               <li class="page-item"><a class="page-link"  href="?page={{ list_equipment.paginator.num_pages }}">last &raquo;</a></li>
           {% endif %}
+<<<<<<< HEAD
       </ul>
 </nav>
+=======
+      </span>
+  </div>
+        
+>>>>>>> 8d326cf7b5f11a89b16a8cb239836a052a93f917
 <hr width="1000px" style="margin-top: -1px;">
   
 

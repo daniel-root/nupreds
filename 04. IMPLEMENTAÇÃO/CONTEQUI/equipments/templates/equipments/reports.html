@@ -221,7 +221,6 @@
     {% load my_tag %}
   <tbody>
     {% ifequal type 'Rastreio' %}
-    {{ list_equipment_user }}
     {% for equipment_user in list_equipment_user %}
     <tr>
     <td>{% TypeName equipment_user.equipment %}</td>
@@ -238,28 +237,6 @@
       Sem Resultados
      </p>
     {% endfor %}
-<<<<<<< HEAD
-    {{ list_equipment_user }}
-      <div class="pagination">
-    <span class="step-links">
-        {% if list_equipment_user.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ list_equipment_user.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ list_equipment_user.number }} of {{ list_equipment_user.paginator.num_pages }}.
-        </span>
-
-        {% if list_equipment_user.has_next %}
-            <a href="?page={{ list_equipment_user.next_page_number }}">next</a>
-            <a href="?page={{ list_equipment_user.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-</div>
-=======
-
->>>>>>> 2e501a4e80f0f830e30caa03fd24237fe27303ba
     {% endifequal %}
     {% ifequal type 'Não Devolvidos' %}
     {% load my_tag %}
@@ -303,7 +280,7 @@
   
        </tbody>
 </table>
-      <div class="pagination">
+  <div class="pagination">
     <span class="step-links">
         {% if list_equipment_user.has_previous %}
             <a href="?page=1">&laquo; first</a>
