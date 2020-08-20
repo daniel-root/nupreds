@@ -40,9 +40,8 @@
         </button>
         </form>
       </div>
-      {{ search }}
       <div style="margin-top: 10px;" class="row justify-content-center">
-        <form class="form-inline" method="POST" action="{% url 'search' type search %}">{% csrf_token %}
+        <form class="form-inline" method="POST" action="{% url 'search' type search %}" >{% csrf_token %}
           <div class="input-group">
             <input class="form-control mr-2 rounded-pill" type="text" placeholder="Search.." name="search" required="required" style="width: 900px; background: #e9ecef">
             <div class="submit">

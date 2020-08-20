@@ -38,6 +38,7 @@ def user_list(request, templete_name='users/user_list.html'):
         data['object_list'] = get_page(request,UserAll())
         data['type_user'] = type_privilegio
         data['type'] = 'Todos'
+        data['search'] = 'Null'
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -49,6 +50,7 @@ def user_list_inactive(request,templete_name='users/user_list.html'):
         data['object_list'] = get_page(request,UserInactive())
         data['type_user'] = type_privilegio
         data['type'] = 'Inativos'
+        data['search'] = 'Null'
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -251,7 +253,6 @@ def type_user(request,pk):
     return render(request, 'login.html')
 
 def filter_type(request,value,templete_name='users/user_list.html'):
-    
     if request.session.has_key('username'):
         user = Client.objects.filter(user_type = value)
         data = {}
@@ -261,6 +262,7 @@ def filter_type(request,value,templete_name='users/user_list.html'):
         data['object_list'] = get_page(request,user)
         data['type_user'] = type_privilegio
         data['type'] = value
+        data['search'] = 'Null'
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
@@ -280,6 +282,7 @@ def filter_list(request,pk,value,templete_name='users/user_list.html'):
             data['object_list'] = get_page(request,user)
             data['type_user'] = type_privilegio
             data['type'] = value
+            data['search'] = 'Null'
             return render(request, templete_name, data)
         elif value == 'Inativos':
             if pk == 'Id':
@@ -295,6 +298,7 @@ def filter_list(request,pk,value,templete_name='users/user_list.html'):
             data['object_list'] = get_page(request,user)
             data['type_user'] = type_privilegio
             data['type'] = value
+            data['search'] = 'Null'
             return render(request, templete_name, data)
         else:
             filtro = 'id'
@@ -312,19 +316,26 @@ def filter_list(request,pk,value,templete_name='users/user_list.html'):
             data['object_list'] = user
             data['type_user'] = type_privilegio
             data['type'] = value
+            data['search'] = 'Null'
             return render(request, templete_name, data)
     return render(request, 'login.html')
 
-def search_user(request,value):
+def search_user(request,value,search_):
     if request.session.has_key('username'):
+        data = {}
         if request.method == 'POST':
-            search = request.POST['search']
-            users = Client.objects.filter(Q(usuario__contains=search) | Q(cpf__contains=search))
-            name = request.session['username']
-            type_privilegio = Client.objects.filter(usuario=name)
-            data = {}
-            data['object_list'] = get_page(request,users)
-            data['type_user'] = type_privilegio
-            data['type'] = 'type'
-            return render(request, 'users/user_list.html', data)
+            name = request.POST['search']
+            data['search'] = name
+            return redirect('/Usuario/Pesquisar/'+value+'/'+name)
+        else:
+            name = search_
+            data['search'] = name
+        users = Client.objects.filter(Q(usuario__contains=name) | Q(cpf__contains=name))
+        name = request.session['username']
+        type_privilegio = Client.objects.filter(usuario=name)
+        
+        data['object_list'] = get_page(request,users)
+        data['type_user'] = type_privilegio
+        data['type'] = 'type'
+        return render(request, 'users/user_list.html', data)
     return render(request, 'login.html')

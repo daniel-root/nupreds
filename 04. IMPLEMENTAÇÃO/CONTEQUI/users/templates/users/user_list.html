@@ -35,7 +35,7 @@
           </a>
         </div>
     <div style="margin-top: 10px;" class="row justify-content-center">
-        <form class="form-inline"method="POST" action="{% url 'search_user' type %}">{% csrf_token %}
+        <form class="form-inline"method="POST" action="{% url 'search_user' type search %}">{% csrf_token %}
           <div class="input-group">
             <input class="form-control mr-2 rounded-pill" type="text" name="search" style="width: 900px; background: #e9ecef">
             <button class="btn border-0" style="background: #FFFFFF;">

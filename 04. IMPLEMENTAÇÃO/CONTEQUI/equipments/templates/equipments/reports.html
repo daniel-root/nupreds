@@ -226,9 +226,9 @@
     <td>{% TypeName equipment_user.equipment %}</td>
     <td>{% TagName equipment_user.equipment %}</td>
     <td>{% DescriptionName equipment_user.equipment %}</td>
-    <td>{{ equipment_user.loan }}</td>
+    <td>{{ equipment_user.loan.date.day }}/{{ equipment_user.loan.date.month }}/{{ equipment_user.loan.date.year }}</td>
     <td>{{ equipment_user.user_loan }}</td>
-    <td>{{ equipment_user.devolution }}</td>
+    <td>{{ equipment_user.devolution.day }}/{{ equipment_user.devolution.date.month }}/{{ equipment_user.devolution.date.year }}</td>
     <td>{{ equipment_user.user_devolution }}</td>
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
@@ -245,7 +245,7 @@
     <td>{% TypeName equipment_user.equipment %}</td>
     <td>{% TagName equipment_user.equipment %}</td>
     <td>{% DescriptionName equipment_user.equipment %}</td>
-    <td>{{ equipment_user.loan }}</td>
+    <td>{{ equipment_user.loan.date.day }}/{{ equipment_user.loan.date.month }}/{{ equipment_user.loan.date.year }}</td>
     <td>{{ equipment_user.user_loan }}</td>
     <td></td>
     <td></td>

@@ -413,18 +413,17 @@ def filter_type(request,value,templete_name='equipments/equipment_list.html'):
         return render(request, templete_name, data)
     return render(request, 'login.html')
 
-def search(request,value,search):
-    print(search)
+def search(request,value,search_):
     data = {}
     if request.session.has_key('username'):
         if request.method == 'POST':
             name = request.POST['search']
             data['search'] = name
+            return redirect('/Pesquisar/'+value+'/'+name)
         else:
-            name = search
+            name = search_
             data['search'] = name
         equipment = Equipment.objects.filter(Q(tag__contains=name) | Q(description__contains=name))
-        
         data['list_equipment'] = get_page(request,equipment)
         data['type_equipment']= EquipmentTypeAll()
         data['type'] = 'Todos'
@@ -502,8 +501,6 @@ def reports_list(request,templete_name='equipments/reports.html'):
 
 
 def get_rastreio(request,value):
-    print(value)
-    print(request.method)
     data = {}
     equipment = Equipment.objects.all()
     equipment_user = Equipment_user.objects.all()
@@ -519,8 +516,10 @@ def get_rastreio(request,value):
     data['equipments'] = CHOICE_EQUIPMENT
     data['type'] = value
     if value == 'Listagem' and request.method == 'POST':
-        print("aqui")
+        #return redirect('/Pesquisar/'+value+'/'+name)
         type_equipment = request.POST['type_equipment']
+        return redirect('/Listagem/type_equipment/'+type_equipment)
+        '''
         data['type_equipment_'] = type_equipment
         data['tag_'] = 'Todos'
         data['start_'] = 'Todos'
@@ -537,13 +536,17 @@ def get_rastreio(request,value):
             equipment_user = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType))
             data['list_equipment_user']= get_page(request,equipment_user)
             data['type'] = value
+        '''
     elif value == 'Rastreio' and request.method == 'POST':
         type_equipment = request.POST['type_equipment']
         tag = request.POST['tag']
         inicio = request.POST['start']
         fim = request.POST['end']
         tag_ = tag.split('-')
-        tag_ = tag_[0] 
+        tag_ = tag_[0]
+        url= '/Rastreio/{}/{}/{}/{}/{}'.format('loan',type_equipment,tag,inicio,fim)
+        return redirect(url) 
+        '''
         data = {}
         data['list_equipment_user']= get_page(request,Equipment_user.objects.all())
         data['type_equipment_'] = type_equipment
@@ -574,12 +577,16 @@ def get_rastreio(request,value):
             equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter))
             data['list_equipment_user']= get_page(request,equipment_user)
             data['type'] = value
+        '''
     elif value == 'Não Devolvidos'  and request.method == 'POST':
         type_equipment = request.POST['type_equipment']
         tag = request.POST['tag']
         inicio = request.POST['start']
         tag_ = tag.split('-')
         tag_ = tag_[0] 
+        url= '/NaoDevolvidos/{}/{}/{}/{}'.format('loan',type_equipment,tag,inicio)
+        return redirect(url)
+        '''
         data = {}
         data['type_equipment_'] = type_equipment
         data['tag_'] = tag_
@@ -609,6 +616,7 @@ def get_rastreio(request,value):
             equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment =  int(EquipmentFilter))
             data['list_equipment_user']= get_page(request,equipment_user)
             data['type'] = value
+        '''
     else:
         data['type_equipment_'] = 'Todos'
         data['list_equipment_user']= get_page(request,[])
