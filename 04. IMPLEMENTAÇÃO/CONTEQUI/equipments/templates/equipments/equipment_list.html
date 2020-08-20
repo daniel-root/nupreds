@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}" >
   {% block content %}
 </head>
-<body style="margin-top: 3%;">
+<body style="margin-top: 1%;">
 
   <div class="container">
     <div class="row " style="padding-left: 5%;">
@@ -40,7 +40,7 @@
         </button>
         </form>
       </div>
-      {{ search }}
+     
       <div style="margin-top: 10px;" class="row justify-content-center">
         <form class="form-inline" method="POST" action="{% url 'search' type search %}">{% csrf_token %}
           <div class="input-group">
@@ -202,14 +202,9 @@
   </tbody>
  
 </table>
-<<<<<<< HEAD
+<hr width="1000px" style="margin-top: -1px;">
 <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
-=======
-
-<div class="pagination">
-      <span class="step-links">
->>>>>>> 8d326cf7b5f11a89b16a8cb239836a052a93f917
           {% if list_equipment.has_previous %}
             <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
               <li class="page-item"><a class="page-link" href="?page={{ list_equipment.previous_page_number }}">previous</a></li>
@@ -221,18 +216,11 @@
               <li class="page-item"><a class="page-link"  href="?page={{ list_equipment.next_page_number }}">next</a></li>
               <li class="page-item"><a class="page-link"  href="?page={{ list_equipment.paginator.num_pages }}">last &raquo;</a></li>
           {% endif %}
-<<<<<<< HEAD
+
       </ul>
 </nav>
-=======
-      </span>
-  </div>
-        
->>>>>>> 8d326cf7b5f11a89b16a8cb239836a052a93f917
-<hr width="1000px" style="margin-top: -1px;">
-  
 
-  <div class="row" style="padding-left: 85%; margin-top: 10px; margin-bottom: 15px;">
+  <div class="row" style="padding-left: 85%;  margin-bottom: 5px;">
         <form class="form-inline" action="{% url "equipment_new" %}">
         <button class="btn rounded-pill" style="background: #e9ecef">
           Novo
