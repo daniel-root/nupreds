@@ -40,10 +40,11 @@
         </button>
         </form>
       </div>
+      {{ search }}
       <div style="margin-top: 10px;" class="row justify-content-center">
-        <form class="form-inline" method="POST" action="{% url 'search' type %}">{% csrf_token %}
+        <form class="form-inline" method="POST" action="{% url 'search' type search %}">{% csrf_token %}
           <div class="input-group">
-            <input class="form-control mr-2 rounded-pill"  type="text" placeholder="Search.." name="search" required="required" style="width: 900px; background: #e9ecef">
+            <input class="form-control mr-2 rounded-pill" type="text" placeholder="Search.." name="search" required="required" style="width: 900px; background: #e9ecef">
             <div class="submit">
             <button class="border-0" type="submit" style="background: #FFFFFF;">
               <span>
@@ -201,6 +202,7 @@
   </tbody>
  
 </table>
+
 <div class="pagination">
       <span class="step-links">
           {% if list_equipment.has_previous %}
@@ -218,6 +220,7 @@
           {% endif %}
       </span>
   </div>
+        
 <hr width="1000px" style="margin-top: -1px;">
   
 

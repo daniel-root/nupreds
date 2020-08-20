@@ -21,13 +21,13 @@
           <a href="{% url "user_list" %}" class="btn btn-link text-dark" >
             Todos
           </a>
-          <a href="{% url "filter_type_list" 'Super' %}" class="btn btn-link text-dark "style="margin-left: 45px;" >
+          <a href="{% url "filter_type" 'Super' %}" class="btn btn-link text-dark "style="margin-left: 45px;" >
             Super Usuário  
           </a>
-          <a href="{% url "filter_type_list" 'Administrador' %}" class="btn btn-link text-dark" style="margin-left: 45px;">
+          <a href="{% url "filter_type" 'Administrador' %}" class="btn btn-link text-dark" style="margin-left: 45px;">
             Administrador
           </a>
-          <a href="{% url "filter_type_list" 'Comum' %}" class="btn btn-link text-dark" style="margin-left: 45px;">
+          <a href="{% url "filter_type" 'Comum' %}" class="btn btn-link text-dark" style="margin-left: 45px;">
             Usuário Comum
           </a>
           <a href="{% url "user_list_inactive" %}" class="btn btn-link text-dark" style="margin-left: 45px;">
@@ -180,11 +180,7 @@
           Novo
         </button>
         </form>
-        <form class="form-inline" action="{% url "user_teste" %}">
-        <button class="rounded-pill">
-          Teste
-        </button>
-        </form>
+        
         <form class="form-inline" action="{% url "home" %}">
         <button class="btn rounded-pill" style="margin-left: 5px;background: #e9ecef;">
           Voltar
