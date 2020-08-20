@@ -82,7 +82,7 @@
           </div>
           <div class="form-group row">
         <label  for="txtTipo" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Tipo: </label>
-        <div class="col-lg-8 col-md-8 col-sm-12">
+        <div class="col-lg-9 col-md-19 col-sm-12">
           <select id="type_equipment"  value="{{equipment.type_equipment}}" name="type_equipment" class="form-control form-control rounded-pill" style="background: #e9ecef;">
               <option value="">---------</option>
               {% for type in types %}
@@ -95,13 +95,7 @@
             </select>
         </div>
 
-        <div class="col-lg-1 col-md-1 col-sm-12">
-        <a type="button" class="btn rounded-pill border" data-toggle="modal" data-target="#Modal" style="background: #e9ecef">
-          <span>
-            <img src="{% static "images/plus.png" %}" style="height: 25px; width: 25px">
-                </span>
-              </a>
-          </div>
+        
 
           <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
