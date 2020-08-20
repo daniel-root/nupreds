@@ -197,7 +197,11 @@
       Sem Resultados
       </p>
      {% endfor %}
-    <div class="pagination">
+    
+  </tbody>
+ 
+</table>
+<div class="pagination">
       <span class="step-links">
           {% if list_equipment.has_previous %}
               <a href="?page=1">&laquo; first</a>
@@ -214,14 +218,8 @@
           {% endif %}
       </span>
   </div>
-  </tbody>
- 
-</table>
-
 <hr width="1000px" style="margin-top: -1px;">
-  <div style='position:fixed;bottom:0;left:0;    
-            background:lightgray;width:100%;'>
-   
+  
 
   <div class="row" style="padding-left: 85%; margin-top: 10px; margin-bottom: 15px;">
         <form class="form-inline" action="{% url "equipment_new" %}">
@@ -235,7 +233,7 @@
         </button>
         </form>
   </div>
-  </div>
+  
   </div>
 
 	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
