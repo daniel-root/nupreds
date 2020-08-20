@@ -22,12 +22,20 @@ def UserInactive():
     user = Client.objects.filter(inative=True)
     return user
 
+from django.core.paginator import Paginator
+def get_page(request,objects):
+    objetcs = objects
+    paginator = Paginator(objetcs,5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj
+
 def user_list(request, templete_name='users/user_list.html'):
     if request.session.has_key('username'):
         name = request.session['username']
         type_privilegio = Client.objects.filter(usuario=name)
         data = {}
-        data['object_list'] = UserAll()
+        data['object_list'] = get_page(request,UserAll())
         data['type_user'] = type_privilegio
         data['type'] = 'Todos'
         return render(request, templete_name, data)
@@ -38,7 +46,7 @@ def user_list_inactive(request,templete_name='users/user_list.html'):
         name = request.session['username']
         type_privilegio = Client.objects.filter(usuario=name)
         data = {}
-        data['object_list'] = UserInactive()
+        data['object_list'] = get_page(request,UserInactive())
         data['type_user'] = type_privilegio
         data['type'] = 'Inativos'
         return render(request, templete_name, data)
@@ -49,8 +57,9 @@ def user_view(request, pk, template_name='users/user_detail.html'):
         user= get_object_or_404(Client, pk=pk)    
         return render(request, template_name, {'object':user})
     return render(request, 'login.html')
-
+count = 0
 def user_create(request, template_name='users/user_form.html'):
+    global count
     if request.session.has_key('username'):
         data = {}
         user = {'id': 'None'}
@@ -59,10 +68,10 @@ def user_create(request, template_name='users/user_form.html'):
         data['user']= user
         if request.method == 'POST':
             result = main("Registro")
-            #result="Digital não reconhecida!"
+            
             if result[0] != 'F':
                 messages.error(request, result)
-                data['mensagem'] = 'Te acorda menino!'
+                count = count + 1
                 data['user'] = {'usuario':request.POST['usuario'],
                     'email':request.POST['email'],
                     'telefone':request.POST['telefone'],
@@ -249,14 +258,15 @@ def type_user(request,pk):
         return render(request, 'users/user_detail.html', {'object':user})
     return render(request, 'login.html')
 
-def filter_type(request,value,templete_name='users/user_list.html'):
+def filter_type_list(request,value,templete_name='users/user_list.html'):
     if request.session.has_key('username'):
+        print("aqui")
         user = Client.objects.filter(user_type = value)
         data = {}
         name = request.session['username']
         type_privilegio = Client.objects.filter(usuario=name)
         data = {}
-        data['object_list'] = user
+        data['object_list'] = get_page(request,user)
         data['type_user'] = type_privilegio
 
         #data['list_equipment'] = equipment
@@ -279,7 +289,7 @@ def filter_list(request,pk,value,templete_name='users/user_list.html'):
             data = {}
             name = request.session['username']
             type_privilegio = Client.objects.filter(usuario=name)
-            data['object_list'] = user
+            data['object_list'] = get_page(request,user)
             data['type_user'] = type_privilegio
             data['type'] = value
             return render(request, templete_name, data)
@@ -294,7 +304,7 @@ def filter_list(request,pk,value,templete_name='users/user_list.html'):
             data = {}
             name = request.session['username']
             type_privilegio = Client.objects.filter(usuario=name)
-            data['object_list'] = user
+            data['object_list'] = get_page(request,user)
             data['type_user'] = type_privilegio
             data['type'] = value
             return render(request, templete_name, data)
@@ -315,4 +325,18 @@ def filter_list(request,pk,value,templete_name='users/user_list.html'):
             data['type_user'] = type_privilegio
             data['type'] = value
             return render(request, templete_name, data)
+    return render(request, 'login.html')
+
+def search_user(request,value):
+    if request.session.has_key('username'):
+        if request.method == 'POST':
+            search = request.POST['search']
+            users = Client.objects.filter(Q(usuario__contains=search) | Q(cpf__contains=search))
+            name = request.session['username']
+            type_privilegio = Client.objects.filter(usuario=name)
+            data = {}
+            data['object_list'] = get_page(request,users)
+            data['type_user'] = type_privilegio
+            data['type'] = 'type'
+            return render(request, 'users/user_list.html', data)
     return render(request, 'login.html')
