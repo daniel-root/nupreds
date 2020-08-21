@@ -72,16 +72,29 @@ def user_create(request, template_name='users/user_form.html'):
             result = main("Registro")
             
             if result[0] != 'F':
-                messages.error(request, result)
                 count = count + 1
-                data['user'] = {'usuario':request.POST['usuario'],
-                    'email':request.POST['email'],
-                    'telefone':request.POST['telefone'],
-                    'cpf':request.POST['cpf'],
-                    'senha':request.POST['pwd1'],
-                    'id':'None'
-                }
-                return render(request, template_name, data)
+                #print(count)
+                if count <= 2:
+                    messages.error(request, result)
+                    data['user'] = {'usuario':request.POST['usuario'],
+                        'email':request.POST['email'],
+                        'telefone':request.POST['telefone'],
+                        'cpf':request.POST['cpf'],
+                        'senha':request.POST['pwd1'],
+                        'id':'None'
+                    }
+                    return render(request, template_name, data)
+                else:
+                    messages.error(request, "Tente com um novo dedo")
+                    count=0 
+                    data['user'] = {'usuario':request.POST['usuario'],
+                        'email':request.POST['email'],
+                        'telefone':request.POST['telefone'],
+                        'cpf':request.POST['cpf'],
+                        'senha':request.POST['pwd1'],
+                        'id':'None'
+                    }
+                    return render(request, template_name, data)
             else:
                 #Client.objects.filter(id = data['object'].id).update(fingerprint=result)
                 #data['frase'] = 'Registro Completo!'
@@ -148,18 +161,24 @@ def user_delete(request, pk, template_name='users/user_confirm_delete.html'):
         return render(request, template_name, {'object':user})
     return render(request, 'login.html')
 
-def user_fingerprint(request, pk, template_name='users/user_fingerprint.html'):
+def user_fingerprint(request, pk, template_name='users/user_form.html'):
     if request.session.has_key('username'):
         data = {}
         data['object'] = get_object_or_404(Client, pk=pk)
         if request.method=='POST':           
             result = main("Registro")
             if result[0] != 'F':
-                data['frase'] = result
+                print("aquiestou")
+                messages.error(request, result)
+                return redirect('/Usuario/Editar/'+pk)
+                
+                #return render(request, template_name, data)
+                #data['frase'] = result
             else:
                 Client.objects.filter(id = data['object'].id).update(fingerprint=result)
-                data['frase'] = 'Registro Completo!'
-            return redirect('/Usuario')
+                messages.error(request, "Registro Completo!")
+                return render(request, template_name, data)
+            #return redirect('/Usuario')
             #return user_fingerprint_registration(request,data['frase'],pk )
         return render(request, template_name, data)
     return render(request, 'login.html')
