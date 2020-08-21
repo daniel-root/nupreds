@@ -4,17 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
 
-    <!-- JQuery -->
-    <script src="js/jquery.js"></script>
-    <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 
     <title>Cadastro de Usuário</title>
     {% load static %}
     <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}">
     <link href={% static "users/open-iconic-master/font/css/open-iconic-bootstrap.css" %} rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
   </head>
   <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -94,6 +90,7 @@
           <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
             <input type="password" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12" id="pwd1" name="pwd1" style=" background: #e9ecef" required>
+            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 50px;cursor: pointer;"></span>
           </div>
         </div>
       </div>
@@ -103,6 +100,7 @@
           <label  for="txtSenha2" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Repetir Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
             <input type="password" class="form-control rounded-pill"  mINlength="8" maxlength="12" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
+            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 50px;cursor: pointer;"></span>
           </div>
         </div>
       </div>
@@ -123,11 +121,15 @@
         {% endif %}
       </div>
   <script>
-  $("#submit-button").submit(function(e){
-    $('#staticBackdrop').modal('show');
-    $("#submit-button").submit();
-    return false;
-    });
+  let btn = document.querySelector('.lnr-eye');
+btn.addEventListener('click', function() {
+    let input = document.querySelector('#pwd1');
+    if(input.getAttribute('type') == 'password') {
+        input.setAttribute('type', 'text');
+    } else {
+        input.setAttribute('type', 'password');
+    }
+});
   </script>
   
   
@@ -136,37 +138,60 @@
 
 
   <!-- Script para verificar se a senha é forte e se senhas são diferentes -->
-  <script type="text/javascript">
+ 
+    <script src="{% static "users/js/bootstrap.min.js" %}"></script>          
+      <!-- JQuery -->
+    <script src="js/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+      <script>
+  let btn = document.querySelector('.lnr-eye');
+btn.addEventListener('click', function() {
+    let input = document.querySelector('#pwd1');
+    if(input.getAttribute('type') == 'password') {
+        input.setAttribute('type', 'text');
+    } else {
+        input.setAttribute('type', 'password');
+    }
+});
+  </script>
+   <script type="text/javascript">
 
   
     var password = document.getElementById("pwd1")
       , confirm_password = document.getElementById("pwd2")
-      , nome_usuario = document.getElementById("nomeUsuario");
     var regex = /^[0-9]+${8}$/i;
 
     function validatePassword(){
-      if (!(regex.test(password.value))) {
-       password.setCustomValidity("Sua senha deve ter números, letras e entre 8 e 12 caracteres!");
-      } else {
-        if(password.value != confirm_password.value) {
-       confirm_password.setCustomValidity("Senhas diferentes!");
-      } else {
-       confirm_password.setCustomValidity('');
-      }
+      pwd1 = document.f1.user_form.value
+      pwd2 = document.f1.user_form.value
+
+      if (pwd1 == pwd2)
+        alert("SENHAS IGUAIS")
+      else
+        alert("SENHAS DIFERENTES")
     }
-      
-        
-      
-
-    //password.onchange = validatePassword;
-    //confirm_password.onkeyup = validatePassword;    
-
-    password.oninput = validatePassword;
-    confirm_password.onkeyup = validatePassword;    
-
   </script>
-    <script src="{% static "users/js/bootstrap.min.js" %}"></script>          
+  <script type="text/javascript">
+        $( "#olho" ).mousedown(function() {
+      $("#pwd1", "#pwd2").attr("type", "text");
+    });
 
+    $( "#olho" ).mouseup(function() {
+      $("#pwd1", "#pwd2").attr("type", "password");
+    });
+  </script>
+    <script type="text/javascript">
+        $( "#olho" ).mousedown(function() {
+      $("#pwd2").attr("type", "text");
+    });
+
+    $( "#olho" ).mouseup(function() {
+      $("#pwd2").attr("type", "password");
+    });
+  </script>
 </body>
 
 </html>
