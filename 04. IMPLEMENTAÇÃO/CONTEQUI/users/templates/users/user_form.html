@@ -25,7 +25,7 @@
                   </div>
                   <div class="modal-body text-center">
                     
-                      <span "><img src="{% static "images/digital.png" %}" style="height: 80px; width: 80px;" ></span>
+                      <span><img src="{% static "images/digital.png" %}" style=" height: 80px; width: 80px;" ></span>
                     
                     <p >Coloque o dedo indicador para cadastro de impressão de digital</p>
                   </div>
@@ -109,11 +109,7 @@
       <div class="col-lg-12 col-sm-12 text-right" style="padding: 50px 0px">
         
         <a  href="{% url "user_list" %}" class="btn rounded-pill" style="background: #e9ecef">Voltar</a>
-        {% if user.id != 'None' %}
-          <form method="post" action="">{% csrf_token %}
-            <input type="submit" value="Recadastrar Digital" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef" />
-          </form>
-    {% endif %}           
+                 
         {% if user.id != 'None' %}
         <button type="submit" class="btn rounded-pill" style="background: #e9ecef">Salvar</button>
         {% else %}
@@ -135,7 +131,11 @@ btn.addEventListener('click', function() {
   
   </div>
 </form>
-
+{% if user.id != 'None' %}
+          <form method="post" action="{% url "user_fingerprint" user.pk %}">{% csrf_token %}
+            <input type="submit" value="Recadastrar Digital" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef" />
+          </form>
+    {% endif %}  
 
   <!-- Script para verificar se a senha é forte e se senhas são diferentes -->
  
@@ -183,6 +183,9 @@ btn.addEventListener('click', function() {
       $("#pwd1", "#pwd2").attr("type", "password");
     });
   </script>
+
+    <script src="{% static "users/js/bootstrap.min.js" %} " > </script>          
+
     <script type="text/javascript">
         $( "#olho" ).mousedown(function() {
       $("#pwd2").attr("type", "text");
