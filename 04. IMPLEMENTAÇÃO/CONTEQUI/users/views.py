@@ -85,7 +85,7 @@ def user_create(request, template_name='users/user_form.html'):
                     }
                     return render(request, template_name, data)
                 else:
-                    messages.error(request, "Tente com um novo dedo")
+                    messages.error(request, "Não foi possivel fazer a leitura da digital")
                     count=0 
                     data['user'] = {'usuario':request.POST['usuario'],
                         'email':request.POST['email'],
@@ -177,7 +177,7 @@ def user_fingerprint(request, pk, template_name='users/user_form.html'):
             else:
                 Client.objects.filter(id = data['object'].id).update(fingerprint=result)
                 messages.error(request, "Registro Completo!")
-                return render(request, template_name, data)
+                return redirect('/Usuario/Editar/'+pk)
             #return redirect('/Usuario')
             #return user_fingerprint_registration(request,data['frase'],pk )
         return render(request, template_name, data)

@@ -224,9 +224,9 @@
     <td>{% TypeName equipment_user.equipment %}</td>
     <td>{% TagName equipment_user.equipment %}</td>
     <td>{% DescriptionName equipment_user.equipment %}</td>
-    <td>{{ equipment_user.loan.date.day }}/{{ equipment_user.loan.date.month }}/{{ equipment_user.loan.date.year }}</td>
+    <td>{{ equipment_user.loan|date:"d/m/Y"}}</td>
     <td>{{ equipment_user.user_loan }}</td>
-    <td>{{ equipment_user.devolution.day }}/{{ equipment_user.devolution.date.month }}/{{ equipment_user.devolution.date.year }}</td>
+    <td>{{ equipment_user.devolution|date:"d/m/Y" }}</td>
     <td>{{ equipment_user.user_devolution }}</td>
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
@@ -243,7 +243,7 @@
     <td>{% TypeName equipment_user.equipment %}</td>
     <td>{% TagName equipment_user.equipment %}</td>
     <td>{% DescriptionName equipment_user.equipment %}</td>
-    <td>{{ equipment_user.loan.date.day }}/{{ equipment_user.loan.date.month }}/{{ equipment_user.loan.date.year }}</td>
+    <td>{{ equipment_user.loan|date:"d/m/Y" }}</td>
     <td>{{ equipment_user.user_loan }}</td>
     <td></td>
     <td></td>
@@ -283,17 +283,17 @@
 <nav aria-label="Page navigation">
   <ul class="pagination justify-content-center">
         {% if list_equipment_user.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ list_equipment_user.previous_page_number }}">previous</a></li>
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primeira</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ list_equipment_user.previous_page_number }}">Anterior</a></li>
         {% endif %}
 
         <li class="page-item"><a class="page-link">
-            Page {{ list_equipment_user.number }} of {{ list_equipment_user.paginator.num_pages }}.
+            Página {{ list_equipment_user.number }} de {{ list_equipment_user.paginator.num_pages }}.
         </a></li>
 
         {% if list_equipment_user.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ list_equipment_user.next_page_number }}">next</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ list_equipment_user.paginator.num_pages }}">last &raquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ list_equipment_user.next_page_number }}">Próxima</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ list_equipment_user.paginator.num_pages }}">Última &raquo;</a></li>
         {% endif %}
   </ul>
 </nav>

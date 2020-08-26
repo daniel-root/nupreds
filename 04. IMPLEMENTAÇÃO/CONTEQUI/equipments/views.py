@@ -55,7 +55,7 @@ def equipment_type_create(request, template_name='equipments/equipment_type_form
             new_equipment_type = Equipment_type.objects.create(
                 name=request.POST['name_type'],
                 time_maximum=request.POST['ctempo'])
-            return redirect('equipment_list')
+            return redirect('equipment_type_list')
         else:
             messages.error(request, 'Tipo de equipamento já existe!')
             data['equipment_type'] = {'name':request.POST['name_type'],'time_maximum':request.POST['ctempo']}
@@ -68,7 +68,7 @@ def equipment_type_update(request, pk, template_name='equipments/equipment_type_
         equipment_type.update(
             name=request.POST['name_type'],
             time_maximum=request.POST['ctempo'])
-        return redirect('equipment_list')
+        return redirect('equipment_type_list')
     return render(request, template_name, {'equipment_type':equipment_type})
 
 def equipment_type_delete(request, pk, template_name='equipments/equipment_type_confirm_delete.html'):
@@ -78,7 +78,8 @@ def equipment_type_delete(request, pk, template_name='equipments/equipment_type_
                 Equipment_type.objects.filter(id = pk).update(inative='False')
             else:
                 Equipment_type.objects.filter(id = pk).update(inative='True')
-            return equipment_list(request)
+            return redirect('equipment_type_list')
+            #return equipment_list(request)
         return render(request, template_name, {'object':EquipmentTypeUnique(pk)})
     return render(request, 'login.html')
 
@@ -186,7 +187,7 @@ def emprestar(request,pk):
         
         if request.method=='POST':
             username = main("Verification")
-            if count >= 2 and username=='Erro dpfj_compare()':
+            if count >= 2 and username=="N":
                     count = 0
                     data = {}
                     data['pk'] = pk
@@ -213,7 +214,7 @@ def emprestar(request,pk):
                     time = ''.join(map(str,time))
                     Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
                     Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
-                    return equipment_list(request)
+                    return redirect('/Equipamentos')
                 else:
                     messages.error(request, 'Usuário não encontrado, tente novamente! Tentativa ' + str(count+2) + '/3')
                     count = count + 1
@@ -243,8 +244,8 @@ def emprestar(request,pk):
                     'equipments/equipment_list.html',
                     data
                     )
-            return equipment_list(request)
-        return equipment_list(request)
+            return redirect('/Equipamentos')
+        return redirect('/Equipamentos')
             #return render(request, 'equipments/emprestar.html', data )
     else:
         return render(request, 'login.html')
@@ -255,7 +256,7 @@ def devolver(request,pk):
         username = None
         if request.method=='POST':
             username = main("Verification")
-            if count >= 2 and username=='Erro dpfj_compare()':
+            if count >= 2 and username=="N":
                 count = 0
                 data = {}
                 data['pk'] = pk
@@ -276,7 +277,7 @@ def devolver(request,pk):
                     if BusyEquipment:
                         Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).update(user_devolution=Client.objects.get(id = int(post[0])),devolution=timezone.now())
                         Equipment.objects.filter(id = pk).update(status='Livre')
-                        return equipment_list(request)
+                        return redirect('/Equipamentos')
                     else:
                         messages.error(request, 'Equipamento sem emprestimo!')
                         return equipment_list(request)
@@ -308,8 +309,8 @@ def devolver(request,pk):
                     'equipments/equipment_list.html',
                     data
                     )
-            return equipment_list(request)
-        return equipment_list(request)
+            return redirect('/Equipamentos')
+        return redirect('/Equipamentos')
     else:
         return render(request, 'login.html')
 
@@ -544,7 +545,7 @@ def get_rastreio(request,value):
         fim = request.POST['end']
         tag_ = tag.split('-')
         tag_ = tag_[0]
-        url= '/Rastreio/{}/{}/{}/{}/{}'.format('loan',type_equipment,tag,inicio,fim)
+        url= '/Rastreio/{}/{}/{}/{}/{}'.format('loan',type_equipment,tag_,inicio,fim)
         return redirect(url) 
         '''
         data = {}
@@ -584,7 +585,7 @@ def get_rastreio(request,value):
         inicio = request.POST['start']
         tag_ = tag.split('-')
         tag_ = tag_[0] 
-        url= '/NaoDevolvidos/{}/{}/{}/{}'.format('loan',type_equipment,tag,inicio)
+        url= '/NaoDevolvidos/{}/{}/{}/{}'.format('loan',type_equipment,tag_,inicio)
         return redirect(url)
         '''
         data = {}
@@ -758,10 +759,13 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
     #title = 'SISTEMA DE CONTROLE DE EQUIPAMENTO'
     #subtitle = 'Relatório de ' + tipo + ' de equipamento'
     #date_now = date.today()
-    time_now = datetime.now()
-    #print(date_now)
-    date = str(time_now.day)+'/'+str(time_now.month)+'/'+str(time_now.year)
-    time = str(time_now.hour)+':'+str(time_now.minute)
+    #time_now = datetime.now()
+    start = datetime.strptime(start, '%Y-%m-%d')
+    end = datetime.strptime(end, '%Y-%m-%d')
+    date = datetime.now()
+    print(date.strftime("%H:%M"))
+    #date = str(time_now.day)+'/'+str(time_now.month)+'/'+str(time_now.year)
+    #time = str(time_now.hour)+':'+str(time_now.minute)
 
 
     picPath = 'equipments/static/images/download.png'
@@ -779,8 +783,8 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
         
 
     list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatório de "+ report +" de equipamento"],[""]
-    list02 = ["Data: "+date],["Hora: "+time],["Página: " + str(inicio+1)  +" de " + str(fim)]
-    list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start,"Final: "+end]
+    list02 = ["Data: "+str(date.strftime("%d/%m/%Y"))],["Hora: "+str(date.strftime("%H:%M"))],["Página: " + str(inicio+1)  +" de " + str(fim)]
+    list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start.strftime("%d/%m/%Y"),"Final: "+end.strftime("%d/%m/%Y")]
 
     Tablelist01 = Table(list01)
     Tablelist02 = Table(list02)

@@ -94,8 +94,6 @@ def Verification(hReader):
                 falsematch_rate = c_uint(0)
                 for user in users:
                     #print(user.usuario)
-                    if user.fingerprint == None:
-                        continue
                     res = [] 
                     for ele in user.fingerprint:
                         res.extend(ord(num) for num in ele)
@@ -105,6 +103,7 @@ def Verification(hReader):
                     dpfj.dpfj_compare.argtypes = [DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,DPFJ_FMD_FORMAT,POINTER(c_ubyte),c_uint,c_uint,POINTER(c_uint)]
                     dpfj.dpfj_compare.restype = c_int
                     result = dpfj.dpfj_compare(DPFJ_FMD_ISO_19794_2_2005, pFeatures1, nFeatures1Size, 0, DPFJ_FMD_ISO_19794_2_2005, pFeatures2, nFeatures2Size, 0, byref(falsematch_rate))
+                    
                     if(DPFJ_SUCCESS == result):
                         #target_falsematch_rate = c_long(21474.83647)
                         #print(falsematch_rate)
@@ -117,7 +116,9 @@ def Verification(hReader):
                             #print("Fingerprints did not match.")
                             continue
                     else:
+                        print("ouraoura")
                         return "Erro dpfj_compare()"
+                return "N"
             else: 
                return "Error"
         bStop = True

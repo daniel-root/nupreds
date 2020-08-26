@@ -117,6 +117,7 @@
         {% endif %}
       </div>
   <script>
+
   let btn = document.querySelector('.lnr-eye');
 btn.addEventListener('click', function() {
     let input = document.querySelector('#pwd1');
@@ -146,6 +147,13 @@ btn.addEventListener('click', function() {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+       <script>
+$("#submit-button").submit(function(e){
+    $('#staticBackdrop').modal('show');
+    $('#submit-button').submit();
+    return false;
+});
+</script>
       <script>
   let btn = document.querySelector('.lnr-eye');
 btn.addEventListener('click', function() {
