@@ -47,7 +47,7 @@
         </form>
       </div>
             
-      <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+      <table class="table table-sm" style="width: 1000px;  margin:auto; margin-top: 10px;" >
   <thead>
     <tr>
       <th scope="col" width="15%" style="text-align: left;">
@@ -79,11 +79,11 @@
       <td>
         <div class="row">
         <form class="form-inline" action="{% url "user_edit" user.id %}">
-        <button class="btn rounded-pill" style="background: #e9ecef">
+        <button class="btn btn-sm rounded-pill" style="background: #e9ecef">
             Editar
           </button>
           </form>
-          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{ user.id }}" style="margin-left: 5px; background: #e9ecef;">
+          <button type="button " class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{ user.id }}" style="margin-left: 5px; background: #e9ecef;">
            {% ActiveOrInactiveUser user.id %}
           </button>
 
@@ -113,7 +113,7 @@
                    {% for type in type_user %}
           {% ifequal type.user_type 'Super' %}
 
-          <button type="button" class="btn border-0" data-toggle="modal" data-target="#Modal2{{ user.id }}" style="background: #FFFFFF;">
+          <button type="button" class="btn btn-sm border-0" data-toggle="modal" data-target="#Modal2{{ user.id }}" style="background: #FFFFFF;">
               <span>
                 <img src={% static "images/engrenagem.png" %} style="height: 25px; width: 25px">
               </span>

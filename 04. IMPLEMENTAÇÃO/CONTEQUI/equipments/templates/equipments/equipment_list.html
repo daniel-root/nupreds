@@ -55,7 +55,7 @@
         </form>
       </div>
       
-      <table class="table" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+      <table class="table table-sm" style="width: 1000px;  margin:auto; margin-top: 10px;" >
        
   <thead>
     <tr>
@@ -86,11 +86,11 @@
       <td >
          <div class="row">
         <form class="form-inline" action="{% url "equipment_edit" equipment.id %}">
-          <button class="btn rounded-pill" style="background: #e9ecef">
+          <button class="btn btn-sm rounded-pill" style="background: #e9ecef">
               Editar
           </button>
         </form>
-          <button type="button" class="btn rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment.id}}" style="margin-left: 5px;background: #e9ecef">
+          <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment.id}}" style="margin-left: 5px;background: #e9ecef">
           {% ActiveOrInactive equipment.id %}
           </button>
           {% include 'equipments/equipment_confirm_delete.html' with equipment=equipment %}
@@ -101,9 +101,9 @@
           <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}               
           {% endifequal %}
           {% ifequal 'Atrasado' equipment.status %}
-          <button class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
+          <button class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
           {% else %}
-          <button type="submit" class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
+          <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
           {% endifequal %}
           {% LoanOrDevolution equipment.id %}
           </button>
