@@ -90,7 +90,7 @@
           <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
             <input type="password" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12" id="pwd1" name="pwd1" style=" background: #e9ecef" required>
-            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 50px;cursor: pointer;"></span>
+            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 40px;cursor: pointer;  font-size: 25px;"></span>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@
           <label  for="txtSenha2" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Repetir Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
             <input type="password" class="form-control rounded-pill"  mINlength="8" maxlength="12" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
-            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 50px;cursor: pointer;"></span>
+            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 40px;cursor: pointer; font-size: 25px;"></span>
           </div>
         </div>
       </div>
@@ -116,19 +116,7 @@
         <input type="submit" value="Continue" class="btn rounded-pill" style="background: #e9ecef"/>
         {% endif %}
       </div>
-  <script>
-
-  let btn = document.querySelector('.lnr-eye');
-btn.addEventListener('click', function() {
-    let input = document.querySelector('#pwd1');
-    if(input.getAttribute('type') == 'password') {
-        input.setAttribute('type', 'text');
-    } else {
-        input.setAttribute('type', 'password');
-    }
-});
-  </script>
-  
+ 
   
   </div>
 </form>
