@@ -50,15 +50,15 @@ def equipment_type_view(request, pk, template_name='equipments/equipment_type_de
 
 def equipment_type_create(request, template_name='equipments/equipment_type_form.html'):
     if request.method=='POST':
-        equipment_type = Equipment_type.objects.filter(name = request.POST['name_type'])
+        equipment_type = Equipment_type.objects.filter(name = request.POST['tag'])
         if not equipment_type:
             new_equipment_type = Equipment_type.objects.create(
-                name=request.POST['name_type'],
-                time_maximum=request.POST['ctempo'])
+                name=request.POST['tag'],
+                time_maximum=request.POST['time_type'])
             return redirect('equipment_type_list')
         else:
             messages.error(request, 'Tipo de equipamento já existe!')
-            data['equipment_type'] = {'name':request.POST['name_type'],'time_maximum':request.POST['ctempo']}
+            data['equipment_type'] = {'name':request.POST['tag'],'time_maximum':request.POST['time_type']}
             return render(request, template_name, data)
     return render(request, template_name)
 
@@ -66,8 +66,8 @@ def equipment_type_update(request, pk, template_name='equipments/equipment_type_
     equipment_type = Equipment_type.objects.filter(pk=pk)
     if request.method=='POST':
         equipment_type.update(
-            name=request.POST['name_type'],
-            time_maximum=request.POST['ctempo'])
+            name=request.POST['tag'],
+            time_maximum=request.POST['time_type'])
         return redirect('equipment_type_list')
     return render(request, template_name, {'equipment_type':equipment_type})
 
@@ -76,8 +76,10 @@ def equipment_type_delete(request, pk, template_name='equipments/equipment_type_
         if request.method=='POST': 
             if Equipment_type.objects.filter(id = pk,inative='True'):
                 Equipment_type.objects.filter(id = pk).update(inative='False')
+                equipments = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id=pk)).update(inative='False')
             else:
                 Equipment_type.objects.filter(id = pk).update(inative='True')
+                equipments = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id=pk)).update(inative='True')
             return redirect('equipment_type_list')
             #return equipment_list(request)
         return render(request, template_name, {'object':EquipmentTypeUnique(pk)})
@@ -88,7 +90,7 @@ def EquipmentActiveAll():
     return equipment
 
 def EquipmentAll():
-    equipment = Equipment.objects.filter(inative=True).order_by('status','tag')
+    equipment = Equipment.objects.filter(inative=True,type_equipment__inative=False).order_by('status','tag')
     return equipment
 
 def EquipmentUnique(pk):
@@ -98,7 +100,7 @@ def EquipmentUnique(pk):
 from django.core.paginator import Paginator
 def get_page(request,objects):
     objetcs = objects
-    paginator = Paginator(objetcs,5)
+    paginator = Paginator(objetcs,8)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return page_obj
@@ -110,6 +112,7 @@ def equipment_list(request,templete_name='equipments/equipment_list.html'):
         data = {}
         equipment_list = EquipmentActiveAll()
         data['list_equipment'] = get_page(request,equipment_list)
+        data['equipments'] = EquipmentActiveAll()
         data['type_equipment']= EquipmentTypeAll()
         data['type'] = 'Todos'
         data['search'] = 'Null'
@@ -194,6 +197,7 @@ def emprestar(request,pk):
                     data['tipo'] = 'por_senha'
                     data['list_equipment'] = get_page(request,EquipmentActiveAll())
                     data['type_equipment']= EquipmentTypeAll()
+                    data['equipments'] = EquipmentActiveAll()
                     data['type'] = 'Todos'
                     data['search'] = 'Null'
                     messages.error(request, 'Não foi Possível capturar digital! Tente com login e senha.')
@@ -208,7 +212,7 @@ def emprestar(request,pk):
                     amout_of_equipments = ''.join(map(str, amout))
                     if BusyEquipment:
                         messages.error(request, 'Equipamento já emprestado!')
-                        return equipment_list(request)
+                        return redirect('/Equipamentos')
                         #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
                     time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
                     time = ''.join(map(str,time))
@@ -221,6 +225,7 @@ def emprestar(request,pk):
                     data = {}
                     data['chave'] = pk
                     data['list_equipment'] = get_page(request,EquipmentActiveAll())
+                    data['equipments'] = EquipmentActiveAll()
                     data['type_equipment']= EquipmentTypeAll()
                     data['type'] = 'Todos'
                     data['search'] = 'Null'
@@ -228,7 +233,7 @@ def emprestar(request,pk):
                     return render(request, 'equipments/equipment_list.html', data )
                     #return equipment_list(request)
                     #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-                return equipment_list(request)
+                return redirect('/Equipamentos')
                 #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})           
             else:
                 data = {}
@@ -236,6 +241,7 @@ def emprestar(request,pk):
                 data['tipo'] = 'por_senha'
                 data['list_equipment'] = get_page(request,EquipmentActiveAll())
                 data['type_equipment']= EquipmentTypeAll()
+                data['equipments'] = EquipmentActiveAll()
                 data['type'] = 'Todos'
                 data['search'] = 'Null'
                 messages.error(request, 'Dispositivo não conectado!')
@@ -263,6 +269,7 @@ def devolver(request,pk):
                 data['tipo'] = 'por_senha'
                 data['list_equipment'] = get_page(request,EquipmentActiveAll())
                 data['type_equipment']= EquipmentTypeAll()
+                data['equipments'] = EquipmentActiveAll()
                 data['type'] = 'Todos'
                 data['search'] = 'Null'
                 messages.error(request, 'Muitas tentativas!')
@@ -289,6 +296,7 @@ def devolver(request,pk):
                     data['chave'] = pk
                     data['list_equipment'] = get_page(request,EquipmentActiveAll())
                     data['type_equipment']= EquipmentTypeAll()
+                    data['equipments'] = EquipmentActiveAll()
                     data['type'] = 'Todos'
                     data['search'] = 'Null'
                     #messages.error(request, 'Dispositivo não conectado!')
@@ -301,6 +309,7 @@ def devolver(request,pk):
                 data['tipo'] = 'por_senha'
                 data['list_equipment'] = get_page(request,EquipmentActiveAll())
                 data['type_equipment']= EquipmentTypeAll()
+                data['equipments'] = EquipmentActiveAll()
                 data['type'] = 'Todos'
                 data['search'] = 'Null'
                 messages.error(request, 'Dispositivo não conectado!')
@@ -333,7 +342,7 @@ def emprestar_user(request,pk):
                 time = ''.join(map(str,time))
                 Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
                 Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
-                return equipment_list(request)
+                return redirect('/Equipamentos')
         return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
     return render(request, 'login.html')
 
@@ -349,7 +358,7 @@ def devolver_user(request,pk):
                 if BusyEquipment:
                     Equipment_user.objects.filter(devolution=None,equipment=Equipment.objects.get(id = pk)).update(user_devolution=Client.objects.get(id = int(post[0])),devolution=timezone.now())
                     Equipment.objects.filter(id = pk).update(status='Livre')
-                    return equipment_list(request)
+                    return redirect('/Equipamentos')
             messages.error(request, 'Equipamento sem emprestimo!')
             return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
         

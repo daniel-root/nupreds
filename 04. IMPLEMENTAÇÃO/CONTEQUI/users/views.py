@@ -25,7 +25,7 @@ def UserInactive():
 from django.core.paginator import Paginator
 def get_page(request,objects):
     objetcs = objects
-    paginator = Paginator(objetcs,5)
+    paginator = Paginator(objetcs,8)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return page_obj

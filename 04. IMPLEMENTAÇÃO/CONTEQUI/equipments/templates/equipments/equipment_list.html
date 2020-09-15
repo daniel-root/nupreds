@@ -11,6 +11,91 @@
 </head>
 <body >
 
+{% for equipment in equipments %}
+
+   <div class="modal fade" id="Modal{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Confirmar Empréstimo </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-center">
+                  {% for message in messages %}
+                      <div class="alert alert-danger">
+                        <strong>Error!</strong> {{ message }}
+                      </div>
+                  {% endfor %}
+                  <p >Coloque o dedo leitor</p>
+                  
+                  <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
+                  {% ifequal equipment.status 'Livre' %}
+                  <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
+                  {% else %}
+                  <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
+                  {% endifequal %}
+                  <button type="submit" class="btn border-0">Posicione o dedo indicador sobre o leitor</button>
+                  </form>
+                  
+                
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+
+           <div class="modal fade" id="danielpor_senha{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Confirmar Empréstimo</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="container-fluid">
+                  <!-- <form class="form-padrao" autocomplete="off"> -->
+                    {% for message in messages %}
+                        <div class="alert alert-danger">
+                          <strong>Error!</strong> {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% ifequal equipment.status 'Livre' %}
+                    <form method="POST" id="add_form" action="{% url 'emprestar_user' equipment.id %}">{% csrf_token %}
+                    {% else %}
+                    <form method="POST" id="add_form" action="{% url 'devolver_user' equipment.id %}">{% csrf_token %}
+                    {% endifequal %}
+                    <div class="form-group row">
+                      <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="textNome">Login:</label>
+                      <div class="col-lg-9 col-md-9 col-sm-9">
+                        <input class="form-control rounded-pill" type="textNome" name="username"  style=" background: #e9ecef">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="senha">Senha:</label>
+                      <div class="col-lg-9 col-md-9 col-sm-9">
+                        <input class="form-control mr-2 rounded-pill" type="password" name="password" required pattern="[0-9]+$" style=" background: #e9ecef">
+                      </div>
+                    </div>
+              </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                  <button type="submit" class="btn btn-primary">Confirmar</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+{% endfor %}
   <div class="container pt-2">
     <div class="row " style="padding-left: 5%;">
         <span>
@@ -95,101 +180,24 @@
           </button>
           {% include 'equipments/equipment_confirm_delete.html' with equipment=equipment %}
          
-          {% ifequal equipment.status 'Livre' %}
-          <form name="my" id="my" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}               
+          {% if equipment.status == 'Livre' %}
+          <form name="my" id="my" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
           {% else %}
-          <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}               
-          {% endifequal %}
-          {% ifequal 'Atrasado' equipment.status %}
-          <button class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
+          <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}
+          {% endif %}
+          {% if 'Atrasado' == equipment.status %}
+          <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
           {% else %}
+          
           <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
-          {% endifequal %}
+          {% endif %}
           {% LoanOrDevolution equipment.id %}
           </button>
           </form>
+          
       </div>
+             
       </td>
-      <div class="modal fade" id="danielpor_senha{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Confirmar Empréstimo</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <div class="container-fluid">
-                  <!-- <form class="form-padrao" autocomplete="off"> -->
-                    {% for message in messages %}
-                        <div class="alert alert-danger">
-                          <strong>Error!</strong> {{ message }}
-                        </div>
-                    {% endfor %}
-                    {% ifequal equipment.status 'Livre' %}
-                    <form method="POST" id="add_form" action="{% url 'emprestar_user' equipment.id %}">{% csrf_token %}
-                    {% else %}
-                    <form method="POST" id="add_form" action="{% url 'devolver_user' equipment.id %}">{% csrf_token %}
-                    {% endifequal %}
-                    <div class="form-group row">
-                      <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="textNome">Login:</label>
-                      <div class="col-lg-9 col-md-9 col-sm-9">
-                        <input class="form-control rounded-pill" type="textNome" name="username"  style=" background: #e9ecef">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="senha">Senha:</label>
-                      <div class="col-lg-9 col-md-9 col-sm-9">
-                        <input class="form-control mr-2 rounded-pill" type="password" name="password" required pattern="[0-9]+$" style=" background: #e9ecef">
-                      </div>
-                    </div>
-              </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
-                  <button type="submit" class="btn btn-primary">Confirmar</button>
-                </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div class="modal fade" id="Modal{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Confirmar Empréstimo </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body text-center">
-                  {% for message in messages %}
-                      <div class="alert alert-danger">
-                        <strong>Error!</strong> {{ message }}
-                      </div>
-                  {% endfor %}
-                  <p >Coloque o dedo leitor</p>
-                  
-                  <span><img src={% static "images/digital.png" %} style="height: 80px; width: 80px;" ></span>
-                  {% ifequal equipment.status 'Livre' %}
-                  <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
-                  {% else %}
-                  <form name="myForm{{equipment.id}}" id="myForm{{equipment.id}}" method="post" action="{% url "devolver" equipment.pk %}">{% csrf_token %}
-                  {% endifequal %}
-                  <button type="submit" class="btn border-0">Posicione o dedo indicador sobre o leitor</button>
-                  </form>
-                  
-                
-                </div>
-
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
     </tr>
     
      {% empty %}
@@ -201,6 +209,7 @@
   </tbody>
  
 </table>
+
 <hr width="1000px" style="margin-top: -1px;">
 <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
@@ -233,13 +242,13 @@
   </div>
   
   </div>
-
 	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src={% static "users/js/bootstrap.min.js" %}></script>
     <script>
           $(document).ready(function() {
             $('#daniel{{tipo}}{{pk}}').modal('show');
+            
           });
     </script>
     <script>
