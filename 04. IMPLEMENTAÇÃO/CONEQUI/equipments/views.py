@@ -553,8 +553,10 @@ def get_rastreio(request,value):
         inicio = request.POST['start']
         fim = request.POST['end']
         tag_ = tag.split('-')
-        tag_ = tag_[0]
-        url= '/Rastreio/{}/{}/{}/{}/{}'.format('loan',type_equipment,tag_,inicio,fim)
+        tag_ = Equipment.objects.get(description__exact=tag_[1], tag__exact=tag_[0])
+        #print(test.id)
+        #tag_ = tag_[0]
+        url= '/Rastreio/{}/{}/{}/{}/{}'.format('loan',type_equipment,tag_.id,inicio,fim)
         return redirect(url) 
         '''
         data = {}
@@ -712,7 +714,7 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
         data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Rastreio'
     elif tag != 'Todos':
-        EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
+        EquipmentFilter = Equipment.objects.filter(id = tag_).values_list('id',flat=True)
         EquipmentFilter = ' '.join(map(str, EquipmentFilter))
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter)).order_by(order_by)
         data['list_equipment_user']= get_page(request,equipment_user)

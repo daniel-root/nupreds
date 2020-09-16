@@ -273,7 +273,7 @@ def type_user(request,pk):
 
 def filter_type(request,value,templete_name='users/user_list.html'):
     if request.session.has_key('username'):
-        user = Client.objects.filter(user_type = value)
+        user = Client.objects.filter(user_type = value, inative=False)
         data = {}
         name = request.session['username']
         type_privilegio = Client.objects.filter(usuario=name)
