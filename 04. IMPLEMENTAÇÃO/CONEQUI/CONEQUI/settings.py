@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'CONTEQUI.urls'
+ROOT_URLCONF = 'CONEQUI.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'CONTEQUI.wsgi.application'
+WSGI_APPLICATION = 'CONEQUI.wsgi.application'
 
 
 # Database
