@@ -125,8 +125,6 @@
             <input type="submit" value="Recadastrar Digital" class="btn rounded-pill" data-toggle="modal" data-target="#staticBackdrop" style="background: #e9ecef" />
           </form>
     {% endif %}  
-
-  <!-- Script para verificar se a senha é forte e se senhas são diferentes -->
  
     <script src="{% static "users/js/bootstrap.min.js" %}"></script>          
       <!-- JQuery -->
@@ -135,6 +133,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+       <script type="text/javascript">
+    var password = document.getElementById("pwd1")
+  , confirm_password = document.getElementById("pwd2");
+
+function validatePassword(){
+  if(password.value != confirm_password.value) {
+    confirm_password.setCustomValidity("Senhas diferentes!");
+  } else {
+    confirm_password.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+  </script>
        <script>
 $("#submit-button").submit(function(e){
     $('#staticBackdrop').modal('show');
@@ -145,7 +159,7 @@ $("#submit-button").submit(function(e){
       <script>
   let btn = document.querySelector('.lnr-eye');
 btn.addEventListener('click', function() {
-    let input = document.querySelector('#pwd1');
+    let input = document.querySelector('#pwd1', '#pwd2' );
     if(input.getAttribute('type') == 'password') {
         input.setAttribute('type', 'text');
     } else {
@@ -153,30 +167,14 @@ btn.addEventListener('click', function() {
     }
 });
   </script>
-   <script type="text/javascript">
 
-  
-    var password = document.getElementById("pwd1")
-      , confirm_password = document.getElementById("pwd2")
-    var regex = /^[0-9]+${8}$/i;
-
-    function validatePassword(){
-      pwd1 = document.f1.user_form.value
-      pwd2 = document.f1.user_form.value
-
-      if (pwd1 == pwd2)
-        alert("SENHAS IGUAIS")
-      else
-        alert("SENHAS DIFERENTES")
-    }
-  </script>
   <script type="text/javascript">
         $( "#olho" ).mousedown(function() {
-      $("#pwd1", "#pwd2").attr("type", "text");
+      $("#pwd1").attr("type", "text");
     });
 
     $( "#olho" ).mouseup(function() {
-      $("#pwd1", "#pwd2").attr("type", "password");
+      $("#pwd1").attr("type", "password");
     });
   </script>
 
