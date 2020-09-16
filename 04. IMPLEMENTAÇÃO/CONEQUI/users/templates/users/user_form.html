@@ -42,8 +42,11 @@
           <p style="margin-left: 10px; font-size: 150%">Usuário</p>
         </div>
        <div class="container-fluid">
-
+    {% if user.id != 'None' %}
+    <form name="user_form" method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
+    {% else %}
     <form id="submit-button" name="user_form" method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
+    {% endif %}
   {% for message in messages %}
             <div class="alert alert-danger">
               <strong>Error!</strong> {{ message }}
@@ -113,7 +116,7 @@
         {% if user.id != 'None' %}
         <button type="submit" class="btn rounded-pill" style="background: #e9ecef">Salvar</button>
         {% else %}
-        <input type="submit" value="Continue" class="btn rounded-pill" style="background: #e9ecef"/>
+        <input type="submit" name="continue" id="continue" value="Continue" class="btn rounded-pill" style="background: #e9ecef"/>
         {% endif %}
       </div>
  
