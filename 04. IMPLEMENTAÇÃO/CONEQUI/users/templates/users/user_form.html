@@ -170,28 +170,18 @@ btn.addEventListener('click', function() {
     }
 });
   </script>
+         <script>
+  let btn = document.querySelector('.lnr-eye');
+btn.addEventListener('click', function() {
+    let input = document.querySelector('#pwd2' );
+    if(input.getAttribute('type') == 'password') {
+        input.setAttribute('type', 'text');
+    } else {
+        input.setAttribute('type', 'password');
+    }
+});
+  </script>     
 
-  <script type="text/javascript">
-        $( "#olho" ).mousedown(function() {
-      $("#pwd1").attr("type", "text");
-    });
-
-    $( "#olho" ).mouseup(function() {
-      $("#pwd1").attr("type", "password");
-    });
-  </script>
-
-    <script src="{% static "users/js/bootstrap.min.js" %} " > </script>          
-
-    <script type="text/javascript">
-        $( "#olho" ).mousedown(function() {
-      $("#pwd2").attr("type", "text");
-    });
-
-    $( "#olho" ).mouseup(function() {
-      $("#pwd2").attr("type", "password");
-    });
-  </script>
-</body>
+    
 
 </html>
