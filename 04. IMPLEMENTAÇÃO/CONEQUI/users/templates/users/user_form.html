@@ -93,7 +93,7 @@
           <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
             <input type="password" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12" id="pwd1" name="pwd1" style=" background: #e9ecef" required>
-            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 40px;cursor: pointer;  font-size: 25px;"></span>
+            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 40px;cursor: pointer;  font-size: 25px; color: gray;"></span>
           </div>
         </div>
       </div>
@@ -103,11 +103,12 @@
           <label  for="txtSenha2" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Repetir Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
             <input type="password" class="form-control rounded-pill"  mINlength="8" maxlength="12" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
-            <span class="lnr lnr-eye" style="position: absolute;top: 5px;right: 40px;cursor: pointer; font-size: 25px;"></span>
+            <span class="oi oi-eye" id="olho" style="position: absolute;top: 5px;right: 40px;cursor: pointer; font-size: 25px; color: gray;"></span>
           </div>
         </div>
       </div>
-      
+
+  
      
       <div class="col-lg-12 col-sm-12 text-right" style="padding: 50px 0px">
         
@@ -170,18 +171,23 @@ btn.addEventListener('click', function() {
     }
 });
   </script>
-         <script>
-  let btn = document.querySelector('.lnr-eye');
-btn.addEventListener('click', function() {
-    let input = document.querySelector('#pwd2' );
-    if(input.getAttribute('type') == 'password') {
-        input.setAttribute('type', 'text');
-    } else {
-        input.setAttribute('type', 'password');
-    }
+     <script >
+       var senha = $('#pwd2');
+var olho= $("#olho");
+
+olho.mousedown(function() {
+  senha.attr("type", "text");
 });
-  </script>     
 
+olho.mouseup(function() {
+  senha.attr("type", "password");
+});
+// para evitar o problema de arrastar a imagem e a senha continuar exposta, 
+//citada pelo nosso amigo nos comentários
+$( "#olho" ).mouseout(function() { 
+  $("#senha").attr("type", "password");
+});
+     </script>    
     
-
+</body>
 </html>
