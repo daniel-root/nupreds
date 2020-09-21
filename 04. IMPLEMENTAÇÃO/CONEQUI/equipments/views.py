@@ -337,13 +337,13 @@ def emprestar_user(request,pk):
                 amout_of_equipments = ''.join(map(str, amout))
                 if BusyEquipment:
                     messages.error(request, 'Equipamento já emprestado!')
-                    return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+                    return redirect('/Equipamentos')
                 time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
                 time = ''.join(map(str,time))
                 Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
                 Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
                 return redirect('/Equipamentos')
-        return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+        return redirect('/Equipamentos')
     return render(request, 'login.html')
 
 def devolver_user(request,pk):
@@ -360,9 +360,9 @@ def devolver_user(request,pk):
                     Equipment.objects.filter(id = pk).update(status='Livre')
                     return redirect('/Equipamentos')
             messages.error(request, 'Equipamento sem emprestimo!')
-            return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+            return redirect('/Equipamentos')
         
-        return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
+        return redirect('/Equipamentos')
     return render(request, 'login.html')
 
 def filter_list(request,pk,value,templete_name='equipments/equipment_list.html'):

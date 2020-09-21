@@ -47,14 +47,15 @@
     {% else %}
     <form id="submit-button" name="user_form" method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
     {% endif %}
-  {% for message in messages %}
+          {% for message in messages %}
             <div class="alert alert-danger">
               <strong>Error!</strong> {{ message }}
+              class="{{ message.tags }}"
             </div>
           {% endfor %}
-           {% if mensagem %}
-          <div class="alert alert-danger">
-              {{mensagem}}
+          {% if mensagem %}
+          <div class="alert alert-success" role="alert">
+            {{mensagem}}
           </div>
           {% endif %}
          

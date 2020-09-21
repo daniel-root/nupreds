@@ -168,7 +168,7 @@ def user_fingerprint(request, pk, template_name='users/user_form.html'):
         if request.method=='POST':           
             result = main("Registro")
             if result[0] != 'F':
-                print("aquiestou")
+                #print("aquiestou")
                 messages.error(request, result)
                 return redirect('/Usuario/Editar/'+pk)
                 
@@ -176,7 +176,7 @@ def user_fingerprint(request, pk, template_name='users/user_form.html'):
                 #data['frase'] = result
             else:
                 Client.objects.filter(id = data['object'].id).update(fingerprint=result)
-                messages.error(request, "Registro Completo!")
+                messages.sucess(request, "Registro Completo!")
                 return redirect('/Usuario/Editar/'+pk)
             #return redirect('/Usuario')
             #return user_fingerprint_registration(request,data['frase'],pk )

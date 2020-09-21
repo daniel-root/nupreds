@@ -6,7 +6,7 @@ class Client(models.Model):
     cpf = models.CharField(max_length=255, null=False,unique=True)
     user_type = models.CharField(max_length=13, null=False,default='Comum')
     senha = models.CharField(max_length=50, null=False)
-    fingerprint = models.CharField(max_length=1630,null=True,unique=True)
+    fingerprint = models.CharField(max_length=1630,null=True)
     inative = models.BooleanField(default=False)
     cod_telegram = models.TextField(max_length=10, null=True)
     
