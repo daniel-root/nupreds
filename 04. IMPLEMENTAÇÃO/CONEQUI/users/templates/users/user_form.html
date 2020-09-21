@@ -84,7 +84,7 @@
       <div class="form-group row">
         <label  for="txtTelefone" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Telefone: </label>
         <div class="col-lg-10 col-md-10 col-sm-5">
-          <input  type="text" value="{{user.telefone}}" class="form-control rounded-pill" id="telefone" name="telefone"  maxlength="11" maxlength="15" placeholder="(00) 0000-00000" onkeypress="$(this).mask('(00) 0000-00009')" style=" background: #e9ecef" required>
+          <input  type="text" value="{{user.telefone}}" class="form-control rounded-pill" id="telefone" name="telefone"  minlength="11" maxlength="15"  pattern="[0-9]+$" placeholder="(00) 0000-00000" onkeypress="$(this).mask('(00) 0000-00009')" style=" background: #e9ecef" required>
         </div>
       </div>
 
@@ -92,7 +92,7 @@
         <div class="row">
           <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
-            <input type="password" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12" id="pwd1" name="pwd1" style=" background: #e9ecef" required>
+            <input type="password" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12"  pattern="[0-9]+$" id="pwd1" name="pwd1" style=" background: #e9ecef" required>
             <span class="oi oi-eye" style="position: absolute;top: 5px;right: 40px;cursor: pointer;  font-size: 25px; color: gray;"></span>
           </div>
         </div>
@@ -102,7 +102,7 @@
         <div class="row">
           <label  for="txtSenha2" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Repetir Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
-            <input type="password" class="form-control rounded-pill"  mINlength="8" maxlength="12" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
+            <input type="password" class="form-control rounded-pill"  minlength="8" maxlength="12"  pattern="[0-9]+$" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
             <span class="oi oi-eye" id="olho" style="position: absolute;top: 5px;right: 40px;cursor: pointer; font-size: 25px; color: gray;"></span>
           </div>
         </div>
