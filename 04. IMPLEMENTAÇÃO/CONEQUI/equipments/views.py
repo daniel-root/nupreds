@@ -553,10 +553,10 @@ def get_rastreio(request,value):
         inicio = request.POST['start']
         fim = request.POST['end']
         tag_ = tag.split('-')
-        tag_ = Equipment.objects.get(description__exact=tag_[1], tag__exact=tag_[0])
+        #tag_ = Equipment.objects.get(description__exact=tag_[1], tag__exact=tag_[0])
         #print(test.id)
-        #tag_ = tag_[0]
-        url= '/Rastreio/{}/{}/{}/{}/{}'.format('loan',type_equipment,tag_.id,inicio,fim)
+        tag_ = tag_[0]
+        url= '/Rastreio/{}/{}/{}/{}/{}'.format('loan',type_equipment,tag_,inicio,fim)
         return redirect(url) 
         '''
         data = {}
