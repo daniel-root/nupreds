@@ -47,16 +47,18 @@
     <form id="submit-button" name="user_form" method="post" class="form-padrao" autocomplete="off"> {% csrf_token %}
     {% endif %}
           {% for message in messages %}
+          {% ifequal mensage.tags 'error' %}
             <div class="alert alert-danger">
               <strong>Error!</strong> {{ message }}
-              class="{{ message.tags }}"
             </div>
-          {% endfor %}
-          {% if mensagem %}
-          <div class="alert alert-success" role="alert">
-            {{mensagem}}
+            {% else %}
+            <div class="alert alert-success" role="alert">
+            <strong>Success!</strong> {{message}}
           </div>
-          {% endif %}
+         
+           {% endifequal %}
+          {% endfor %}
+          
          
       <div class="form-group row">
         <label  for="txtNome" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Nome: </label>

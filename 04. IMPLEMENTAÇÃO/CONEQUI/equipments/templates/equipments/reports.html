@@ -231,9 +231,9 @@
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
      {% empty %}
-     <p style="text-align: center;">
-      Sem Resultados
-     </p>
+    <tr>
+        <td>Sem resultados</td>
+    </tr>
     {% endfor %}
     {% endifequal %}
     {% ifequal type 'Não Devolvidos' %}
@@ -249,10 +249,10 @@
     <td></td>
     <td>{{ equipment_user.amount_of_loans }}</td>
     </tr>
-    {% empty %}
-    <p style="text-align: center;">
-      Sem Resultados
-    </p>
+     {% empty %}
+    <tr>
+        <td>Sem resultados</td>
+    </tr>
     {% endfor %}
     {% endifequal %}
 
@@ -268,10 +268,10 @@
       <td></td>
       <td>{{ equipment_user.amount_of_loans }}</td>
       </tr>
-     {% empty %}
-     <p style="text-align: center;">
-     Sem Resultados
-     </p>
+      {% empty %}
+    <tr>
+        <td>Sem resultados</td>
+    </tr>
     {% endfor %}
 
     {% endifequal %}

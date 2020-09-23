@@ -72,6 +72,27 @@ def user_create(request, template_name='users/user_form.html'):
             result = main("Registro")
             
             if result[0] != 'F':
+                user = Client.objects.filter(cpf=request.POST['cpf'])
+                if not user:    
+                    new_user = Client.objects.create(
+                        usuario = request.POST['usuario'],
+                        email = request.POST['email'],
+                        telefone = request.POST['telefone'],
+                        cpf = request.POST['cpf'],
+                        senha = request.POST['pwd1'],
+                        fingerprint=result
+                    )
+                    new = Client.objects.filter(usuario=request.POST['usuario'])
+                    number = aleatorio()
+                    internet = email_cadastro(new[0].usuario,number,new[0].email)
+                    if internet:
+                        new.update(cod_telegram=number)
+                    #print(new[0].id)
+                    #Client.objects.filter(id = data['object'].id).update(fingerprint=result)
+                    messages.error(request, "Cadastro Realizado!")
+                    messages.success(request, "Digital não cadastrada!")
+                    return redirect('/Usuario/Editar/'+new[0].id)
+                '''
                 count = count + 1
                 #print(count)
                 if count <= 2:
@@ -95,6 +116,7 @@ def user_create(request, template_name='users/user_form.html'):
                         'id':'None'
                     }
                     return render(request, template_name, data)
+                '''
             else:
                 #Client.objects.filter(id = data['object'].id).update(fingerprint=result)
                 #data['frase'] = 'Registro Completo!'
@@ -176,7 +198,7 @@ def user_fingerprint(request, pk, template_name='users/user_form.html'):
                 #data['frase'] = result
             else:
                 Client.objects.filter(id = data['object'].id).update(fingerprint=result)
-                messages.sucess(request, "Registro Completo!")
+                messages.success(request, "Registro Completo!")
                 return redirect('/Usuario/Editar/'+pk)
             #return redirect('/Usuario')
             #return user_fingerprint_registration(request,data['frase'],pk )

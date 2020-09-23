@@ -8,14 +8,17 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import telepot
 
-smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
-#print(smtpObj)
-smtpObj.ehlo()
-smtpObj.starttls()
-msgTo = 'nupreds@gmail.com'
-toPass = 'hYV83BBDA2ebx8r'
-smtpObj.login(msgTo, toPass)
-bot = telepot.Bot("1244766207:AAGjFP8KytsFILHQUjXazo1yV7JUqN5w4g8")
+try:
+    smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+    #print(smtpObj)
+    smtpObj.ehlo()
+    smtpObj.starttls()
+    msgTo = 'nupreds@gmail.com'
+    toPass = 'hYV83BBDA2ebx8r'
+    smtpObj.login(msgTo, toPass)
+    bot = telepot.Bot("1244766207:AAGjFP8KytsFILHQUjXazo1yV7JUqN5w4g8")
+except:
+    pass
 
 def email_atraso(name, equipment, tag, description,msgFrom):
 	try:
@@ -90,13 +93,16 @@ def TelegramCadastro():
         pass
 
 def EmailsNotSend():
-    users = Client.objects.filter(cod_telegram=None)
-    #print(users)
-    if users:
-        #print("passei")
-        for user in users:
-            #print(user.usuario)
-            number = aleatorio()
-            internet = email_cadastro(user.usuario,number,user.email)
-            if internet:
-                Client.objects.filter(id=user.id).update(cod_telegram=number)
+    try:    
+        users = Client.objects.filter(cod_telegram=None)
+        #print(users)
+        if users:
+            #print("passei")
+            for user in users:
+                #print(user.usuario)
+                number = aleatorio()
+                internet = email_cadastro(user.usuario,number,user.email)
+                if internet:
+                    Client.objects.filter(id=user.id).update(cod_telegram=number)
+    except:
+        pass

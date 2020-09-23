@@ -199,13 +199,11 @@
              
       </td>
     </tr>
-    
-     {% empty %}
-      <p style="text-align: center;">
-      Sem Resultados
-      </p>
-     {% endfor %}
-    
+    {% empty %}
+    <tr>
+        <td style="text-align: center;">Sem resultados</td>
+    </tr>
+    {% endfor %}
   </tbody>
  
 </table>
