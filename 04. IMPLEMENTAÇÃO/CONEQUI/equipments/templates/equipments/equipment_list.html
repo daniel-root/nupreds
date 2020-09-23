@@ -143,17 +143,17 @@
       <table class="table table-sm" style="width: 1000px;  margin:auto; margin-top: 10px;" >
        
   <thead>
-    <tr>
-      <th scope="col" width="25%" style="text-align: left;">
+    <tr class="d-flex">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="{% url "filter_list_equipment" 'Etiqueta' type %}" style="color: black;">Etiqueta</a>
       </th>
-      <th scope="col" width="25%" style="text-align: left;">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="{% url "filter_list_equipment" 'Descricao' type %}" style="color: black;">Descrição</a>
       </th>
-      <th scope="col" width="20%" style="text-align: left;">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="{% url "filter_list_equipment" 'EmPosse' type %}" style="color: black;">Em posse</a>
       </th>
-      <th scope="col" width="30%" style="text-align: left;">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="" style="color: black;">Ações</a>
       </th>
       </tr>
@@ -163,12 +163,12 @@
  {% for equipment in list_equipment %}
   
 
-    <tr>
-      <td>{{ equipment.tag }}</td>
-      <td>{{ equipment.description }}</td>
+    <tr class="d-flex">
+      <td class="col-lg-3 col-md-3 col-sm-3" >{{ equipment.tag }}</td>
+      <td class="col-lg-3 col-md-3 col-sm-3">{{ equipment.description }}</td>
       {% load my_tag %}
-      <td>{% NameUser equipment.id %}</td>
-      <td >
+      <td class="col-lg-3 col-md-3 col-sm-3">{% NameUser equipment.id %}</td>
+      <td class="col-lg-3 col-md-3 col-sm-3">
          <div class="row">
         <form class="form-inline" action="{% url "equipment_edit" equipment.id %}">
           <button class="btn btn-sm rounded-pill" style="background: #e9ecef">
@@ -201,7 +201,9 @@
     </tr>
     {% empty %}
     <tr>
-        <td style="text-align: center;">Sem resultados</td>
+        <td class="col-lg-6 col-md-6 col-sm-6 text-center">
+          Sem resultados
+      </td>
     </tr>
     {% endfor %}
   </tbody>
