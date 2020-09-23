@@ -49,21 +49,20 @@
             
       <table class="table table-sm" style="width: 1000px;  margin:auto; margin-top: 10px;" >
   <thead>
-    <tr>
-      <th scope="col" width="15%" style="text-align: left;">
+    <tr class="d-flex">
+      <th class="col-lg-2 col-md-2 col-sm-2">
         <a href="{% url "filter_list" 'Id' type %}" style="color: black;">Código</a>
       </th>
-      <th scope="col" width="20%" style="text-align: left;">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="{% url "filter_list" 'Nome' type %}" style="color: black;">Nome</a>
       </th>
-      <th scope="col" width="20%" style="text-align: left;">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="{% url "filter_list" 'CPF' type %}" style="color: black;">CPF</a>
       </th>
-      
-      <th scope="col" width="20%" style="text-align: left;">
+      <th class="col-lg-2 col-md-2 col-sm-2">
       <a href="" style="color: black;">Privilégio</a>
       </th>
-      <th scope="col" width="20%" style="text-align: left;">
+      <th class="col-lg-2 col-md-2 col-sm-2">
       <a href="" style="color: black;">Ações</a>
       </th>
     </tr>
@@ -71,12 +70,12 @@
   <tbody>
   {% load my_tag %}
     {% for user in object_list %}
-    <tr>
-      <td>{{ user.id }}</td>
-      <td>{{ user.usuario }}</td>
-      <td>{{ user.cpf }}</td>
-      <td>{{ user.user_type }}</td>
-      <td>
+    <tr class="d-flex">
+      <td class="col-lg-2 col-md-2 col-sm-2">{{ user.id }}</td>
+      <td class="col-lg-3 col-md-3 col-sm-3">{{ user.usuario }}</td>
+      <td class="col-lg-3 col-md-3 col-sm-3">{{ user.cpf }}</td>
+      <td class="col-lg-2 col-md-2 col-sm-2">{{ user.user_type }}</td>
+      <td class="col-lg-2 col-md-2 col-sm-2">
         <div class="row">
         <form class="form-inline" action="{% url "user_edit" user.id %}">
         <button class="btn btn-sm rounded-pill" style="background: #e9ecef">
@@ -154,7 +153,7 @@
     </tr>
      {% empty %}
     <tr>
-        <td>Sem resultados</td>
+        <td class="col-lg-6 col-md-6 col-sm-6 text-center">Sem resultados</td>
     </tr>
     {% endfor %}
   </tbody>
