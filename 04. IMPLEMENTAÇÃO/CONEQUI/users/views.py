@@ -72,6 +72,7 @@ def user_create(request, template_name='users/user_form.html'):
             result = main("Registro")
             
             if result[0] != 'F':
+                print("aqui")
                 user = Client.objects.filter(cpf=request.POST['cpf'])
                 if not user:    
                     new_user = Client.objects.create(
@@ -80,7 +81,7 @@ def user_create(request, template_name='users/user_form.html'):
                         telefone = request.POST['telefone'],
                         cpf = request.POST['cpf'],
                         senha = request.POST['pwd1'],
-                        fingerprint=result
+                        #fingerprint=result
                     )
                     new = Client.objects.filter(usuario=request.POST['usuario'])
                     number = aleatorio()
@@ -89,9 +90,9 @@ def user_create(request, template_name='users/user_form.html'):
                         new.update(cod_telegram=number)
                     #print(new[0].id)
                     #Client.objects.filter(id = data['object'].id).update(fingerprint=result)
-                    messages.error(request, "Cadastro Realizado!")
-                    messages.success(request, "Digital não cadastrada!")
-                    return redirect('/Usuario/Editar/'+new[0].id)
+                    messages.success(request, "Cadastro Realizado!")
+                    messages.error(request, "Digital não cadastrada! Tente novamente em Recadastrar Digital.")
+                    return redirect('/Usuario/Editar/'+str(new[0].id))
                 '''
                 count = count + 1
                 #print(count)
@@ -190,7 +191,7 @@ def user_fingerprint(request, pk, template_name='users/user_form.html'):
         if request.method=='POST':           
             result = main("Registro")
             if result[0] != 'F':
-                #print("aquiestou")
+                print("aquiestou")
                 messages.error(request, result)
                 return redirect('/Usuario/Editar/'+pk)
                 
