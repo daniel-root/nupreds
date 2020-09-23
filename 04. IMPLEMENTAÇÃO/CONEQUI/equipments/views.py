@@ -718,7 +718,9 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
     fim = end
     tag_ = tag
     if type_equipment == 'Todos' and tag=='Todos':
+        #print('aqui',inicio,fim)
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim).order_by(order_by)
+        #print(equipment_user)
         data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Rastreio'
     elif type_equipment != 'Todos' and tag == 'Todos':
@@ -735,7 +737,7 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
         data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Rastreio'
     elif tag != 'Todos':
-        EquipmentFilter = Equipment.objects.filter(id = tag_).values_list('id',flat=True)
+        EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
         EquipmentFilter = ' '.join(map(str, EquipmentFilter))
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter)).order_by(order_by)
         data['list_equipment_user']= get_page(request,equipment_user)
@@ -792,8 +794,9 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
     #subtitle = 'Relatório de ' + tipo + ' de equipamento'
     #date_now = date.today()
     #time_now = datetime.now()
-    start = datetime.strptime(start, '%Y-%m-%d')
-    end = datetime.strptime(end, '%Y-%m-%d')
+    if start != "Todos":
+        start = datetime.strptime(start, '%Y-%m-%d')
+        end = datetime.strptime(end, '%Y-%m-%d')
     date = datetime.now()
     print(date.strftime("%H:%M"))
     #date = str(time_now.day)+'/'+str(time_now.month)+'/'+str(time_now.year)
@@ -816,7 +819,10 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
 
     list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatório de "+ report +" de equipamento"],[""]
     list02 = ["Data: "+str(date.strftime("%d/%m/%Y"))],["Hora: "+str(date.strftime("%H:%M"))],["Página: " + str(inicio+1)  +" de " + str(fim)]
-    list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start.strftime("%d/%m/%Y"),"Final: "+end.strftime("%d/%m/%Y")]
+    if start == "Todos" or end == "Todos":
+        list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start,"Final: "+end]
+    else:
+        list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start.strftime("%d/%m/%Y"),"Final: "+end.strftime("%d/%m/%Y")]
 
     Tablelist01 = Table(list01)
     Tablelist02 = Table(list02)
