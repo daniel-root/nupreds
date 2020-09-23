@@ -756,7 +756,7 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
         CHOICE_EQUIPMENT.append((QuerySet[0]+"-"+QuerySet[1]))
     data['types'] = CHOICE
     data['equipments'] = CHOICE_EQUIPMENT
-    data['type'] = 'NaoDevolvidos'
+    data['type'] = 'Não Devolvidos'
     data['type_equipment_'] = type_equipment_
     data['tag_'] = tag
     data['start_'] = start
@@ -766,8 +766,11 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
     inicio = start
     tag_ = tag
     if type_equipment_ == 'Todos' and tag=='Todos':
+        #print('aqui',inicio)
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None).order_by(order_by)
-        data['list_equipment_user']= get_page(request,equipment_user)
+        #print(equipment_user)
+        data['list_equipment_user'] = get_page(request,equipment_user)
+        #return render(request, 'equipments/reports.html', data)
     elif type_equipment_ != 'Todos' and tag == 'Todos':
         EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
         EquipmentType = ''.join(map(str, EquipmentType))
@@ -796,6 +799,7 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
     #time_now = datetime.now()
     if start != "Todos":
         start = datetime.strptime(start, '%Y-%m-%d')
+    if end != "Todos":
         end = datetime.strptime(end, '%Y-%m-%d')
     date = datetime.now()
     print(date.strftime("%H:%M"))
@@ -819,8 +823,10 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
 
     list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatório de "+ report +" de equipamento"],[""]
     list02 = ["Data: "+str(date.strftime("%d/%m/%Y"))],["Hora: "+str(date.strftime("%H:%M"))],["Página: " + str(inicio+1)  +" de " + str(fim)]
-    if start == "Todos" or end == "Todos":
+    if start == "Todos":
         list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start,"Final: "+end]
+    if end == "Todos":
+        list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start.strftime("%d/%m/%Y"),"Final: "+end]
     else:
         list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start.strftime("%d/%m/%Y"),"Final: "+end.strftime("%d/%m/%Y")]
 
@@ -997,7 +1003,10 @@ def some_view(request,report,type_equipment,tag,start,end,order_by):
 
         list_complete = []
         for equipment in list_report:
-            list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),equipment.devolution.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_devolution),equipment.amount_of_loans]
+            if equipment.devolution == None:
+                list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),'None',str(equipment.user_devolution),equipment.amount_of_loans]
+            else:
+                list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),equipment.devolution.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_devolution),equipment.amount_of_loans]
             list_complete.append(list_temp)
 
 
