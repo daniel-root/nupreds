@@ -21,20 +21,19 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="{% url 'equipment_type_new' %}">{% csrf_token %}
+       <form method="post" action="{% url 'equipment_type_new' %}">{% csrf_token %}
           <div class="form-group row">
             <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="nome">Nome:</label>
              <div class="col-lg-8 col-md-8 col-sm-12">
-              <input class="form-control rounded-pill" type="text" value="" name="tag" id="name_type"  style=" background: #e9ecef" required>
+              <input class="form-control rounded-pill" type="text" value="" name="tag" id="name_type" pattern="^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$" title="Este campo aceita apenas letras" required style=" background: #e9ecef" >
              </div>
           </div>
           <div class="form-group row">
             <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="tipo">Tempo Máximo:</label>
              <div class="col-lg-8 col-md-8 col-sm-12">
-              <input class="form-control rounded-pill" value="" type="ctempo" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef">
+              <input class="form-control rounded-pill" value="" type="number" min="1" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef">
              </div>
-          </div>
-        
+          </div>     
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
