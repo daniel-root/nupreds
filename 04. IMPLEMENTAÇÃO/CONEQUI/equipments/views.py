@@ -58,16 +58,29 @@ def equipment_type_create(request, template_name='equipments/equipment_type_form
             return redirect('equipment_type_list')
         else:
             messages.error(request, 'Tipo de equipamento já existe!')
+            data = {}
             data['equipment_type'] = {'name':request.POST['tag'],'time_maximum':request.POST['time_type']}
-            return render(request, template_name, data)
+            data['object_list'] = Equipment_type.objects.all()
+            data['open'] = 'Novo'
+            return render(request, 'equipments/equipment_type_list.html', data)
     return render(request, template_name)
 
 def equipment_type_update(request, pk, template_name='equipments/equipment_type_form.html'):
     equipment_type = Equipment_type.objects.filter(pk=pk)
     if request.method=='POST':
-        equipment_type.update(
-            name=request.POST['tag'],
-            time_maximum=request.POST['time_type'])
+        equipment_type_ = Equipment_type.objects.filter(name = request.POST['tag'])
+        if not equipment_type_:
+            equipment_type.update(
+                name=request.POST['tag'],
+                time_maximum=request.POST['time_type'])
+            return redirect('equipment_type_list')
+        else:
+            messages.error(request, 'Tipo de equipamento já existe!')
+            data = {}
+            #data['equipment_type'] = {'name':request.POST['tag'],'time_maximum':request.POST['time_type']}
+            data['object_list'] = Equipment_type.objects.all()
+            data['chave'] = str(equipment_type[0].id)
+            return render(request, 'equipments/equipment_type_list.html', data)
         return redirect('equipment_type_list')
     return render(request, template_name, {'equipment_type':equipment_type})
 

@@ -11,7 +11,7 @@
   </head>
   <body style="margin-top: 3%;">
 
-    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="NovoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -21,17 +21,22 @@
         </button>
       </div>
       <div class="modal-body">
+       {% for message in messages %}
+        <div class="alert alert-danger">
+          <strong>Error!</strong> {{ message }}
+        </div>
+      {% endfor %}
        <form method="post" action="{% url 'equipment_type_new' %}">{% csrf_token %}
           <div class="form-group row">
             <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="nome">Nome:</label>
              <div class="col-lg-8 col-md-8 col-sm-12">
-              <input class="form-control rounded-pill" type="text" value="" name="tag" id="name_type" pattern="^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$" title="Este campo aceita apenas letras" required style=" background: #e9ecef" >
+              <input class="form-control rounded-pill" type="text" value="{{equipment_type.name}}" name="tag" id="name_type" pattern="^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$" title="Este campo aceita apenas letras" required style=" background: #e9ecef" >
              </div>
           </div>
           <div class="form-group row">
             <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="tipo">Tempo Máximo:</label>
              <div class="col-lg-8 col-md-8 col-sm-12">
-              <input class="form-control rounded-pill" value="" type="number" min="1" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef">
+              <input class="form-control rounded-pill" value="{{equipment_type.time_maximum}}" type="number" min="1" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef">
              </div>
           </div>     
       </div>
@@ -106,7 +111,7 @@
  <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 80%; margin-top: 10px; margin-bottom: 15px;">
         
-        <button data-toggle="modal" data-target="#Modal" class="btn rounded-pill" style="background: #e9ecef">
+        <button data-toggle="modal" data-target="#NovoModal" class="btn rounded-pill" style="background: #e9ecef">
           Novo
         </button>
        
@@ -119,6 +124,14 @@
  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src={% static "users/js/bootstrap.min.js" %}></script>
+    <script>
+          $(document).ready(function() {
+            $('#{{open}}Modal').modal('show');
+          });
+          $(document).ready(function() {
+            $('#ModalEdit{{chave}}').modal('show');
+          });
+    </script>
 </body>
 {% endblock %}
 </html>
