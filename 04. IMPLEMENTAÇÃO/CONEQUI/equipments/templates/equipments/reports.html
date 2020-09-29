@@ -70,7 +70,7 @@
           </button>
           </form>
        </div>
-      <div style="margin-top: 10px;" class="container-fluid">
+      <div style="margin-top: 10px;" class="container">
         <form id="submit-button" class="form-padrao" autocomplete="off" action="{% url "get_rastreio" type %}" method="post">
           {% csrf_token %}
           <div class=" form-group row" >
@@ -128,12 +128,12 @@
         </div>
           {% endifequal %}
           
-          <div class="col-lg-12 col-sm-12 text-right" style="padding: 30px 0px">
+          <div class="col-lg-12 col-sm-12 text-right" >
         <button type="submit" class="btn rounded-pill"style="background-color: #e9ecef; color: black;">Realizar Pesquisa</button>            
       </div>
         </form>
       </div>
-      <table class="table table-sm" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+      <table class="table table-sm" style="  margin:auto; margin-top: 10px;" >
   <thead>
     <tr>
      {% ifequal type 'Listagem' %}
@@ -279,7 +279,7 @@
   
        </tbody>
 </table>
-<hr width="1000px" style="margin-top: -1px;">
+
 
 <nav aria-label="Page navigation">
   <ul class="pagination justify-content-center">
