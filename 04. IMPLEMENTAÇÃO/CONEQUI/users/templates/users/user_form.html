@@ -73,7 +73,7 @@
         <label  for="txtCPF" class="col-lg-2 col-md-2 col-sm-12 col-form-label">CPF: </label>
         <div class="col-lg-10 col-md-10 col-sm-12">
           <!-- Se cpfJaCadastrado = 1, mostra mensagem de erro dizendo que CPF já está cadastrado -->
-          <input  type="text" value="{{user.cpf}}" class="form-control rounded-pill" pattern="^(\d{3}\.\d{3}\.\d{3}-\d{2})|(\d{11})$" title="Digite apenas os números" placeholder="000.000.000-00" onkeypress="$(this).mask('000.000.000-00');" minlength="13" maxlength="13" id="cpf" name="cpf" style=" background: #e9ecef" required>
+          <input  type="text" value="{{user.cpf}}" class="form-control rounded-pill" pattern="^(\d{3}\.\d{3}\.\d{3}-\d{2})|(\d{11})$" title="Digite apenas os números do seu CPF/ verifique se a quantidade de números está correta" placeholder="000.000.000-00" onkeypress="$(this).mask('000.000.000-00');" minlength="13" maxlength="13" id="cpf" name="cpf" style=" background: #e9ecef" required>
         </div>
       </div>
       
@@ -87,7 +87,7 @@
       <div class="form-group row">
         <label  for="txtTelefone" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Telefone: </label>
         <div class="col-lg-10 col-md-10 col-sm-5">
-          <input  type="text" value="{{user.telefone}}" class="form-control rounded-pill" id="telefone" name="telefone"  placeholder="(00) 00000-0000" pattern="\([0-9]{2}\)[\s][0-9]{5}-[0-9]{4}" onkeypress="$(this).mask('(00) 00000-0000')" title="Digete apenas os números" style=" background: #e9ecef" required>
+          <input  type="text" value="{{user.telefone}}" class="form-control rounded-pill" id="telefone" name="telefone"  placeholder="(00) 00000-0000" pattern="\([0-9]{2}\)[\s][0-9]{5}-[0-9]{4}" onkeypress="$(this).mask('(00) 00000-0000')" title="Digite apenas os números" style=" background: #e9ecef" required>
         </div>
       </div>
 
@@ -95,7 +95,7 @@
         <div class="row">
           <label  for="txtSenha1" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
-            <input type="password" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12"  id="pwd1" name="pwd1" style=" background: #e9ecef" required>
+            <input type="password" value="{{user.senha}}" class="form-control rounded-pill" minlength="8" maxlength="12"  id="pwd1" name="pwd1" style=" background: #e9ecef" title="Este campo aceita letras, números e caracteres especiais" required>
             <span class="oi oi-eye" style="position: absolute;top: 5px;right: 40px;cursor: pointer;  font-size: 25px; color: gray;"></span>
           </div>
         </div>
@@ -105,7 +105,7 @@
         <div class="row">
           <label  for="txtSenha2" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Repetir Senha: </label>
           <div class="col-lg-10 col-md-10 col-sm-12">
-            <input type="password" class="form-control rounded-pill"  minlength="8" maxlength="12" id="pwd2" name="pwd2" style=" background: #e9ecef" required>
+            <input type="password" class="form-control rounded-pill"  minlength="8" maxlength="12" id="pwd2" name="pwd2" style=" background: #e9ecef" title="Este campo aceita letras, números e caracteres especiais" required>
             <span class="oi oi-eye" id="olho" style="position: absolute;top: 5px;right: 40px;cursor: pointer; font-size: 25px; color: gray;"></span>
           </div>
         </div>
