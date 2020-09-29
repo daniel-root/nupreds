@@ -26,8 +26,23 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        <button type="button" class="btn btn-dark">por senha</button>
-                        <button type="button" class="btn btn-dark">por digital</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#danielpor_senha{{equipment.id}}">
+                          Por Senha
+                          </button>
+                        {% if equipment.status == 'Livre' %}
+                        <form name="my" id="my" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
+                        {% else %}
+                        <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}
+                        {% endif %}
+                        {% if 'Atrasado' == equipment.status %}
+                        <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
+                        {% else %}
+                        
+                        <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
+                        {% endif %}
+                        Por Digital
+                        </button>
+                        </form>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -202,6 +217,7 @@
           </button>
           {% include 'equipments/equipment_confirm_delete.html' with equipment=equipment %}
          
+         <!--
           {% if equipment.status == 'Livre' %}
           <form name="my" id="my" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
           {% else %}
@@ -210,14 +226,20 @@
           {% if 'Atrasado' == equipment.status %}
           <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
           {% else %}
-          
           <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
           {% endif %}
           {% LoanOrDevolution equipment.id %}
           </button>
           </form>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#EscolhaModal{{equipment.id}}">
-          Teste
+          -->
+
+
+          {% if 'Atrasado' == equipment.status %}
+          <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#EscolhaModal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
+          {% else %}
+          <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#EscolhaModal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
+          {% endif %}
+          {% LoanOrDevolution equipment.id %}
           </button>
       </div>
              
