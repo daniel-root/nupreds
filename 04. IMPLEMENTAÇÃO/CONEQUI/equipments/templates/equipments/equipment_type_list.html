@@ -11,7 +11,7 @@
   </head>
   <body style="margin-top: 3%;">
 
-    <div class="modal fade" id="NovoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="NovoModalNovo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -111,7 +111,7 @@
  <hr width="1000px" style="margin-top: -1px;">
   <div class="row" style="padding-left: 80%; margin-top: 10px; margin-bottom: 15px;">
         
-        <button data-toggle="modal" data-target="#NovoModal" class="btn rounded-pill" style="background: #e9ecef">
+        <button data-toggle="modal" data-target="#NovoModalNovo" class="btn rounded-pill" style="background: #e9ecef">
           Novo
         </button>
        
@@ -126,10 +126,8 @@
     <script src={% static "users/js/bootstrap.min.js" %}></script>
     <script>
           $(document).ready(function() {
-            $('#{{open}}Modal').modal('show');
-          });
-          $(document).ready(function() {
             $('#ModalEdit{{chave}}').modal('show');
+            $('#{{open}}ModalNovo').modal('show');
           });
     </script>
 </body>

@@ -836,9 +836,11 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
 
     list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatório de "+ report +" de equipamento"],[""]
     list02 = ["Data: "+str(date.strftime("%d/%m/%Y"))],["Hora: "+str(date.strftime("%H:%M"))],["Página: " + str(inicio+1)  +" de " + str(fim)]
-    if start == "Todos":
+    
+    if start == 'Todos' and end == 'Todos':
+        #print('Aqui')
         list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start,"Final: "+end]
-    if end == "Todos":
+    elif start != 'Todos' and end == 'Todos':
         list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start.strftime("%d/%m/%Y"),"Final: "+end]
     else:
         list03 = ["Tipo: "+type_equipment,"Etiqueta: "+tag],["Descrição: "+description,""],["Inicial: "+start.strftime("%d/%m/%Y"),"Final: "+end.strftime("%d/%m/%Y")]

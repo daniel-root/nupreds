@@ -72,7 +72,7 @@ def user_create(request, template_name='users/user_form.html'):
             result = main("Registro")
             
             if result[0] != 'F':
-                print("aqui")
+                #print("aqui")
                 user = Client.objects.filter(cpf=request.POST['cpf'])
                 if not user:    
                     new_user = Client.objects.create(
@@ -93,6 +93,17 @@ def user_create(request, template_name='users/user_form.html'):
                     messages.success(request, "Cadastro Realizado!")
                     messages.error(request, "Digital não cadastrada! Tente novamente em Recadastrar Digital.")
                     return redirect('/Usuario/Editar/'+str(new[0].id))
+                else:
+                    messages.error(request, 'Usuário já existe!')
+                    messages.error(request, result)
+                    #data['mensagem'] = 'Te acorda menino!'
+                    data['user'] = {'usuario':request.POST['usuario'],
+                        'email':request.POST['email'],
+                        'telefone':request.POST['telefone'],
+                        'cpf':request.POST['cpf'],
+                        'senha':request.POST['pwd1'],
+                        'id':'None'
+                    }
                 '''
                 count = count + 1
                 #print(count)
