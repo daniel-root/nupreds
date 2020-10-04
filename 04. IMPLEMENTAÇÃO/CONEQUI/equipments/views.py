@@ -24,7 +24,7 @@ def home(request):
     return render(request,'login.html')
 
 def EquipmentTypeAll():
-    equipment_type = Equipment_type.objects.all().values('name')
+    equipment_type = Equipment_type.objects.filter(inative=False).values('name')
     return equipment_type
 
 def EquipmentTypeAllOrderBy(value):
@@ -50,7 +50,7 @@ def equipment_type_view(request, pk, template_name='equipments/equipment_type_de
 
 def equipment_type_create(request, template_name='equipments/equipment_type_form.html'):
     if request.method=='POST':
-        equipment_type = Equipment_type.objects.filter(name = request.POST['tag'])
+        equipment_type = Equipment_type.objects.filter(name_exact = request.POST['tag'])
         if not equipment_type:
             new_equipment_type = Equipment_type.objects.create(
                 name=request.POST['tag'],
@@ -153,10 +153,11 @@ def equipment_view(request, pk, template_name='equipments/equipment_detail.html'
 def equipment_create(request, template_name='equipments/equipment_form.html'):
     if request.session.has_key('username'):
         data = {}
-        tipo = Equipment_type.objects.all()
+        tipo = Equipment_type.objects.filter(inative=False)
         data['types'] = tipo
         if request.method == 'POST':
-            equipment = Equipment.objects.filter( Q(tag=request.POST['tag']) | Q(description=request.POST['description']) ,type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))
+            equipment = Equipment.objects.filter( (Q(tag=request.POST['tag']) & Q(type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))) | (Q(description__exact=request.POST['description']) & Q(type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))))
+            #print("Equipment: ",equipment)
             if not equipment:
                 new_equipment = Equipment.objects.create(
                     tag=request.POST['tag'],
@@ -174,14 +175,20 @@ def equipment_create(request, template_name='equipments/equipment_form.html'):
 def equipment_update(request, pk, template_name='equipments/equipment_form.html'):
     if request.session.has_key('username'):
         data = {}
-        tipo = Equipment_type.objects.all()
+        tipo = Equipment_type.objects.filter(inative=False)
         data['types'] = tipo
         equipment = get_object_or_404(Equipment, pk=pk)
         data['equipment']= equipment
         if request.method == 'POST':
-            equipment = Equipment.objects.filter(pk=pk)
-            equipment.update(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
-            return equipment_list(request)
+            equipment = Equipment.objects.filter( (Q(tag=request.POST['tag']) & Q(type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))) | (Q(description__exact=request.POST['description']) & Q(type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))))
+            if not equipment:
+                equipment = Equipment.objects.filter(pk=pk)
+                equipment.update(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
+                return equipment_list(request)
+            else:
+                messages.error(request, 'Equipamento já existe!')
+                data['equipment'] = {'tag':request.POST['tag'],'description':request.POST['description'],'type_equipment':Equipment_type.objects.get(name = request.POST['type_equipment']),'maximum_time':request.POST['maximum_time']}
+                return render(request, template_name, data)
         return render(request, template_name, data)
     return render(request, 'login.html')
 
@@ -202,6 +209,7 @@ def emprestar(request,pk):
         username = None
         
         if request.method=='POST':
+
             username = main("Verification")
             if count >= 2 and username=="N":
                     count = 0
@@ -227,8 +235,10 @@ def emprestar(request,pk):
                         messages.error(request, 'Equipamento já emprestado!')
                         return redirect('/Equipamentos')
                         #return render(request, 'equipments/equipment_detail.html', {'object':EquipmentUnique(pk)})
-                    time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
-                    time = ''.join(map(str,time))
+                    #time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
+                    #time = ''.join(map(str,time))
+                    time = request.POST['time_type']
+                    #print(request.POST['time_type'])
                     Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
                     Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
                     return redirect('/Equipamentos')
@@ -351,8 +361,9 @@ def emprestar_user(request,pk):
                 if BusyEquipment:
                     messages.error(request, 'Equipamento já emprestado!')
                     return redirect('/Equipamentos')
-                time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
-                time = ''.join(map(str,time))
+                #time = Equipment.objects.filter(id = pk).values_list('maximum_time',flat=True)
+                #time = ''.join(map(str,time))
+                time = request.POST['time_type']
                 Equipment.objects.filter(id = pk).update(status='Ocupado',amount_of_loans=(int(amout_of_equipments)+1))
                 Equipment_user.objects.create(loan=timezone.now(),devolution=None,equipment=Equipment.objects.get(id = pk),user_loan=Client.objects.get(id = int(StringPost)),amount_of_loans=int(amout_of_equipments)+1,limit_time=datetime.now()+timedelta(minutes=int(time)))
                 return redirect('/Equipamentos')
@@ -411,6 +422,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             equipment = Equipment.objects.filter(inative=False).order_by('status',filtro)
             data = {}
             data['list_equipment'] = get_page(request,equipment)
+            data['equipments'] = equipment
             data['type_equipment']= EquipmentTypeAll()
             data['type'] = value
             data['search'] = 'Null'
@@ -426,6 +438,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             equipment = Equipment.objects.filter(inative=True).order_by('status',filtro)
             data = {}
             data['list_equipment'] = get_page(request,equipment)
+            data['equipments'] = equipment
             data['type_equipment']= EquipmentTypeAll()
             data['type'] = value
             data['search'] = 'Null'
@@ -440,6 +453,7 @@ def filter_list(request,pk,value,templete_name='equipments/equipment_list.html')
             equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value),inative=False).order_by('status',filtro)
             data = {}
             data['list_equipment'] = get_page(request,equipment)
+            data['equipments'] = equipment
             data['type_equipment']= EquipmentTypeAll()
             data['type'] = value
             data['search'] = 'Null'
@@ -451,6 +465,7 @@ def filter_type(request,value,templete_name='equipments/equipment_list.html'):
         equipment = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name = value),inative=False).order_by('status','tag')
         data = {}
         data['list_equipment'] = get_page(request,equipment)
+        data['equipments'] = equipment
         data['type_equipment']= EquipmentTypeAll()
         data['type'] = value
         data['search'] = 'Null'
@@ -469,6 +484,7 @@ def search(request,value,search_):
             data['search'] = name
         equipment = Equipment.objects.filter(Q(tag__contains=name) | Q(description__contains=name))
         data['list_equipment'] = get_page(request,equipment)
+        data['equipments'] = equipment
         data['type_equipment']= EquipmentTypeAll()
         data['type'] = 'Todos'
         return render(request, 'equipments/equipment_list.html', data)
@@ -478,6 +494,7 @@ def search_page(request,name):
     equipment = Equipment.objects.filter(Q(tag__contains=name) | Q(description__contains=name))
     data = {}
     data['list_equipment'] = get_page(request,equipment)
+    data['equipments'] = equipment
     data['type_equipment']= EquipmentTypeAll()
     data['type'] = 'Todos'
     return render(request, 'equipments/equipment_list.html', data)
@@ -586,10 +603,16 @@ def get_rastreio(request,value):
         tag = request.POST['tag']
         inicio = request.POST['start']
         fim = request.POST['end']
-        tag_ = tag.split('-')
-        #tag_ = Equipment.objects.get(description__exact=tag_[1], tag__exact=tag_[0])
+        if tag != 'Todos':
+            tag_ = tag.split('-')
+            tag_ = Equipment.objects.get(description__exact=tag_[1], tag__exact=tag_[0])
+            tag_ = tag_.id
+        else:
+            tag_ = tag
+        #print(tag_1)
         #print(test.id)
-        tag_ = tag_[0]
+        #tag_ = tag_[0]
+        #print('Tag:',tag_)
         url= '/Rastreio/{}/{}/{}/{}/{}'.format('loan',type_equipment,tag_,inicio,fim)
         return redirect(url) 
         '''
@@ -628,8 +651,12 @@ def get_rastreio(request,value):
         type_equipment = request.POST['type_equipment']
         tag = request.POST['tag']
         inicio = request.POST['start']
-        tag_ = tag.split('-')
-        tag_ = tag_[0] 
+        if tag != 'Todos':
+            tag_ = tag.split('-')
+            tag_ = Equipment.objects.get(description__exact=tag_[1], tag__exact=tag_[0])
+            tag_ = tag_.id
+        else:
+            tag_ = tag
         url= '/NaoDevolvidos/{}/{}/{}/{}'.format('loan',type_equipment,tag_,inicio)
         return redirect(url)
         '''
@@ -697,10 +724,10 @@ def listagem(request,order_by,type_equipment_):
         data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Listagem'
     else:
-        EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+        EquipmentType = Equipment_type.objects.filter(name__exact=type_equipment).values_list('id',flat=True)
         EquipmentType = ''.join(map(str, EquipmentType))
         EquipmentType = int(EquipmentType)
-        equipment_user = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).order_by(order_by)
+        equipment_user = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id__exact = EquipmentType)).order_by(order_by)
         data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Listagem'
 
@@ -708,7 +735,7 @@ def listagem(request,order_by,type_equipment_):
 
 def rastreio(request,order_by,type_equipment_,tag,start,end):
     data = {}
-    print("aqui")
+    #print("aqui")
     tipo = Equipment_type.objects.all().values_list('name',flat=True)
     CHOICE = []
     for QuerySet in tipo:
@@ -750,7 +777,8 @@ def rastreio(request,order_by,type_equipment_,tag,start,end):
         data['list_equipment_user']= get_page(request,equipment_user)
         data['type'] = 'Rastreio'
     elif tag != 'Todos':
-        EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
+        #print(tag_)
+        EquipmentFilter = Equipment.objects.filter(id = tag_).values_list('id',flat=True)
         EquipmentFilter = ' '.join(map(str, EquipmentFilter))
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution__lte=fim,equipment =  int(EquipmentFilter)).order_by(order_by)
         data['list_equipment_user']= get_page(request,equipment_user)
@@ -797,7 +825,7 @@ def nao_devolvidos(request,order_by,type_equipment_,tag,start):
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment__in =  number).order_by(order_by)
         data['list_equipment_user']= get_page(request,equipment_user)
     elif tag != 'Todos':
-        EquipmentFilter = Equipment.objects.filter(tag = tag_).values_list('id',flat=True)
+        EquipmentFilter = Equipment.objects.filter(id = tag_).values_list('id',flat=True)
         EquipmentFilter = ' '.join(map(str, EquipmentFilter))
         equipment_user = Equipment_user.objects.filter(loan__gte=inicio,devolution=None,equipment =  int(EquipmentFilter)).order_by(order_by)
         data['list_equipment_user']= get_page(request,equipment_user)
@@ -815,7 +843,7 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
     if end != "Todos":
         end = datetime.strptime(end, '%Y-%m-%d')
     date = datetime.now()
-    print(date.strftime("%H:%M"))
+    #print(date.strftime("%H:%M"))
     #date = str(time_now.day)+'/'+str(time_now.month)+'/'+str(time_now.year)
     #time = str(time_now.hour)+':'+str(time_now.minute)
 
@@ -829,9 +857,11 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
     description = 'Todos'
     if tag != 'Todos':
         #print('Aqui')
-        description = Equipment.objects.filter(tag=tag)
+        description = Equipment.objects.filter(id=tag)
         type_equipment = str(description[0].type_equipment)
+        tag = str(description[0].tag)
         description = str(description[0].description)
+        
         
 
     list01 = ["SISTEMA DE CONTROLE DE EQUIPAMENTOS"],["Relatório de "+ report +" de equipamento"],[""]
@@ -900,6 +930,7 @@ def page(list_complete,inicio,fim,report,type_equipment,tag,start,end):
 
 
 def some_view(request,report,type_equipment,tag,start,end,order_by):
+    #print(report)
     def call_type_equipment(id):
         equipment = Equipment.objects.filter(id=id).values_list('type_equipment',flat=True)
         name_equipment = Equipment_type.objects.filter(id=equipment[0]).values_list('name',flat=True)
@@ -918,103 +949,70 @@ def some_view(request,report,type_equipment,tag,start,end,order_by):
         return name_equipment[0]
 
     if report == 'Listagem':
-        if order_by == 'Nenhum':
-            if type_equipment == 'Todos':
-                list_report = Equipment.objects.all().order_by('type_equipment','tag')
-            else:
-                list_report = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name=type_equipment))
+        if type_equipment == 'Todos':
+            equipment_user = Equipment.objects.all().order_by(order_by)
+            list_report = equipment_user
         else:
-            if type_equipment == 'Todos':
-                list_report = Equipment.objects.all().order_by(order_by)
-            else:
-                list_report = Equipment.objects.filter(type_equipment = Equipment_type.objects.get(name=type_equipment)).order_by(order_by)
-
+            EquipmentType = Equipment_type.objects.filter(name__exact=type_equipment).values_list('id',flat=True)
+            EquipmentType = ''.join(map(str, EquipmentType))
+            EquipmentType = int(EquipmentType)
+            equipment_user = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id__exact = EquipmentType)).order_by(order_by)
+            list_report = equipment_user
+        
         list_complete = []
         for equipment in list_report:
             list_temp = [equipment.type_equipment.name,equipment.tag,equipment.description,'','','','',equipment.amount_of_loans]
             list_complete.append(list_temp)
 
     elif report == 'Rastreio':
-        if order_by == 'Nenhum':
-            if type_equipment == 'Todos' and tag =='Todos':
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end)
-            elif type_equipment != 'Todos' and tag == 'Todos':
-                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
-                EquipmentType = ''.join(map(str, EquipmentType))
-                EquipmentType = int(EquipmentType)
-                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
-                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
-                EquipmentFilter = EquipmentFilter.split()
-                number = []
-                for i in EquipmentFilter:
-                    number.append(int(i))
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment__in =  number)
-            elif tag != 'Todos':
-                EquipmentFilter = Equipment.objects.filter(tag = tag).values_list('id',flat=True)
-                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment =  int(EquipmentFilter))
-        else:
-            report = 'Não Devolvidos'
-            if type_equipment == 'Todos' and tag=='Todos':
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end).order_by(order_by)
-            elif type_equipment != 'Todos' and tag == 'Todos':
-                #print('cheguei')
-                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
-                EquipmentType = ''.join(map(str, EquipmentType))
-                EquipmentType = int(EquipmentType)
-                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
-                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
-                EquipmentFilter = EquipmentFilter.split()
-                number = []
-                for i in EquipmentFilter:
-                    number.append(int(i))
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment__in =  number).order_by(order_by)
-            elif tag != 'Todos':
-                EquipmentFilter = Equipment.objects.filter(tag = tag).values_list('id',flat=True)
-                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment =  int(EquipmentFilter)).order_by(order_by)
-
+        if type_equipment == 'Todos' and tag=='Todos':
+            equipment_user = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end).order_by(order_by)
+            list_report = equipment_user
+        elif type_equipment != 'Todos' and tag == 'Todos':
+            EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+            EquipmentType = ''.join(map(str, EquipmentType))
+            EquipmentType = int(EquipmentType)
+            EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+            EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+            EquipmentFilter = EquipmentFilter.split()
+            number = []
+            for i in EquipmentFilter:
+                number.append(int(i))
+            equipment_user = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment__in =  number).order_by(order_by)
+            list_report = equipment_user
+        elif tag != 'Todos':
+            EquipmentFilter = Equipment.objects.filter(id = tag).values_list('id',flat=True)
+            EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+            equipment_user = Equipment_user.objects.filter(loan__gte=start,devolution__lte=end,equipment =  int(EquipmentFilter)).order_by(order_by)
+            list_report = equipment_user
         list_complete = []
         for equipment in list_report:
-            list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),equipment.devolution.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_devolution),equipment.amount_of_loans]
+            if equipment.devolution == None:
+                list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),'None',str(equipment.user_devolution),equipment.amount_of_loans]
+            else:
+                list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),equipment.devolution.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_devolution),equipment.amount_of_loans]
             list_complete.append(list_temp)
     else:
-        if order_by == 'Nenhum':
-            if type_equipment == 'Todos' and tag=='Todos':
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None)
-            elif type_equipment != 'Todos' and tag == 'Todos':
-                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
-                EquipmentType = ''.join(map(str, EquipmentType))
-                EquipmentType = int(EquipmentType)
-                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
-                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
-                EquipmentFilter = EquipmentFilter.split()
-                number = []
-                for i in EquipmentFilter:
-                    number.append(int(i))
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment__in =  number)
-            elif tag != 'Todos':
-                EquipmentFilter = Equipment.objects.filter(tag = tag).values_list('id',flat=True)
-                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment =  int(EquipmentFilter))
-        else:
-            if type_equipment == 'Todos' and tag=='Todos':
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None).order_by(order_by)
-            elif type_equipment != 'Todos' and tag == 'Todos':
-                EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
-                EquipmentType = ''.join(map(str, EquipmentType))
-                EquipmentType = int(EquipmentType)
-                EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
-                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
-                EquipmentFilter = EquipmentFilter.split()
-                number = []
-                for i in EquipmentFilter:
-                    number.append(int(i))
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment__in =  number).order_by(order_by)
-            elif tag != 'Todos':
-                EquipmentFilter = Equipment.objects.filter(tag = tag).values_list('id',flat=True)
-                EquipmentFilter = ' '.join(map(str, EquipmentFilter))
-                list_report = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment =  int(EquipmentFilter)).order_by(order_by)
+        if type_equipment == 'Todos' and tag=='Todos':
+            equipment_user = Equipment_user.objects.filter(loan__gte=start,devolution=None).order_by(order_by)
+            list_report = equipment_user
+        elif type_equipment_ != 'Todos' and tag == 'Todos':
+            EquipmentType = Equipment_type.objects.filter(name=type_equipment).values_list('id',flat=True)
+            EquipmentType = ''.join(map(str, EquipmentType))
+            EquipmentType = int(EquipmentType)
+            EquipmentFilter = Equipment.objects.filter(type_equipment=Equipment_type.objects.get(id = EquipmentType)).values_list('id',flat=True)
+            EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+            EquipmentFilter = EquipmentFilter.split()
+            number = []
+            for i in EquipmentFilter:
+                number.append(int(i))
+            equipment_user = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment__in =  number).order_by(order_by)
+            list_report = equipment_user
+        elif tag != 'Todos':
+            EquipmentFilter = Equipment.objects.filter(id = tag).values_list('id',flat=True)
+            EquipmentFilter = ' '.join(map(str, EquipmentFilter))
+            equipment_user = Equipment_user.objects.filter(loan__gte=start,devolution=None,equipment =  int(EquipmentFilter)).order_by(order_by)
+            list_report = equipment_user
 
         list_complete = []
         for equipment in list_report:
@@ -1024,10 +1022,13 @@ def some_view(request,report,type_equipment,tag,start,end,order_by):
                 list_temp = [call_type_equipment(equipment.equipment),call_tag_equipment(equipment.equipment),call_description_equipment(equipment.equipment),equipment.loan.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_loan),equipment.devolution.strftime("%d/%m/%Y às %H:%M"),str(equipment.user_devolution),equipment.amount_of_loans]
             list_complete.append(list_temp)
 
-
-
+    #print(list_complete)
+    #print(report)
     #list_report = Equipment_user.objects.all()
-    list_title = ["Tipo","Etiqueta","Descrição","Solicitação","Responsável","Devolução","Responsável","Qtd. Empr."]
+    if report == 'Listagem':
+        list_title = ["Tipo","Etiqueta","Descrição","            ","            ","            ","            ","Qtd. Empr."]
+    else:
+        list_title = ["Tipo","Etiqueta","Descrição","Solicitação","Responsável","Devolução","Responsável","Qtd. Empr."]
     
     buffer = io.BytesIO()
     pdf = SimpleDocTemplate(buffer,pagesize=landscape(A4),rightMargin=30,leftMargin=30, topMargin=30,bottomMargin=18)
