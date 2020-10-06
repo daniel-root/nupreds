@@ -179,23 +179,18 @@
         </button>
         </form>
       {% endfor %}
-      <form action="{% url "equipment_list_inactive" type %}">
-      <button class="btn btn-link text-dark">
-          Ver Inativos
-         
-        </button>
-        </form>
       </div>
       <div style="margin-top: 10px;" class="row justify-content-center">
         <form class="form-inline" method="POST" action="{% url 'search' type search %}" >{% csrf_token %}
           <div class="input-group">
-            <input class="form-control  rounded-pill" type="text" placeholder="Search.." name="search" required="required" style="width: 900px; background: #e9ecef">
+            <input class="form-control  rounded-pill" type="text" placeholder="Search.." name="search" required="required" style="width: 800px; background: #e9ecef">
             <div class="submit">
             <button class="border-0" type="submit" style="background: #FFFFFF;">
               <span>
                 <img src="{% static "images/lupa.png" %}" style="height: 30px; width: 30px">
               </span>
             </button>
+        <a href="{% url "equipment_list_inactive" type %}" type="button" class="btn rounded-pill" style="background: #e9ecef">Ver inativos</a>
             </div>
           </div>
         </form>
