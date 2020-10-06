@@ -10,12 +10,7 @@
   {% block content %}
 </head>
 <body >
-
 {% for equipment in equipments %}
- 
-                  
-                
-                
                 <div class="modal fade" id="EscolhaModal{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -26,11 +21,15 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#danielpor_senha{{equipment.id}}">
-                          Por Senha
-                          </button>
+                        
                         {% if equipment.status == 'Livre' %}
                         <form name="my" id="my" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
+                        <div class="form-group row">
+                          <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="tipo">Tempo de emprestimo:</label>
+                          <div class="col-lg-8 col-md-8 col-sm-12">
+                            <input class="form-control rounded-pill" value="{{equipment.maximum_time}}" type="ctempo" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef">
+                          </div>
+                        </div>
                         {% else %}
                         <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}
                         {% endif %}
@@ -42,6 +41,9 @@
                         {% endif %}
                         Por Digital
                         </button>
+                        <button type="button" onclick="javascript:solution(this.form);" class="btn btn-primary" data-toggle="modal" data-target="#danielpor_senha{{equipment.id}}">
+                          Por Senha
+                          </button>
                         </form>
                       </div>
                       <div class="modal-footer">
@@ -51,7 +53,23 @@
                     </div>
                   </div>
                 </div>
-
+           <script language="JavaScript"> 
+    function solution(form) { 
+    var tempo=0;
+    tempo = form.time_type.value;
+    
+    /* aqui inicio o código mostrado na nova janela */
+    chaine='' 
+    +'<div class="form-group row">'
+    +'<label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="tipo">Tempo de emprestimo:</label>'
+    +'<div class="col-lg-8 col-md-8 col-sm-12">'
+    +'<input class="form-control rounded-pill" value="' + tempo + '" type="ctempo" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef" >'
+    +'</div></div>'
+    
+    $('.campo_tempo').html(chaine);
+    
+    }
+    </script>
    <div class="modal fade" id="Modal{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -121,6 +139,10 @@
                         <input class="form-control mr-2 rounded-pill" type="password" name="password" required pattern="[0-9]+$" style=" background: #e9ecef">
                       </div>
                     </div>
+                    <div class="campo_tempo">
+                    
+                    </div>
+                   
               </div>
                 </div>
                 <div class="modal-footer">
@@ -131,6 +153,8 @@
               </div>
             </div>
           </div>
+          </div>
+          
 
 {% endfor %}
   <div class="container pt-2">
@@ -303,7 +327,6 @@
             document.myForm{{chave}}.submit();
           });
     </script>
-   
 </body>
 {% endblock %}
 </html>
