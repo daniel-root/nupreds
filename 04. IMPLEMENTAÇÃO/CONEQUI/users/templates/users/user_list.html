@@ -70,6 +70,8 @@
   <tbody>
   {% load my_tag %}
     {% for user in object_list %}
+    {% for type in type_user %}
+    {% if type.user_type == 'Super' and user.user_type == 'Super' %}
     <tr class="d-flex">
       <td class="col-lg-2 col-md-2 col-sm-2">{{ user.id }}</td>
       <td class="col-lg-3 col-md-3 col-sm-3">{{ user.usuario }}</td>
@@ -155,6 +157,8 @@
     <tr>
         <td class="col-lg-6 col-md-6 col-sm-6 text-center">Sem resultados</td>
     </tr>
+    {% endif %}
+    {% endfor %}
     {% endfor %}
   </tbody>
 </table> <hr width="1000px" style="margin-top: -1px;">
