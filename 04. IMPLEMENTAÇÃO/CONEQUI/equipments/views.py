@@ -50,7 +50,7 @@ def equipment_type_view(request, pk, template_name='equipments/equipment_type_de
 
 def equipment_type_create(request, template_name='equipments/equipment_type_form.html'):
     if request.method=='POST':
-        equipment_type = Equipment_type.objects.filter(name_exact = request.POST['tag'])
+        equipment_type = Equipment_type.objects.filter(name__exact = request.POST['tag'])
         if not equipment_type:
             new_equipment_type = Equipment_type.objects.create(
                 name=request.POST['tag'],
@@ -69,7 +69,7 @@ def equipment_type_update(request, pk, template_name='equipments/equipment_type_
     equipment_type = Equipment_type.objects.filter(pk=pk)
     if request.method=='POST':
         equipment_type_ = Equipment_type.objects.filter(name = request.POST['tag'])
-        if not equipment_type_:
+        if not equipment_type_  or equipment_type_[0].id == pk:
             equipment_type.update(
                 name=request.POST['tag'],
                 time_maximum=request.POST['time_type'])
