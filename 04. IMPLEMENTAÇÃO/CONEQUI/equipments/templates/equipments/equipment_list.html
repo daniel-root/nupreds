@@ -15,7 +15,7 @@
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Formar de realizar emprestimo</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -25,29 +25,30 @@
                         {% if equipment.status == 'Livre' %}
                         <form name="my" id="my" method="post" action="{% url "emprestar" equipment.pk %}">{% csrf_token %}
                         <div class="form-group row">
-                          <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="tipo">Tempo de emprestimo:</label>
-                          <div class="col-lg-8 col-md-8 col-sm-12">
-                            <input class="form-control rounded-pill" value="{{equipment.maximum_time}}" type="ctempo" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef">
+                          <label class="col-lg-5 col-md-5 col-sm-12 col-form-label" for="tipo">Tempo de emprestimo:</label>
+                          <div class="col-lg-7 col-md-7 col-sm-12">
+                            <input class="form-control rounded-pill" value="{{equipment.maximum_time}}" type="number" min="1" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef">
                           </div>
                         </div>
                         {% else %}
                         <form name="my" id="my" method="post" action="{% url 'devolver' equipment.id %}">{% csrf_token %}
                         {% endif %}
                         {% if 'Atrasado' == equipment.status %}
-                        <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
+                        <button type="submit" class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #4de7ff; color: black;">
                         {% else %}
-                        
-                        <button type="submit" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
+                        <div class="text-center">
+                        <button type="submit" class="btn rounded-pill" data-toggle="modal" data-target="#Modal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
                         {% endif %}
                         Por Digital
                         </button>
-                        <button type="button" onclick="javascript:solution(this.form);" class="btn btn-primary" data-toggle="modal" data-target="#danielpor_senha{{equipment.id}}">
+                        <button type="button" onclick="javascript:solution(this.form);" class="btn rounded-pill" data-toggle="modal" data-target="#danielpor_senha{{equipment.id}}" style="background: #e9ecef">
                           Por Senha
                           </button>
+                          </div>
                         </form>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
                         
                       </div>
                     </div>
@@ -128,7 +129,7 @@
                     <form method="POST" id="add_form" action="{% url 'devolver_user' equipment.id %}">{% csrf_token %}
                     {% endifequal %}
                     <div class="form-group row">
-                      <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="textNome">Login:</label>
+                      <label class="col-lg-5 col-md-5 col-sm-12 col-form-label" for="textNome">Login:</label>
                       <div class="col-lg-9 col-md-9 col-sm-9">
                         <input class="form-control rounded-pill" type="textNome" name="username"  style=" background: #e9ecef">
                       </div>
@@ -179,23 +180,18 @@
         </button>
         </form>
       {% endfor %}
-      <form action="{% url "equipment_list_inactive" type %}">
-      <button class="btn btn-link text-dark">
-          Ver Inativos
-         
-        </button>
-        </form>
       </div>
       <div style="margin-top: 10px;" class="row justify-content-center">
         <form class="form-inline" method="POST" action="{% url 'search' type search %}" >{% csrf_token %}
           <div class="input-group">
-            <input class="form-control  rounded-pill" type="text" placeholder="Search.." name="search" required="required" style="width: 900px; background: #e9ecef">
+            <input class="form-control  rounded-pill" type="text" placeholder="Search.." name="search" required="required" style="width: 800px; background: #e9ecef">
             <div class="submit">
             <button class="border-0" type="submit" style="background: #FFFFFF;">
               <span>
                 <img src="{% static "images/lupa.png" %}" style="height: 30px; width: 30px">
               </span>
             </button>
+        <a href="{% url "equipment_list_inactive" type %}" type="button" class="btn rounded-pill" style="background: #e9ecef">Ver inativos</a>
             </div>
           </div>
         </form>
