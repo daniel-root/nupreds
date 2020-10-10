@@ -135,20 +135,18 @@
       </div>
       <table class="table table-sm" style="  margin:auto; margin-top: 10px;" >
   <thead>
-    <tr>
+    <tr class="d-flex">
      {% ifequal type 'Listagem' %}
-      <th scope="col" width="10%" style="text-align: left;">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="{% url "listagem" 'type_equipment__name' type_equipment_  %}"  style="color: black;">Tipo</a>
       </th>
-      <th scope="col" width="10%" style="text-align: left;">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="{% url "listagem" 'tag' type_equipment_ %}"  style="color: black;" >Etiqueta</a>
       </th>
-      <th scope="col" width="10%" style="text-align: left;">
+      <th class="col-lg-3 col-md-3 col-sm-3">
         <a href="{% url "listagem" 'description' type_equipment_ %}" style="color: black;">Descrição</a>
       </th>
-      <th scope="col" width="15%" style="text-align: left;">
-      <form action="">
-      </form>
+      <th class="col-lg-3 col-md-3 col-sm-3">
       <a href="{% url "listagem" 'amount_of_loans' type_equipment_ %}" style="color: black;">Qtd. Emprestimo</a>
       </th>
       {% endifequal %}
@@ -241,19 +239,15 @@
 
     {% ifequal type 'Listagem' %}
       {% for equipment_user in list_equipment_user %}
-      <tr>
-      <td>{{ equipment_user.type_equipment }}</td>
-      <td>{{ equipment_user.tag }}</td>
-      <td>{{ equipment_user.description }}</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>{{ equipment_user.amount_of_loans }}</td>
+      <tr class="d-flex">
+      <td class="col-lg-3 col-md-3 col-sm-3">{{ equipment_user.type_equipment }}</td>
+      <td class="col-lg-3 col-md-3 col-sm-3">{{ equipment_user.tag }}</td>
+      <td class="col-lg-3 col-md-3 col-sm-3">{{ equipment_user.description }}</td>
+      <td class="col-lg-3 col-md-3 col-sm-3">{{ equipment_user.amount_of_loans }}</td>
       </tr>
       {% empty %}
     <tr>
-        <td>Sem resultados</td>
+        <td class="col-lg-6 col-md-6 col-sm-6 text-center">Sem resultados</td>
     </tr>
     {% endfor %}
 
