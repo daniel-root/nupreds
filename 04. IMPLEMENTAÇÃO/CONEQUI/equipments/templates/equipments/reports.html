@@ -177,22 +177,22 @@
       </th>
       {% endifequal %}
       {% ifequal type 'Não Devolvidos' %}
-      <th scope="col" width="10%" style="text-align: left;">
+      <th class="col-lg-2 col-md-2 col-sm-2" >
         <a href="{% url "nao_devolvidos" 'equipment__type_equipment__name' type_equipment_ tag_ start_ %}" style="color: black;">Tipo</a>
       </th>
-      <th scope="col" width="10%" style="text-align: left;">
+      <th class="col-lg-2 col-md-2 col-sm-2">
         <a href="{% url "nao_devolvidos" 'equipment__tag' type_equipment_ tag_ start_ %}" style="color: black;">Etiqueta</a>
       </th>
-      <th scope="col" width="10%" style="text-align: left;">
+      <th class="col-lg-2 col-md-2 col-sm-2">
         <a href="{% url "nao_devolvidos" 'equipment__description' type_equipment_ tag_ start_ %}" style="color: black;">Descrição</a>
       </th>
-      <th scope="col" width="10%" style="text-align: left;">
+      <th class="col-lg-2 col-md-2 col-sm-2">
         <a href="{% url "nao_devolvidos" 'loan' type_equipment_ tag_ start_ %}" style="color: black;">Solicitação</a>
       </th>
-      <th scope="col" width="10%" style="text-align: left;">
+      <th class="col-lg-2 col-md-2 col-sm-2">
         <a href="{% url "nao_devolvidos" 'user_loan' type_equipment_ tag_ start_ %}" style="color: black; "> Responsável </a>
       </th>
-      <th scope="col" width="20%" style="text-align: left;">
+      <th class="col-lg-2 col-md-2 col-sm-2">
       <a href="{% url "nao_devolvidos" 'amount_of_loans' type_equipment_ tag_ start_ %}" style="color: black;">Qtd. Emprestimo</a>
       </th>
       {% endifequal %}
@@ -220,19 +220,17 @@
     {% ifequal type 'Não Devolvidos' %}
     {% load my_tag %}
     {% for equipment_user in list_equipment_user %}
-    <tr>
-    <td>{% TypeName equipment_user.equipment %}</td>
-    <td>{% TagName equipment_user.equipment %}</td>
-    <td>{% DescriptionName equipment_user.equipment %}</td>
-    <td>{{ equipment_user.loan|date:"d/m/Y" }}</td>
-    <td>{{ equipment_user.user_loan }}</td>
-    <td></td>
-    <td></td>
-    <td>{{ equipment_user.amount_of_loans }}</td>
+    <tr class="d-flex">
+    <td class="col-lg-2 col-md-2 col-sm-2">{% TypeName equipment_user.equipment %}</td>
+    <td class="col-lg-2 col-md-2 col-sm-2">{% TagName equipment_user.equipment %}</td>
+    <td class="col-lg-2 col-md-2 col-sm-2">{% DescriptionName equipment_user.equipment %}</td>
+    <td class="col-lg-2 col-md-2 col-sm-2">{{ equipment_user.loan|date:"d/m/Y" }}</td>
+    <td class="col-lg-2 col-md-2 col-sm-2">{{ equipment_user.user_loan }}</td>
+    <td class="col-lg-2 col-md-2 col-sm-2">{{ equipment_user.amount_of_loans }}</td>
     </tr>
      {% empty %}
     <tr>
-        <td>Sem resultados</td>
+        <td class="col-lg-6 col-md-6 col-sm-6 text-center">Sem resultados</td>
     </tr>
     {% endfor %}
     {% endifequal %}
