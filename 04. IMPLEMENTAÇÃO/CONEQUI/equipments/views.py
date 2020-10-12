@@ -181,7 +181,7 @@ def equipment_update(request, pk, template_name='equipments/equipment_form.html'
         data['equipment']= equipment
         if request.method == 'POST':
             equipment = Equipment.objects.filter( (Q(tag=request.POST['tag']) & Q(type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))) | (Q(description__exact=request.POST['description']) & Q(type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']))))
-            if not equipment:
+            if not equipment or equipment[0].id == pk:
                 equipment = Equipment.objects.filter(pk=pk)
                 equipment.update(tag=request.POST['tag'],description=request.POST['description'],type_equipment=Equipment_type.objects.get(name = request.POST['type_equipment']),maximum_time=request.POST['maximum_time'])
                 return equipment_list(request)
