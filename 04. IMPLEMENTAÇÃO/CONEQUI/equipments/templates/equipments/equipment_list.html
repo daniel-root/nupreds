@@ -15,7 +15,7 @@
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Formar de realizar emprestimo</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Realizar emprestimo</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -62,9 +62,9 @@
     /* aqui inicio o código mostrado na nova janela */
     chaine='' 
     +'<div class="form-group row">'
-    +'<label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="tipo">Tempo de emprestimo:</label>'
-    +'<div class="col-lg-8 col-md-8 col-sm-12">'
-    +'<input class="form-control rounded-pill" value="' + tempo + '" type="ctempo" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef" >'
+    +'<label class="col-lg-3 col-md-3 col-sm-12 col-form-label" for="tipo">Tempo de emprestimo:</label>'
+    +'<div class="col-lg-9 col-md-9 col-sm-12">'
+    +'<input class="form-control rounded-pill" value="' + tempo + '" type="number" min="1" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef" >'
     +'</div></div>'
     
     $('.campo_tempo').html(chaine);
@@ -129,15 +129,15 @@
                     <form method="POST" id="add_form" action="{% url 'devolver_user' equipment.id %}">{% csrf_token %}
                     {% endifequal %}
                     <div class="form-group row">
-                      <label class="col-lg-5 col-md-5 col-sm-12 col-form-label" for="textNome">Login:</label>
-                      <div class="col-lg-9 col-md-9 col-sm-9">
-                        <input class="form-control rounded-pill" type="textNome" name="username"  style=" background: #e9ecef">
+                      <label class="col-lg-3 col-md-3 col-sm-12 col-form-label" for="textNome">Login:</label>
+                      <div class="col-lg-9 col-md-9 col-sm-12">
+                        <input class="form-control rounded-pill" type="textNome" name="username"  pattern="^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$" maxlength="20" title="Este campo aceita apenas letras" style=" background: #e9ecef">
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-lg-2 col-md-2 col-sm-12 col-form-label" for="senha">Senha:</label>
+                      <label class="col-lg-3 col-md-3 col-sm-12 col-form-label" for="senha">Senha:</label>
                       <div class="col-lg-9 col-md-9 col-sm-9">
-                        <input class="form-control mr-2 rounded-pill" type="password" name="password" required pattern="[0-9]+$" style=" background: #e9ecef">
+                        <input class="form-control mr-2 rounded-pill" type="password" required name="password" maxlength="12" minlength="8" title="Este campo aceita letras, números e caracteres especiais" style=" background: #e9ecef">
                       </div>
                     </div>
                     <div class="campo_tempo">
@@ -260,6 +260,9 @@
           <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#EscolhaModal{{equipment.id}}"style="margin-left: 5px; background: #e9ecef">
           {% endif %}
           {% LoanOrDevolution equipment.id %}
+          </button>
+          <button class="border-0" style="background-color: white;">
+            <span class="oi oi-envelope-closed"></span>
           </button>
       </div>
              
