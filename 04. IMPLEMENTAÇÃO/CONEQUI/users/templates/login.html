@@ -28,7 +28,7 @@
                         <div class="form-group">
                             <label for="csenha">Senha:</label>
                         <div class="input-group">
-                            <input class="form-control rounded-pill "type="password" id="senha" name="password" maxlength="12" minlength="8" title="Este campo aceita letras, números e caracteres especiais" style=" background: #e9ecef;">
+                            <input class="form-control rounded-pill "type="password" id="pwd1" name="password" maxlength="12" minlength="8" title="Este campo aceita letras, números e caracteres especiais" style=" background: #e9ecef;">
                             <span class="oi oi-eye" id="olho" style="position: absolute;top: 7px;right: 20px;cursor: pointer;  font-size: 25px; color: gray;"></span>
                         </div>
                         </div>
@@ -54,11 +54,24 @@
 
 	 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="static/users/js/bootstrap.min.js"></script>
-    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+         <script >
+       var senha = $('#pwd1');
+var olho= $("#olho");
 
+olho.mousedown(function() {
+  senha.attr("type", "text");
+});
 
-
+olho.mouseup(function() {
+  senha.attr("type", "password");
+});
+// para evitar o problema de arrastar a imagem e a senha continuar exposta, 
+//citada pelo nosso amigo nos comentários
+$( "#olho" ).mouseout(function() { 
+  $("#senha").attr("type", "password");
+});
+     </script> 
 </body>
 {% endblock %}
 </html>
