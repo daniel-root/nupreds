@@ -62,8 +62,8 @@ def enviar(name, equipment, tag, description,number):
 		    pass
 
 
-
 def Atraso():
+    print("Aqui")
     TimeEquipment = Equipment_user.objects.filter(devolution=None)
     for time in TimeEquipment:
         if timezone.now() >= time.limit_time:

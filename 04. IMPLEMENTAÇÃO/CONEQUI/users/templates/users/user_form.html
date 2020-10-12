@@ -58,12 +58,14 @@
           </div>
          
            {% endif %}
-          {% endfor %}
-           {% if user.fingerprint == None %}
+            {% endfor %}
+          {% if user.id != 'None' %}
+          {% if user.fingerprint == None %}
             <div class="alert alert-danger">
               <strong>Atenção!</strong> Usuário sem cadastro de digital
             </div>
-           {% endif %}
+          {% endif %}
+          {% endif %}
          
       <div class="form-group row">
         <label  for="txtNome" class="col-lg-2 col-md-2 col-sm-12 col-form-label">Nome: </label>
