@@ -261,9 +261,11 @@
           {% endif %}
           {% LoanOrDevolution equipment.id %}
           </button>
-          <button class="border-0" style="background-color: white;">
+          {% if 'Atrasado' == equipment.status %}
+          <a href="{% url "email_" equipment.id %}" class="border-0" style="background-color: white;">
             <span class="oi oi-envelope-closed"></span>
-          </button>
+          </a>
+          {% endif %}
       </div>
              
       </td>
@@ -316,6 +318,16 @@
     <script src={% static "users/js/bootstrap.min.js" %}></script>
     <script>
           $(document).ready(function() {
+            {% if tempo_time %}
+            chaine='' 
+            +'<div class="form-group row">'
+            +'<label class="col-lg-3 col-md-3 col-sm-12 col-form-label" for="tipo">Tempo de emprestimo:</label>'
+            +'<div class="col-lg-9 col-md-9 col-sm-12">'
+            +'<input class="form-control rounded-pill" value="' + {{tempo_time}} + '" type="number" min="1" name="time_type" id="time_type" required pattern="[0-9]+$" style=" background: #e9ecef" >'
+            +'</div></div>'
+            
+            $('.campo_tempo').html(chaine);
+            {% endif %}
             $('#daniel{{tipo}}{{pk}}').modal('show');
             
           });

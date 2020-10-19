@@ -203,6 +203,15 @@ def equipment_delete(request, pk, template_name='equipments/equipment_confirm_de
         return render(request, template_name, {'object':EquipmentUnique(pk)})
     return render(request, 'login.html')
 count = 0
+
+def email_(request,pk):
+    equipment_user = Equipment_user.objects.get(equipment=pk,devolution=None)
+    user = Client.objects.filter(usuario=equipment_user.user_loan)
+    equipment = Equipment.objects.filter(id = equipment_user.equipment)
+    email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
+    return redirect('/Equipamentos')
+    
+
 def emprestar(request,pk):
     global count
     if request.session.has_key('username'):
@@ -262,6 +271,7 @@ def emprestar(request,pk):
                 data = {}
                 data['pk'] = pk
                 data['tipo'] = 'por_senha'
+                data['tempo_time'] = request.POST['time_type']
                 data['list_equipment'] = get_page(request,EquipmentActiveAll())
                 data['type_equipment']= EquipmentTypeAll()
                 data['equipments'] = EquipmentActiveAll()
