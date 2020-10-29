@@ -262,6 +262,11 @@
           {% LoanOrDevolution equipment.id %}
           </button>
           {% if 'Atrasado' == equipment.status %}
+          {% if equipment.email_sent %}
+          Email Enviado
+          {% else %}
+          Email Não Enviado
+          {% endif %}
           <a href="{% url "email_" equipment.id %}" class="border-0" style="background-color: white;">
             <span class="oi oi-envelope-closed"></span>
           </a>

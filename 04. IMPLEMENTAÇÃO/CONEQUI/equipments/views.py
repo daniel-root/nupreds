@@ -208,7 +208,11 @@ def email_(request,pk):
     equipment_user = Equipment_user.objects.get(equipment=pk,devolution=None)
     user = Client.objects.filter(usuario=equipment_user.user_loan)
     equipment = Equipment.objects.filter(id = equipment_user.equipment)
-    email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
+    internet = email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
+    if internet:
+        equipment.update(email_sent=True)
+    else:
+        equipment.update(email_sent=False)
     return redirect('/Equipamentos')
     
 

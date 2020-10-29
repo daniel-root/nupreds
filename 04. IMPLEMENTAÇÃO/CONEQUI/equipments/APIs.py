@@ -63,7 +63,7 @@ def enviar(name, equipment, tag, description,number):
 
 
 def Atraso():
-    print("Aqui")
+    #print("Aqui")
     TimeEquipment = Equipment_user.objects.filter(devolution=None)
     for time in TimeEquipment:
         if timezone.now() >= time.limit_time:
@@ -76,9 +76,12 @@ def Atraso():
                 #print("vou enviar!")
                 internet = email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
                 if internet:
-                    equipment.update(status='Atrasado')
-                    if cod_telegram[0] != 'D':
-                        enviar(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].cod_telegram)
+                    continue
+                else:
+                    equipment.update(email_sent=False)
+                equipment.update(status='Atrasado')
+                if cod_telegram[0] != 'D':
+                    enviar(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].cod_telegram)
 
 def TelegramCadastro():
     cod_telegram = Client.objects.filter(cod_telegram__contains='D')
