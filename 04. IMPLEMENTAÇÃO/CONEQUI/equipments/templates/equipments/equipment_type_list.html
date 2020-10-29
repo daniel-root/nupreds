@@ -108,16 +108,24 @@
      {% endfor %}
   </tbody>
 </table>
- <hr width="1000px" style="margin-top: -1px;">
-   <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-      <li class="page-item"><a class="page-link" href="#">Primeira</a></li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item"><a class="page-link" href="#">Última</a></li>
-    </ul>
-  </nav>
+<hr width="1000px" style="margin-top: -1px;">
+<nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+          {% if object_list.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primeira</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ object_list.previous_page_number }}">Anterior</a></li>
+          {% endif %}
+
+          <li class="page-item"> <a class="page-link">Página {{ object_list.number }} de {{ object_list.paginator.num_pages }}.</a></li>
+
+          {% if object_list.has_next %}
+              <li class="page-item"><a class="page-link"  href="?page={{ object_list.next_page_number }}">Próximo</a></li>
+              <li class="page-item"><a class="page-link"  href="?page={{ object_list.paginator.num_pages }}">Última &raquo;</a></li>
+          {% endif %}
+
+      </ul>
+</nav>
+
   <div class="row" style="padding-left: 80%; margin-top: 10px; margin-bottom: 15px;">
         
         <button data-toggle="modal" data-target="#NovoModalNovo" class="btn rounded-pill" style="background: #e9ecef">
