@@ -262,9 +262,13 @@
           {% LoanOrDevolution equipment.id %}
           </button>
           {% if 'Atrasado' == equipment.status %}
-          <a href="{% url "email_" equipment.id %}" class="border-0">
+          <a href="{% url "email_" equipment.id %}" class="border-0" data-toggle="tooltip" data-placement="top" title="Email enviado">
             <span><img class="border-0" src="{% static "images/mensagem.png" %}" style="height: 30px; width: 30px;"></span>
           </a>
+          <a href="{% url "email_" equipment.id %}" class="border-0" data-toggle="tooltip" data-placement="top" title="Email não enviado">
+            <span><img class="border-0" src="{% static "images/email-vermelho.png" %}" style="height: 30px; width: 30px;"></span>
+          </a> 
+          
           {% endif %}
       </div>
              
