@@ -75,38 +75,40 @@
       </div>
 
   <table class="table table-sm" style="width: 1000px;  margin:auto; margin-top: 10px;" >
-  <thead>
-    <tr>
-      <th scope="col" width="60%" style="text-align: left;">
-        <a href="" style="color: black;">Nome</a>
-      </th>
-      <th scope="col" width="40%" style="text-align: left;">
-        <a href="{% url "equipment_type_order_by" 'name' %}" style="color: black;">Ações</a>
-      </th>
-    </tr>
-    </thead>
-  <tbody>
-   {% load my_tag %}
-   {% for equipment_type in object_list  %}
-    <tr>
-    
-      <td>{{ equipment_type.name }}</td>
-      
-      <td >
+    <div class="row justify-content-md-center">
+      <thead>
+        <tr class="d-flex">
+          <th class="col-lg-3 col-md-3 col-sm-3">
+            <a href="" style="color: black;">Nome</a>
+          </th>
+          <th class="col-lg-3 col-md-3 col-sm-3">
+            <a href="{% url "equipment_type_order_by" 'name' %}" style="color: black;">Ações</a>
+          </th>
+        </tr>
+        </thead>
+      <tbody>
+       {% load my_tag %}
+       {% for equipment_type in object_list  %}
+        <tr>
+        
+          <td>{{ equipment_type.name }}</td>
+          
+          <td >
 
-        {% include 'equipments/equipment_type_form.html' with equipment_type=equipment_type %}
-          <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#ModalEdit{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
-            Editar
-          </button>
+            {% include 'equipments/equipment_type_form.html' with equipment_type=equipment_type %}
+              <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#ModalEdit{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
+                Editar
+              </button>
 
-        {% include 'equipments/equipment_type_confirm_delete.html' with equipment_type=equipment_type %}
-          <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
-            {% ActiveOrInactiveType equipment_type.id %}
-          </button>
-      </td>
-    </tr>
-     {% endfor %}
-  </tbody>
+            {% include 'equipments/equipment_type_confirm_delete.html' with equipment_type=equipment_type %}
+              <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#ModalLabel{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
+                {% ActiveOrInactiveType equipment_type.id %}
+              </button>
+          </td>
+        </tr>
+         {% endfor %}
+      </tbody>
+    </div>
 </table>
 <hr width="1000px" style="margin-top: -1px;">
 <nav aria-label="Page navigation">
