@@ -37,12 +37,12 @@ def EquipmentTypeUnique(pk):
 
 def equipment_type_list(request, templete_name='equipments/equipment_type_list.html'):
     data = {}
-    data['object_list'] = Equipment_type.objects.all()
+    data['object_list'] = get_page(request,Equipment_type.objects.all())
     return render(request, templete_name, data)
 
 def equipment_type_order_by(request,value, templete_name='equipments/equipment_type_list.html'):
     data = {}
-    data['object_list'] = EquipmentTypeAllOrderBy(value)
+    data['object_list'] = get_page(request,EquipmentTypeAllOrderBy(value))
     return render(request, templete_name, data)
 
 def equipment_type_view(request, pk, template_name='equipments/equipment_type_detail.html'):   
@@ -208,7 +208,12 @@ def email_(request,pk):
     equipment_user = Equipment_user.objects.get(equipment=pk,devolution=None)
     user = Client.objects.filter(usuario=equipment_user.user_loan)
     equipment = Equipment.objects.filter(id = equipment_user.equipment)
-    email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
+    internet = email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
+    #print(internet)
+    if internet:
+        equipment.update(email_sent=True)
+    else:
+        equipment.update(email_sent=False)
     return redirect('/Equipamentos')
     
 

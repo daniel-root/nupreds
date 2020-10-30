@@ -262,6 +262,7 @@
           {% LoanOrDevolution equipment.id %}
           </button>
           {% if 'Atrasado' == equipment.status %}
+
           <a href="{% url "email_" equipment.id %}" class="border-0" data-toggle="tooltip" data-placement="top" title="Email enviado">
             <span><img class="border-0" src="{% static "images/mensagem.png" %}" style="height: 30px; width: 30px;"></span>
           </a>
@@ -269,6 +270,20 @@
             <span><img class="border-0" src="{% static "images/email-vermelho.png" %}" style="height: 30px; width: 30px;"></span>
           </a> 
           
+          {% if equipment.email_sent %}
+          Email Enviado
+            <a href="{% url "email_" equipment.id %}" class="border-0" style="background-color: white;">
+            <span class="oi oi-envelope-closed"></span>
+
+          {% else %}
+          Email Não Enviado
+                 
+          <a href="{% url "email_" equipment.id %}" class="border-0">
+            <span><img class="border-0" src="{% static "images/mensagem.png" %}" style="height: 30px; width: 30px;"></span>
+          </a>
+ 
+          {% endif %}
+
           {% endif %}
       </div>
              

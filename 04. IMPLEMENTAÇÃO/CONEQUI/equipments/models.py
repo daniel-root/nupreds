@@ -17,6 +17,7 @@ class Equipment(models.Model):
     inative = models.BooleanField(default=False)
     status =  models.CharField(max_length=9,null=False,default='Livre')
     amount_of_loans = models.IntegerField(default=0)
+    email_sent =  models.BooleanField(default=True)
     
     def __int__(self):
         return self.id
