@@ -79,7 +79,7 @@
         <label  for="txtCPF" class="col-lg-2 col-md-2 col-sm-12 col-form-label">CPF: </label>
         <div class="col-lg-10 col-md-10 col-sm-12">
           <!-- Se cpfJaCadastrado = 1, mostra mensagem de erro dizendo que CPF já está cadastrado -->
-          <input  type="text" value="{{user.cpf}}" class="form-control rounded-pill" pattern="^(\d{3}\.\d{3}\.\d{3}-\d{2})|(\d{11})$" title="Digite apenas os números do seu CPF/ verifique se a quantidade de números está correta" placeholder="000.000.000-00" onkeypress="$(this).mask('000.000.000-00');" minlength="14" maxlength="14" data-id="cpf" name="cpf" id="cpf"  onblur=" VerificaCPF();" style=" background: #e9ecef" required>
+          <input  type="text" value="{{user.cpf}}" class="form-control rounded-pill" pattern="^(\d{3}\.\d{3}\.\d{3}-\d{2})|(\d{11})$" title="Digite apenas os números do seu CPF/ verifique se a quantidade de números está correta" placeholder="000.000.000-00" onkeypress="$(this).mask('000.000.000-00');" minlength="14" maxlength="14" data-id="CPF" name="CPF" id="CPF"  onblur=" VerificaCPF();" style=" background: #e9ecef" required>
         </div>
       </div>
       
@@ -200,11 +200,15 @@ $( "#olho" ).mouseout(function() {
 
   <script type="text/javascript">
     function VerificaCPF () {
+ var cpf = document.getElementById("CPF").value;
+cpf = cpf.replace(/\./g, "");
+cpf = cpf.replace(/\-/g, "");
+
 if (vercpf(document.user_form.cpf.value)) 
 {document.user_form.submit();}else 
 {errors="1";if (errors) alert('CPF NÃO VÁLIDO');
 document.retorno = (errors == '');}}
-function vercpf (cpf) 
+function vercpf (CPF) 
 {if (cpf.length != 11 || cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999")
 return false;
 add = 0;
