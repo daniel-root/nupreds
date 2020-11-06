@@ -141,6 +141,8 @@
  
     <script src="{% static "users/js/bootstrap.min.js" %}"></script>          
       <!-- JQuery -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script src="js/jquery.js"></script>
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
@@ -200,34 +202,35 @@ $( "#olho" ).mouseout(function() {
 
   <script type="text/javascript">
     function VerificaCPF () {
- var cpf = document.getElementById("CPF").value;
-cpf = cpf.replace(/\./g, "");
-cpf = cpf.replace(/\-/g, "");
+ 	var cpf = document.getElementByld("CPF").value;
+	cpf = cpf.replace(/\./g, "");
+	cpf = cpf.replace(/\-/g, "");
 
-if (vercpf(document.user_form.cpf.value)) 
-{document.user_form.submit();}else 
-{errors="1";if (errors) alert('CPF NÃO VÁLIDO');
-document.retorno = (errors == '');}}
-function vercpf (CPF) 
-{if (cpf.length != 11 || cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999")
-return false;
-add = 0;
-for (i=0; i < 9; i ++)
-add += parseInt(cpf.charAt(i)) * (10 - i);
-rev = 11 - (add % 11);
-if (rev == 10 || rev == 11)
-rev = 0;
-if (rev != parseInt(cpf.charAt(9)))
-return false;
-add = 0;
-for (i = 0; i < 10; i ++)
-add += parseInt(cpf.charAt(i)) * (11 - i);
-rev = 11 - (add % 11);
-if (rev == 10 || rev == 11)
-rev = 0;
-if (rev != parseInt(cpf.charAt(10)))
-return false;
-return true;}
+	if (vercpf(cpf)) 
+		{document.user_form.submit();}else 
+		{errors="1";
+	if (errors) alert('CPF NÃO VÁLIDO');
+		document.retorno = (errors == '');}}
+	function vercpf (cpf) 
+	{if (cpf.length != 11 || cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999")
+	return false;
+	add = 0;
+	for (i=0; i < 9; i ++)
+		add += parseInt(cpf.charAt(i)) * (10 - i);
+		rev = 11 - (add % 11);
+		if (rev == 10 || rev == 11)
+			rev = 0;
+		if (rev != parseInt(cpf.charAt(9)))
+			return false;
+			add = 0;
+	for (i = 0; i < 10; i ++)
+		add += parseInt(cpf.charAt(i)) * (11 - i);
+		rev = 11 - (add % 11);
+		if (rev == 10 || rev == 11)
+			rev = 0;
+		if (rev != parseInt(cpf.charAt(10)))
+			return false;
+			return true;}
   </script>
 
 

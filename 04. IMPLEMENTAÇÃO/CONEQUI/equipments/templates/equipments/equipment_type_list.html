@@ -78,10 +78,11 @@
     <div class="row justify-content-md-center">
       <thead>
         <tr class="d-flex">
-          <th class="col-lg-3 col-md-3 col-sm-3">
+        	<th class="col-lg-2 col-md-2 col-sm-2"></th>
+          <th class="col-lg-5 col-md-5 col-sm-5">
             <a href="" style="color: black;">Nome</a>
           </th>
-          <th class="col-lg-3 col-md-3 col-sm-3">
+          <th class="col-lg-5 col-md-5 col-sm-5">
             <a href="{% url "equipment_type_order_by" 'name' %}" style="color: black;">Ações</a>
           </th>
         </tr>
@@ -89,11 +90,11 @@
       <tbody>
        {% load my_tag %}
        {% for equipment_type in object_list  %}
-        <tr>
-        
-          <td>{{ equipment_type.name }}</td>
+        <tr class="d-flex">
+          <td class="col-lg-2 col-md-2 col-sm-2"></td>
+          <td class="col-lg-5 col-md-5 col-sm-5">{{ equipment_type.name }}</td>
           
-          <td >
+          <td class="col-lg-5 col-md-5 col-sm-5">
 
             {% include 'equipments/equipment_type_form.html' with equipment_type=equipment_type %}
               <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#ModalEdit{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
