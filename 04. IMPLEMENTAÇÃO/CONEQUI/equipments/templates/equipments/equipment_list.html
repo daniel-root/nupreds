@@ -267,10 +267,10 @@
           
 
           {% if equipment.email_sent %}
-         <a href="{% url "email_" equipment.id %}" class="border-0"  data-toggle="modal" data-target="#email-enviado" data-toggle="tooltip" data-placement="top" title="Envio manual de email">
+         <a href="{% url "email_" equipment.id %}" class="border-0"  data-toggle="modal" data-target="#emailenviado" data-toggle="tooltip" data-placement="top" title="Envio manual de email">
             <span><img class="border-0" src="{% static "images/mensagem.png" %}" style="height: 30px; width: 30px;"></span>
           </a>
-          <div class="modal fade" id="email-enviado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="emailenviado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -280,7 +280,7 @@
                     </button> 
                 </div>
                 <div class="modal-body">
-                  Email enviadocom sucesso!
+                  Email enviado com sucesso!
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -290,10 +290,10 @@
             </div>
           </div>
           {% else %}
-          <a href="{% url "email_" equipment.id %}" class="border-0" ata-toggle="modal" data-target="#email-não-enviado" data-toggle="tooltip" data-placement="top" title="Envio manual não enviada">
+          <a href="{% url "email_" equipment.id %}" class="border-0" ata-toggle="modal" data-target="#emailnenviado" data-toggle="tooltip" data-placement="top" title="Envio manual não enviado">
             <span><img class="border-0" src="{% static "images/email-vermelho.png" %}" style="height: 30px; width: 30px;"></span>
           </a> 
-                    <div class="modal fade" id="email-não-enviado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="emailnenviado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">

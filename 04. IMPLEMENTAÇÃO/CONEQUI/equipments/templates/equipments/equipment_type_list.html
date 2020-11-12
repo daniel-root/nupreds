@@ -74,15 +74,14 @@
 
       </div>
 
-  <table class="table table-sm" style="width: 1000px;  margin:auto; margin-top: 10px;" >
+  <table class="table table-sm" style="width: 800px;  margin:auto; margin-top: 10px;" >
     <div class="row justify-content-md-center">
       <thead>
         <tr class="d-flex">
-        	<th class="col-lg-2 col-md-2 col-sm-2"></th>
-          <th class="col-lg-5 col-md-5 col-sm-5">
+          <th class="col-lg-7 col-md-7 col-sm-7">
             <a href="" style="color: black;">Nome</a>
           </th>
-          <th class="col-lg-5 col-md-5 col-sm-5">
+          <th class="col-lg-3 col-md-3 col-sm-3">
             <a href="{% url "equipment_type_order_by" 'name' %}" style="color: black;">Ações</a>
           </th>
         </tr>
@@ -91,10 +90,9 @@
        {% load my_tag %}
        {% for equipment_type in object_list  %}
         <tr class="d-flex">
-          <td class="col-lg-2 col-md-2 col-sm-2"></td>
-          <td class="col-lg-5 col-md-5 col-sm-5">{{ equipment_type.name }}</td>
+          <td class="col-lg-7 col-md-7 col-sm-7">{{ equipment_type.name }}</td>
           
-          <td class="col-lg-5 col-md-5 col-sm-5">
+          <td class="col-lg-3 col-md-3 col-sm-3">
 
             {% include 'equipments/equipment_type_form.html' with equipment_type=equipment_type %}
               <button type="button" class="btn btn-sm rounded-pill" data-toggle="modal" data-target="#ModalEdit{{equipment_type.id}}" style="margin-left: 5px;background: #e9ecef">
@@ -111,7 +109,7 @@
       </tbody>
     </div>
 </table>
-<hr width="1000px" style="margin-top: -1px;">
+
 <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
           {% if object_list.has_previous %}
