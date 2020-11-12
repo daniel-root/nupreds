@@ -167,11 +167,12 @@ def user_update(request, pk, template_name='users/user_form.html'):
         #print('chequi')
         data = {}
         user= get_object_or_404(Client, pk=pk)
-        form = ClientForm(request.POST or None, instance=user)
+        #form = ClientForm(request.POST or None, instance=user)
         #data['form']= form
         data['user']= user
         if request.method == 'POST':
             update_user = Client.objects.filter(pk=pk)
+            #print(request.POST)
             update_user.update(
             usuario = request.POST['usuario'],
             email = request.POST['email'],
