@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="{% static "users/bootstrap.min.css" %}" >
 {% block content %}
   </head>
-  <body style="margin-top: 3%;">
+  <body style="margin-top: 2%; overflow-x:hidden;overflow-y:hidden;">
+<div class="container" style="">
 
     <div class="modal fade" id="NovoModalNovo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -41,7 +42,7 @@
           </div>     
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <a href="{% url 'equipment_type_list' %}" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
         <button class="btn btn-primary">Salvar</button>
         </form>
       </div>
@@ -50,7 +51,7 @@
 </div>
 
 
-    <div class="container">
+    
       <div class="row " style="padding-left: 5%;">
           <span>
             <img src={% static "images/equipamentos.png" %} style="height: 30px; width: 30px; ">
@@ -129,7 +130,7 @@
       </ul>
 </nav>
 
-  <div class="row" style="padding-left: 80%; margin-top: 10px; margin-bottom: 15px;">
+  <div class="row" style="padding-left: 80%; margin-top: 5px; margin-bottom: 5px;">
         
         <button data-toggle="modal" data-target="#NovoModalNovo" class="btn rounded-pill" style="background: #e9ecef">
           Novo
