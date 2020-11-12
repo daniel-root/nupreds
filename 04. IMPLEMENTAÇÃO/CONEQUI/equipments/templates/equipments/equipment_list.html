@@ -10,6 +10,49 @@
   {% block content %}
 </head>
 <body >
+{{email_enviado}}
+
+<div class="modal fade" id="Modalemail-enviado" tabindex="-1" aria-labelledby="Modalemail-enviado" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button> 
+                </div>
+                <div class="modal-body">
+                  Email enviado com sucesso!
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="Modalemail-não-enviado" tabindex="-1" aria-labelledby="Modalemail-não-enviado" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  Email não enviado!
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
 {% for equipment in equipments %}
                 <div class="modal fade" id="EscolhaModal{{equipment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
@@ -262,58 +305,15 @@
           {% LoanOrDevolution equipment.id %}
           </button>
           {% if 'Atrasado' == equipment.status %}
-
-          
-          
-
-          {% if equipment.email_sent %}
-         <a href="{% url "email_" equipment.id %}" class="border-0"  data-toggle="modal" data-target="#email-enviado" data-toggle="tooltip" data-placement="top" title="Envio manual de email">
-            <span><img class="border-0" src="{% static "images/mensagem.png" %}" style="height: 30px; width: 30px;"></span>
-          </a>
-          <div class="modal fade" id="email-enviado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button> 
-                </div>
-                <div class="modal-body">
-                  Email enviadocom sucesso!
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          {% else %}
-          <a href="{% url "email_" equipment.id %}" class="border-0" ata-toggle="modal" data-target="#email-não-enviado" data-toggle="tooltip" data-placement="top" title="Envio manual não enviada">
-            <span><img class="border-0" src="{% static "images/email-vermelho.png" %}" style="height: 30px; width: 30px;"></span>
-          </a> 
-                    <div class="modal fade" id="email-não-enviado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                  Email não enviado!
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-              </div>
-            </div>
-          </div>
- 
-          {% endif %}
+            {% if equipment.email_sent %}
+             <a href="{% url "email_" equipment.id %}" class="border-0" ata-toggle="modal"  data-toggle="tooltip" data-placement="top" title="Envio manual não enviada">
+              <span><img class="border-0" src="{% static "images/mensagem.png" %}" style="height: 30px; width: 30px;"></span>
+            </a>
+            {% else %}
+            <a href="{% url "email_" equipment.id %}" class="border-0" ata-toggle="modal"  data-toggle="tooltip" data-placement="top" title="Envio manual não enviada">
+              <span><img class="border-0" src="{% static "images/email-vermelho.png" %}" style="height: 30px; width: 30px;"></span>
+            </a>
+            {% endif %}
 
           {% endif %}
       </div>
@@ -385,6 +385,10 @@
     <script>
           $(document).ready(function() {
             $('#Modal{{chave}}').modal('show');
+            document.myForm{{chave}}.submit();
+          });
+          $(document).ready(function() {
+            $('#Modal{{email_enviado}}').modal('show');
             document.myForm{{chave}}.submit();
           });
     </script>

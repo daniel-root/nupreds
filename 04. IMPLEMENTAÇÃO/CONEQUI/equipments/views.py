@@ -204,17 +204,29 @@ def equipment_delete(request, pk, template_name='equipments/equipment_confirm_de
     return render(request, 'login.html')
 count = 0
 
-def email_(request,pk):
+def email_(request,pk,template_name='equipments/equipment_list.html'):
     equipment_user = Equipment_user.objects.get(equipment=pk,devolution=None)
     user = Client.objects.filter(usuario=equipment_user.user_loan)
     equipment = Equipment.objects.filter(id = equipment_user.equipment)
     internet = email_atraso(user[0].usuario, equipment[0].type_equipment, equipment[0].tag, equipment[0].description,user[0].email)
     #print(internet)
+    data = {}
+    data['type'] = 'Todos'
+    data['search'] = 'Null'
+    equipment_list = EquipmentActiveAll()
+    data['list_equipment'] = get_page(request,equipment_list)
+    data['equipments'] = EquipmentActiveAll()
+    data['type_equipment']= EquipmentTypeAll()
+    print(internet)
     if internet:
         equipment.update(email_sent=True)
+        data['email_enviado'] = "email-enviado"
+        print("Enviado")
     else:
         equipment.update(email_sent=False)
-    return redirect('/Equipamentos')
+        data['email_enviado'] = "email-não-enviado"
+        print("Não Enviado")
+    return render(request,template_name,data)
     
 
 def emprestar(request,pk):
