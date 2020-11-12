@@ -61,7 +61,7 @@
     <div style="margin-top: 10px;" class="row justify-content-center">
         <form class="form-inline" method="POST" action="{% url 'search_type' %}">{% csrf_token %}
           <div class="input-group">
-            <input class="form-control mr-2 rounded-pill" type="cemquipamento" name="cemquipamento" style="width: 900px; background: #e9ecef">
+            <input class="form-control mr-2 rounded-pill" type="cemquipamento" name="cemquipamento" style="width: 750px; background: #e9ecef">
             <button class="border-0" style="background: #FFFFFF;">
               <span>
                 <img src={% static "images/lupa.png" %} style="height: 30px; width: 30px">
@@ -78,6 +78,7 @@
     <div class="row justify-content-md-center">
       <thead>
         <tr class="d-flex">
+          <th class="col-lg-1 col-md-1 col-sm-1"></th>
           <th class="col-lg-7 col-md-7 col-sm-7">
             <a href="" style="color: black;">Nome</a>
           </th>
@@ -90,6 +91,7 @@
        {% load my_tag %}
        {% for equipment_type in object_list  %}
         <tr class="d-flex">
+          <td class="col-lg-1 col-md-1 col-sm-1"></td>
           <td class="col-lg-7 col-md-7 col-sm-7">{{ equipment_type.name }}</td>
           
           <td class="col-lg-3 col-md-3 col-sm-3">
