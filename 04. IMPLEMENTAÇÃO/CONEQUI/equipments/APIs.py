@@ -41,7 +41,6 @@ def email_atraso(name, equipment, tag, description,msgFrom):
             
             return True
 	except:
-            print("não enviado")
             return False
 
 def enviar(name, equipment, tag, description,number):
@@ -65,7 +64,7 @@ def Atraso():
         if timezone.now() >= time.limit_time:
             #print(time.equipment)
             equipment = Equipment.objects.filter(id = time.equipment)
-            if equipment[0].status != 'Atrasado' or equipment[0].email_sent != True:
+            if equipment[0].email_sent == False:
                 
                 user = Client.objects.filter(usuario=time.user_loan)
                 cod_telegram = user[0].cod_telegram
