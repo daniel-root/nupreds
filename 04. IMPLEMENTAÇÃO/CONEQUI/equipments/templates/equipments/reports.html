@@ -55,28 +55,37 @@
       </div>
         <div class="row justify-content-center">
           <form action="{% url "get_rastreio" 'Listagem' %}">
-          <button id="listagem" class="btn btn-link text-dark" >
-            Listagem   
-          </button>
+          {% ifequal type 'Listagem' %}
           <button id="listagem" class="btn rounded-pill" style="background: #4de7ff; color: black;">
             Listagem   
           </button>
+          {% else %}
+          <button id="listagem" class="btn btn-link text-dark" >
+            Listagem   
+          </button>
+          {% endifequal %}
           </form>
           <form action="{% url "get_rastreio" 'Rastreio' %}">
+          {% ifequal type 'Rastreio' %}
+          <button class="btn rounded-pill" style="background: #4de7ff; color: black;">
+            Rastreio
+          </button>
+          {% else %}
           <button class="btn btn-link text-dark "  style="margin-left: 45px;">
             Rastreio
           </button>
-          <button class="btn rounded-pill" style="background: #4de7ff; color: black;">
-            Rastreio
-          </button>
+          {% endifequal %}
           </form>
           <form action="{% url "get_rastreio" 'Não Devolvidos' %}">
+          {% ifequal type 'Não Devolvidos' %}
+          <button class="btn rounded-pill" style="background: #4de7ff; color: black;">
+            Não devolvidos
+          </button>
+          {% else %}
           <button class="btn btn-link text-dark " id="E"style="margin-left: 45px;">
             Não devolvidos
           </button>
-          <button class="btn rounded-pill" style="background: #4de7ff; color: black;">
-            Não devolvidos
-          </button>
+          {% endifequal %}
           </form>
        </div>
       <div style="margin-top: 10px;" class="container">
