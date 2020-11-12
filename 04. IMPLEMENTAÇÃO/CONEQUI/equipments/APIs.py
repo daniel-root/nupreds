@@ -8,45 +8,41 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import telepot
 
-try:
-    smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
-    #print(smtpObj)
-    smtpObj.ehlo()
-    smtpObj.starttls()
-    msgTo = 'nupreds@gmail.com'
-    toPass = 'hYV83BBDA2ebx8r'
-    smtpObj.login(msgTo, toPass)
-    bot = telepot.Bot("1244766207:AAGjFP8KytsFILHQUjXazo1yV7JUqN5w4g8")
-except:
-    pass
+
 
 def email_atraso(name, equipment, tag, description,msgFrom):
 	try:
-		print("mandando email!")
-		msgFrom = str(msgFrom)		
-		msg = MIMEMultipart('alternative')
-		text ="""
-		Olá, """ + str(name) + """, tudo bem? 
-		Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento."""
-		html = """\
-		<html>
-		<head></head>
-		<body>
-				<p>Olá, """ + str(name) + """, tudo bem?</p>
-		<p>Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.</p>
-		</body>
-		</html>
-		"""
-		part1 = MIMEText(text, 'plain')
-		part2 = MIMEText(html, 'html')
-		msg.attach(part1)
-		msg.attach(part2)
-		smtpObj.sendmail(msgTo,msgFrom,'Subject: Atraso!\n{}'.format( msg.as_string()))
-		smtpObj.quit()
-		
-		return True
+            smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+            smtpObj.ehlo()
+            smtpObj.starttls()
+            msgTo = 'nupreds@gmail.com'
+            toPass = 'hYV83BBDA2ebx8r'
+            smtpObj.login(msgTo, toPass)
+            msgFrom = str(msgFrom)		
+            msg = MIMEMultipart('alternative')
+            text ="""
+            Olá, """ + str(name) + """, tudo bem? 
+            Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento."""
+            html = """\
+            <html>
+            <head></head>
+            <body>
+                    <p>Olá, """ + str(name) + """, tudo bem?</p>
+            <p>Notamos que você está muito tempo com """ + str(equipment) + """, """ + str(tag) + """ - """ + str(description) + """. Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.</p>
+            </body>
+            </html>
+            """
+            part1 = MIMEText(text, 'plain')
+            part2 = MIMEText(html, 'html')
+            msg.attach(part1)
+            msg.attach(part2)
+            smtpObj.sendmail(msgTo,msgFrom,'Subject: Atraso!\n{}'.format( msg.as_string()))
+            smtpObj.quit()
+            
+            return True
 	except:
-		return False
+            print("não enviado")
+            return False
 
 def enviar(name, equipment, tag, description,number):
     try:
@@ -55,7 +51,7 @@ def enviar(name, equipment, tag, description,number):
             tag = str(tag)
             description = str(description)
             number = int(number)
-            
+            bot = telepot.Bot("1244766207:AAGjFP8KytsFILHQUjXazo1yV7JUqN5w4g8")
             #print(bot)  
             bot.sendMessage(number,"Olá, "+ name + ", tudo bem? \n Notamos que você está muito tempo com " + equipment + ", " + tag + " - " + description + ". Quando você puder dirija-se à recepção para fazer a devolução ou realizar novamente o empréstimo deste equipamento.")
     except:

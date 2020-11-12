@@ -14,5 +14,7 @@ urlpatterns = [
     #path('Fingerprint/<str:frase>/<int:pk>', views.user_fingerprint_registration, name='user_fingerprint_registration'),
     #path('Teste/', views.user_teste, name='user_teste'),
     path('Filtro/<str:pk>/<str:value>', views.filter_list, name='filter_list'),
-    path('Filtro/<str:value>', views.filter_type, name='filter_type')
+    path('Filtro/<str:value>', views.filter_type, name='filter_type'),
+    path('get/ajax/validate/CPF', views.checkCPF, name = "validate_cpf"),
+    path('get/ajax/validate/CPF/<str:pk>', views.checkCPFupdate, name = "validate_cpf_update")
 ]
