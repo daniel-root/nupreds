@@ -233,7 +233,62 @@ $( "#olho" ).mouseout(function() {
           return true;
       }
   </script>
-
-
+{% block javascript %}
+{% if user.id != 'None' %}
+<script>
+    
+    $("#cpf").focusout(function (e) {
+        e.preventDefault();
+        
+        var cpf = $(this).val();
+        
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'validate_cpf_update' user.id %}",
+            data: {"cpf": cpf},
+            success: function (response) {
+                
+                if(!response["valid"]){
+                    alert("Você não pode criar um usúario com o mesmo CPF");
+                    var nickName = $("#cpf");
+                    nickName.val("")
+                    nickName.focus()
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+    })
+</script>
+{% else %}
+<script>
+    
+    $("#cpf").focusout(function (e) {
+        e.preventDefault();
+        
+        var cpf = $(this).val();
+        
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'validate_cpf' %}",
+            data: {"cpf": cpf},
+            success: function (response) {
+                
+                if(!response["valid"]){
+                    alert("Você não pode criar um usúario com o mesmo CPF");
+                    var nickName = $("#cpf");
+                    nickName.val("")
+                    nickName.focus()
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+    })
+</script>
+{% endif %}
+{% endblock javascript %}
 </body>
 </html>
