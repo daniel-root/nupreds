@@ -33,7 +33,7 @@
         <p>Você tem certeza que deseja sair?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <a href="{% url "home" %}" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
         <form method="post" action="{% url "logout" %}">{% csrf_token %}
         <button type="submit" class="btn btn-primary">Confirmar</button>
         </form>

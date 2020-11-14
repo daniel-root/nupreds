@@ -104,7 +104,7 @@
                 Você tem certeza que deseja  {% ActiveOrInactiveUser user.id %} "{{ user.usuario }}"?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                <a href="{% url "user_list" %}" type="button" class="btn btn-secondary" data-dismiss="modal">Voltar></a>
                 <form method="post" action="{% url "user_delete" user.id %}">{% csrf_token %}
                 <button type="submit" class="btn btn-primary">Confimar</button>
                 </form>
@@ -142,7 +142,7 @@
               
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                <a href="{% url "user_list" %}" type="button" class="btn btn-secondary" data-dismiss="modal">Voltar></a>
                 <button type="submit" class="btn btn-primary">Confimar</button>
               </div>
               </form>
